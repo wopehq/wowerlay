@@ -5,14 +5,14 @@ export interface EventsStore {
    id: symbol;
    handler: Handler;
 }
-export interface OverlayContext {
+export interface WowerlayContext {
    onRecalculate: (handler: Handler) => void;
    onWindowClick: (handler: Handler<PointerEvent>) => void;
    calculateAll: () => void;
    clickAll: () => void;
 }
 
-export const injectionKey: InjectionKey<OverlayContext> = Symbol();
+export const injectionKey: InjectionKey<WowerlayContext> = Symbol();
 
 export const createEvent = (store: EventsStore[], handler: Handler) => {
    const id = Symbol();
@@ -33,6 +33,6 @@ export const runEvents = (store: EventsStore[]) => {
 
 export const createEventStore = () => [] as EventsStore[];
 
-export const useOverlayContext = () => {
+export const useWowerlayContext = () => {
    return inject(injectionKey);
 };

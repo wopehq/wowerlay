@@ -1,8 +1,8 @@
 import { cWowerlay, sWowerlayX, sWowerlayY } from '../consts';
 import { computed, defineComponent, nextTick, onMounted, ref } from 'vue';
 
-import { OverlayProps } from './OverlayReusables';
-import { useOverlayContext } from '../event';
+import { useWowerlayContext } from '../event';
+import { wowerlayBaseProps } from './WowerlayReusables';
 
 const Emits = {
    close: (): any => true
@@ -16,10 +16,10 @@ enum Direction {
 export const WowerlayRenderer = defineComponent({
    name: 'WowerlayRenderer',
    inheritAttrs: false,
-   props: OverlayProps,
+   props: wowerlayBaseProps,
    emits: Emits,
    setup(props, { slots, attrs }) {
-      const { onRecalculate } = useOverlayContext();
+      const { onRecalculate } = useWowerlayContext();
       const gap = 10;
 
       const overlayElement = ref<HTMLElement | null>(null);

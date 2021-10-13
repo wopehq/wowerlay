@@ -1,8 +1,7 @@
 import { PropType, Teleport, defineComponent, onBeforeUnmount, onMounted } from 'vue';
 
 import { cWowerlayContainer } from '../consts';
-import { defineProp } from '../utils';
-import { useOverlayContext } from '../event';
+import { useWowerlayContext } from '../event';
 
 export interface OverlayContainerProps {
    zIndex?: number;
@@ -15,10 +14,10 @@ type WProp<T extends keyof OverlayContainerProps> = PropType<OverlayContainerPro
 type WEmit<T extends keyof OverlayContainerEmits> = OverlayContainerEmits[T];
 
 const Props = {
-   zIndex: defineProp({
+   zIndex: {
       type: Number as WProp<'zIndex'>,
       default: 1500
-   })
+   }
 } as const;
 
 const Emits = {
@@ -30,7 +29,7 @@ export const WowerlayContainer = defineComponent({
    props: Props,
    emits: Emits,
    setup() {
-      const { calculateAll, clickAll } = useOverlayContext();
+      const { calculateAll, clickAll } = useWowerlayContext();
       const wa = window.addEventListener;
       const wr = window.removeEventListener;
 

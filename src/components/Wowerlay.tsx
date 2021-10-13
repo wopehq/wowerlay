@@ -1,19 +1,19 @@
 import { PropType, Teleport, Transition, defineComponent, ref, watch } from 'vue';
+import { WowerlayBaseProps, wowerlayBaseProps } from './WowerlayReusables';
 import { cWowerlayAnimEnter, cWowerlayAnimLeave, cWowerlayContainer } from '../consts';
 
-import { OverlayProps } from './OverlayReusables';
 import { WowerlayRenderer } from './WowerlayRenderer';
-import { useOverlayContext } from '../event';
+import { useWowerlayContext } from '../event';
 
-export interface OverlayRendererProps extends OverlayProps {
+export interface WowerlayProps extends WowerlayBaseProps {
    visible: boolean;
 }
-type OverlayRendererProp<T extends keyof OverlayRendererProps> = PropType<OverlayRendererProps[T]>;
+type WowerlayProp<T extends keyof WowerlayProps> = PropType<WowerlayProps[T]>;
 
 const Props = {
    visible: {
       required: true,
-      type: Boolean as OverlayRendererProp<'visible'>
+      type: Boolean as WowerlayProp<'visible'>
    }
 };
 const Emits = {
@@ -24,12 +24,12 @@ export const Wowerlay = defineComponent({
    name: 'Wowerlay',
    inheritAttrs: false,
    props: {
-      ...OverlayProps,
+      ...wowerlayBaseProps,
       ...Props
    },
    emits: Emits,
-   setup(props, { slots, emit, attrs }) {
-      const { onWindowClick } = useOverlayContext();
+   setup(props, { emit }) {
+      const { onWindowClick } = useWowerlayContext();
       const canClose = ref(false);
 
       const toClass = `.${cWowerlayContainer}`;
