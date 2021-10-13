@@ -3,7 +3,6 @@ import {
    indent,
    log,
    readGitignore,
-   renameTypesFolder,
    sleep,
    writeNewPackageJson
 } from './modules/functions';
@@ -147,8 +146,7 @@ async function main() {
    if (willBePublished) {
       await execute('npm', ['run', 'build']);
       await sleep(300);
-      await renameTypesFolder();
-      // await execute('npm', ['publish']);
+      await execute('npm', ['publish']);
    }
 }
 main();

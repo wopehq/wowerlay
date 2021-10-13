@@ -2,7 +2,7 @@ import { Handler, createEvent, createEventStore, injectionKey, runEvents } from 
 
 import { Plugin } from 'vue';
 
-export const OverlayPlugin: Plugin = {
+export const createWowerlay = (): Plugin => ({
    install(app) {
       const calculateEvents = createEventStore();
       const clickEvents = createEventStore();
@@ -18,4 +18,4 @@ export const OverlayPlugin: Plugin = {
          onRecalculate
       });
    }
-};
+});

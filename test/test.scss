@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+* {
+   font-family: 'Roboto', sans-serif;
+}
+
+::-webkit-scrollbar {
+   width: 5px;
+   height: 5px;
+
+   &-thumb {
+      background-color: gray;
+   }
+   &-track {
+      background-color: transparent;
+   }
+}

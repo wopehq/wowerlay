@@ -1,5 +1,5 @@
-import { Teleport, computed, defineComponent, nextTick, onMounted, ref } from 'vue';
-import { overlayClassName, overlayContainerClassName, overlayVariableNameX, overlayVariableNameY } from '../consts';
+import { cWowerlay, sWowerlayX, sWowerlayY } from '../consts';
+import { computed, defineComponent, nextTick, onMounted, ref } from 'vue';
 
 import { OverlayProps } from './OverlayReusables';
 import { useOverlayContext } from '../event';
@@ -13,13 +13,14 @@ enum Direction {
    Y
 }
 
-export const Overlay = defineComponent({
-   name: 'Overlay',
+export const WowerlayRenderer = defineComponent({
+   name: 'WowerlayRenderer',
    inheritAttrs: false,
    props: OverlayProps,
    emits: Emits,
    setup(props, { slots, attrs }) {
       const { onRecalculate } = useOverlayContext();
+      const gap = 10;
 
       const overlayElement = ref<HTMLElement | null>(null);
       const isReady = ref(false);
@@ -28,13 +29,13 @@ export const Overlay = defineComponent({
 
       const Tag = computed(() => props.tag as 'div');
       const positionClassNames = computed<Record<string, string>>(() => ({
-         [overlayVariableNameY]: posY.value + 'px',
-         [overlayVariableNameX]: posX.value + 'px'
+         [sWowerlayY]: posY.value + 'px',
+         [sWowerlayX]: posX.value + 'px'
       }));
 
       const fixPosition = (pos: number, direction: Direction) => {
          const { width, height, y } = overlayElement.value.getBoundingClientRect();
-         const scrollbarGap = 20;
+         const scrollbarGap = gap * 2;
          switch (direction) {
             case Direction.X: {
                const limitX = window.innerWidth - width - scrollbarGap;
@@ -52,45 +53,47 @@ export const Overlay = defineComponent({
          e.stopPropagation();
       };
 
-      const handleUpdateOverlayPosition = () => {
+      const updateOverlayPosition = () => {
          if (!props.target || !overlayElement.value) {
             throw new Error('overlayElement.value or target prop is undefined');
          }
          const { height, x: newX, y } = props.target.getBoundingClientRect();
-         const newY = height + y + 5;
+         const newY = height + y + gap;
          posY.value = fixPosition(newY, Direction.Y);
          posX.value = fixPosition(newX, Direction.X);
       };
 
-      const mountHandler = async (status: boolean) => {
+      onRecalculate(updateOverlayPosition);
+      onMounted(async () => {
          if (!props.target) {
             await nextTick();
          }
          if (props.target) {
-            const { height, x, y } = props.target.getBoundingClientRect();
-            posY.value = fixPosition(height + y, Direction.Y);
-            posX.value = fixPosition(x, Direction.X);
+            updateOverlayPosition();
          } else {
             throw new Error('Overlay should have a valid target');
          }
-      };
-
-      onRecalculate(handleUpdateOverlayPosition);
-      onMounted(async () => {
-         await mountHandler(true);
          isReady.value = true;
       });
 
-      return () => (
-         <Tag.value
-            onClick={handleOverlayClick}
-            ref={overlayElement}
-            style={positionClassNames.value}
-            class={[overlayClassName]}
-            {...attrs}
+      return {
+         handleOverlayClick,
+         overlayElement,
+         positionClassNames,
+         Tag
+      };
+   },
+   render() {
+      return (
+         <this.Tag
+            onClick={this.handleOverlayClick}
+            ref={(el) => (this.overlayElement = el as HTMLElement)}
+            style={this.positionClassNames}
+            class={cWowerlay}
+            {...this.$attrs}
          >
-            {slots.default?.()}
-         </Tag.value>
+            {this.$slots.default?.()}
+         </this.Tag>
       );
    }
 });

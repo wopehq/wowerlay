@@ -1,10 +1,7 @@
-import '../src/styles/Overlay.scss';
-import '../src/styles/OverlayContainer.scss';
+import './test.scss';
 
-import { Overlay, OverlayContainer, OverlayPlugin } from '../src/lib';
 import { Transition, createApp, defineComponent, onMounted, onUnmounted, ref } from 'vue';
-
-import { OverlayRenderer } from '../src/components/OverlayRenderer';
+import { Wowerlay, WowerlayContainer, createWowerlay } from '../src/lib';
 
 const Mycomponent = defineComponent({
    setup() {
@@ -25,7 +22,7 @@ const App = defineComponent({
 
       return () => (
          <>
-            <OverlayContainer />
+            <WowerlayContainer />
             <div
                style={{
                   display: 'flex',
@@ -36,28 +33,30 @@ const App = defineComponent({
                }}
             >
                <div style="text-align: center; width: 100%">
-                  <h3
+                  <div
                      style={{
                         margin: 'auto',
                         display: 'inline-block'
                      }}
-                     onClick={() => {
-                        isOpen.value = !isOpen.value;
-                     }}
                      ref={targetEl}
                   >
-                     Vue Overlay Yeah
-                  </h3>
+                     <button
+                        onClick={() => {
+                           isOpen.value = !isOpen.value;
+                        }}
+                     >
+                        Vue Overlay Yeah
+                        <Wowerlay
+                           onUpdate:visible={(state) => (isOpen.value = state)}
+                           visible={isOpen.value}
+                           target={targetEl.value}
+                        >
+                           <Mycomponent />
+                        </Wowerlay>
+                     </button>
+                  </div>
+                  <h4 style="margin-top: 150px;">Hi</h4>
                </div>
-               <OverlayRenderer
-                  onUpdate:visible={(state) => (isOpen.value = state)}
-                  visible={isOpen.value}
-                  tag="div"
-                  target={targetEl.value}
-               >
-                  <div>Selamlar Herkese</div>
-                  <Mycomponent />
-               </OverlayRenderer>
             </div>
             <div style={{ height: '1000px' }}></div>
          </>
@@ -66,5 +65,6 @@ const App = defineComponent({
 });
 
 const app = createApp(App);
-app.use(OverlayPlugin);
+const wowerlay = createWowerlay();
+app.use(wowerlay);
 app.mount('#app');

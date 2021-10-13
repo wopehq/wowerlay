@@ -1,5 +1,7 @@
 import { PropType, Teleport, defineComponent, onBeforeUnmount, onMounted } from 'vue';
 
+import { cWowerlayContainer } from '../consts';
+import { defineProp } from '../utils';
 import { useOverlayContext } from '../event';
 
 export interface OverlayContainerProps {
@@ -9,22 +11,22 @@ export interface OverlayContainerEmits {
    overlayClose: (value: any) => void;
 }
 
-type OProp<T extends keyof OverlayContainerProps> = PropType<OverlayContainerProps[T]>;
-type OEmit<T extends keyof OverlayContainerEmits> = OverlayContainerEmits[T];
+type WProp<T extends keyof OverlayContainerProps> = PropType<OverlayContainerProps[T]>;
+type WEmit<T extends keyof OverlayContainerEmits> = OverlayContainerEmits[T];
 
 const Props = {
-   zIndex: {
-      type: Number as OProp<'zIndex'>,
+   zIndex: defineProp({
+      type: Number as WProp<'zIndex'>,
       default: 1500
-   }
+   })
 } as const;
 
 const Emits = {
-   overlayClose: null as OEmit<'overlayClose'>
+   overlayClose: null as WEmit<'overlayClose'>
 } as const;
 
-export const OverlayContainer = defineComponent({
-   name: 'OverlayContainer',
+export const WowerlayContainer = defineComponent({
+   name: 'WowerlayContainer',
    props: Props,
    emits: Emits,
    setup() {
@@ -48,7 +50,7 @@ export const OverlayContainer = defineComponent({
    render() {
       return (
          <Teleport to="body">
-            <div class="k-overlay-container"></div>
+            <div class={cWowerlayContainer}></div>
          </Teleport>
       );
    }

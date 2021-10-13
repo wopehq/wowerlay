@@ -7,6 +7,7 @@ const root = process.cwd();
 const mode = process.env.MODE as 'production' | undefined;
 
 export default defineConfig({
+   root: mode !== 'production' ? path.join(root, 'test') : root,
    plugins: [
       VueJSX(),
       DTS({
@@ -14,12 +15,11 @@ export default defineConfig({
          staticImport: true
       })
    ],
-   root: mode !== 'production' ? path.join(root, 'test') : root,
    build: {
       target: 'es2020',
       lib: {
          entry: path.resolve(root, 'src', 'lib.tsx'),
-         name: 'vue3-overlay',
+         name: 'wowerlay',
          formats: ['es', 'umd']
       },
       rollupOptions: {

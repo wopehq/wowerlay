@@ -1,158 +1,179 @@
-[![simplebar-vue3](https://img.shields.io/npm/v/simplebar-vue3)](https://npmjs.com/package/simplebar-vue3)
+### A Overlay/Popup library for Vue3. (WORK IN PROGRESS BUT WORKS)
 
-### A Vue3 Wrapper for SimpleBar
+![wowarley logo](md/wowerley.png)
 
-### Intallation
+[![wowarley](https://img.shields.io/npm/v/wowerlay)](https://npmjs.com/package/wowerlay)
 
-For npm and pnpm:
+## Intallation
+
+For npm:
 
 ```
-(npm or pnpm) install simplebar simplebar-vue3
+npm install wowerlay
+```
+
+For pnpm:
+
+```
+pnpm install wowerlay
 ```
 
 For yarn:
 
 ```
-yarn add simplebar simplebar-vue3
+yarn add wowerlay
 ```
 
-### Usage
+## Usage
 
-You need to import simplebar stylesheet in your `main.(js|ts)` file for scrollbar to look normal and work. <br>
+First you have to register the plugin.
 
-##### main.(js|ts)
+### `main.(js|ts)`
 
 ```ts
-import 'simplebar/dist/simplebar.min.css';
-
+import { createWowerlay } from 'wowerlay';
 import { createApp } from 'vue';
 import App from './App.vue';
-createApp(App).mount('#app');
+
+const wowerlay = createWowerlay();
+const app = createApp(App);
+app.use(wowerlay);
+app.mount('#app');
 ```
 
-To use it in `.vue` files just import the component and use.
+You must have `<WowerlayContainer/>` in your `App.vue`. WowerlayContainer is just a `div` element with wrapped by `<Teleport/>` so it will automatically teleport itself to end of the `body`. WowerlayContainer will keep overlays inside and is invisible, not targetable by pointers.
+
+### `App.vue`
 
 ```html
 <template>
-   <SimpleBar style="height: 500px; overflow-y: auto"> ... Content Goes here </SimpleBar>
+   <!-- IMPORTANT | DO NOT FORGET THIS -->
+   <WowerlayContainer />
+   <Navbar />
+   <router-view />
+   <!-- don't use multiple times! -->
+   <WowerlayContainer_But_Shouldnt_Be_Used_More_Than_Once />
 </template>
 
 <script setup>
-   import { SimpleBar } from 'simplebar-vue3';
+   import { WowerlayContainer } from 'wowerlay';
 </script>
+
 <!-- FOR NORMAL SCRIPT -->
 <script>
-   import { SimpleBar } from 'simplebar-vue3';
+   import { WowerlayContainer } from 'wowerlay';
    import { defineComponent } from 'vue';
 
    export default defineComponent({
-      components: { SimpleBar }
+      components: { WowerlayContainer }
    });
 </script>
 ```
 
-### Accessing Simplebar Instance
+## Creating overlay.
 
-##### Via event;
+To create an overlay you must at least set a `visibility` handler value and give a target element, template ref values can be given.
 
-If you want to access simplebar instance by event you can use `@created` event.
+Don't worry, anthing goes to `<Wowarley/>` will be unmounted when visible is `false` but currently I don't recommend you to use it with `<KeepAlive/>` because I haven't test it yet.
+
+And `<Wowarley/>` component is jut a `div` with extra features, you can change tag of it with `tag` prop.
 
 ```html
 <template>
-   <SimpleBar
-      @created="instance => {
-         simplebarInstance = instance;
-      }"
+   <button ref="targetElement" @click="toggle">Hi How Are you?</button>
+   <!-- tag prop is "div" by default -->
+   <Wowarley tag="section" :target="targetElement" v-model:visible="isVisible">
+      <div>Hey how you doin?</div>
+      <button>Good</button>
+      <button>Bad</button>
+   </Wowarley>
+</template>
+
+<!-- Typescript is optional -->
+<script setup lang="ts">
+   import { Wowarley } from 'wowarley';
+   import { ref } from 'vue';
+
+   // if you are using typescript define template ref like this otherwise
+   // you will get a type error.
+   // const targetElement = ref<HTMLElement | null>(null);
+   const targetElement = ref(null);
+   const isVisible = ref(false);
+   const toggle = () => (isVisible.value = !isVisible.value);
+</script>
+```
+
+If you don't prefer `v-model:visible` syntax you can use this one;
+
+```html
+<template>
+   <button ref="targetElement" @click="toggle">Hi How Are you?</button>
+
+   <Wowarley
+      tag="span"
+      :target="targetElement"
+      :visible="isVisible"
+      @update:visible="(state) => isVisible = state"
    >
-   </SimpleBar>
+      <div>Hey how you doin?</div>
+      <button>Good</button>
+      <button>Bad</button>
+   </Wowarley>
 </template>
-
-<!-- Typescript is optional -->
-<script setup lang="ts">
-   import type { SimplebarInstanceRef } from 'simplebar-vue3';
-   import { SimpleBar } from 'simplebar-vue3';
-   import { ref } from 'vue';
-
-   const simplebarInstance = ref<SimplebarInstanceRef>(null);
-</script>
 ```
 
-##### Via template ref;
-
-You access simplebar instance ref
+And lastly if you don't want to stop [`attribute inheritance`](https://v3.vuejs.org/guide/component-attrs.html#attribute-inheritance) you can use
+`<Wowarley/>` component inside of target button, it will work as expected because it will be `teleported` to `body` eventually.
 
 ```html
 <template>
-   <SimpleBar ref="simplebarInstance"> </SimpleBar>
-   <!-- Or this behavior can be used but it will give type error probably -->
-   <SimpleBar :ref="(instance) => { simplebarInstance = instance }"> </SimpleBar>
+   <button ref="targetElement" @click="toggle">
+      Hi How Are you?
+      <!-- nice right? but be careful with recursive components :) -->
+      <Wowarley
+         tag="div"
+         :target="targetElement"
+         :visible="isVisible"
+         @update:visible="(state) => isVisible = state"
+      >
+         <div>Hey how you doin?</div>
+         <button>Good</button>
+         <button>Bad</button>
+      </Wowarley>
+   </button>
 </template>
-
-<!-- Typescript is optional -->
-<script setup lang="ts">
-   import type { SimplebarInstanceRef } from 'simplebar-vue3';
-   import { SimpleBar } from 'simplebar-vue3';
-   import { ref } from 'vue';
-
-   const simplebarInstance = ref<SimplebarInstanceRef>(null);
-</script>
 ```
 
-##### Via composable;
+## Styling Wowerlay
 
-In **CHILD COMPONENTS** you can use `useSimplebar` composable to access simplebar instance as a **Ref**. <br>
-**NOTE:** If you try access to instance before parent `mounted` this composable will return `null`;
+Styling wowerlay is too simple because `<Wowerlay/>` is just a single wrapper element. You can give any class any style and any attribute to it, that's why I didn't make props like `width`, `height` because you have full control with styles.
 
-##### parent.vue
+`!!! Expect necessary ones, please do not break them :)`
+
+By default `<Wowarley/>` will try to fit in viewport. If you don't want that behavior in future you can use `disableFit: boolean` prop but not implemented yet.
 
 ```html
-<SimpleBar>
-   <ChildComponent />
-</SimpleBar>
+<Wowerlay tag="something" style="width: 300px; height: 300px;"> Content Goes Here </Wowerlay>
 ```
 
-##### child.vue
+## Props
 
-```html
-<!-- Typescript is optional -->
-<script lang="ts">
-   import { useSimplebar } from 'simplebar-vue3';
-   import { onMounted } from 'vue';
-
-   const simplebar = useSimplebar();
-   onMounted(() => {
-      simplebar.value.recalculate();
-      simplebar.value.el.getBoundingClientRect();
-      // or more
-   });
-</script>
-```
-
-### Options
-
-You can give these options to the component as props.
+Currently `target` and `visible` props are supported, other ones will be finished in the future.
 
 ```ts
-import { Options } from 'simplebar';
-
-interface SimpleBarProps {
-   tag?: string; //default 'div'
-
-   // Simplebar Options as prop
-   autoHide?: Options['autoHide'];
-   classNames?: Options['classNames'];
-   clickOnTrack?: Options['clickOnTrack'];
-   direction?: Options['direction'];
-   forceVisible?: Options['forceVisible'];
-   scrollbarMaxSize?: Options['scrollbarMaxSize'];
-   scrollbarMinSize?: Options['scrollbarMinSize'];
-   timeout?: Options['timeout'];
+export interface OverlayProps {
+   align?: 'auto' | 'top' | 'bottom'; // not implemented yet
+   canLeaveViewport?: boolean; // not implemented yet
+   disableFit?: boolean; // not implemented yet
+   noFollow?: boolean; // not implemented yet
+   target: null | HTMLElement;
+   tag?: string; // default: "div"
 }
 ```
 
-### TypeScript Support
+## What about TypeScript?
 
-This package has built-in typescript support for events and props it should work with `.tsx` files with no trouble.
+This package has built-in typescript support for events and props it should work with `.tsx` files. If you check source code of this project you can see I wrote whole plugin with tsx.
 
 To have types support in vue files we recommend you to use `Volar` plugin. <br>
 [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar) <br>

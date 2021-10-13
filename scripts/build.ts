@@ -10,7 +10,7 @@ async function main() {
       await fse.rm(dist, { recursive: true });
    }
 
-   await execute('npm', ['run', 'build']);
+   await execute('npm', ['run', 'script:build']);
    await sleep(300);
    await refactorTypes();
 }

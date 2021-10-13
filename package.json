@@ -1,23 +1,23 @@
 {
-   "name": "overlay-vue3",
+   "name": "wowerlay",
    "version": "0.0.1",
-   "main": "./dist/overlay-vue3.umd.js",
-   "module": "./dist/overlay-vue3.es.js",
+   "main": "./dist/wowerlay.umd.js",
+   "module": "./dist/wowerlay.es.js",
    "types": "./dist/types/lib.d.ts",
    "exports": {
       ".": {
-         "require": "./dist/overlay-vue3.umd.js",
-         "import": "./dist/overlay-vue3.es.js"
+         "require": "./dist/wowerlay.umd.js",
+         "import": "./dist/wowerlay.es.js"
       }
    },
    "repository": {
-      "url": "git+https://github.com/teamseodo/overlay-vue3.git",
+      "url": "git+https://github.com/teamseodo/wowerlay.git",
       "type": "git"
    },
    "bugs": {
-      "url": "https://github.com/teamseodo/overlay-vue3/issues"
+      "url": "https://github.com/teamseodo/wowerlay/issues"
    },
-   "homepage": "https://github.com/teamseodo/overlay-vue3#readme",
+   "homepage": "https://github.com/teamseodo/wowerlay#readme",
    "keywords": [
       "vue 3",
       "simplebar"
@@ -25,9 +25,9 @@
    "license": "MIT",
    "scripts": {
       "dev": "vite",
-      "build": "tsc --noEmit && cross-env MODE=production vite build",
+      "build": "ts-node --transpile-only scripts/build.ts",
       "script:release": "ts-node --transpile-only scripts/release.ts",
-      "script:build": "ts-node --transpile-only scripts/build.ts",
+      "script:build": "tsc --noEmit && cross-env MODE=production vite build",
       "watch": "cross-env MODE=production vite build --watch"
    },
    "devDependencies": {

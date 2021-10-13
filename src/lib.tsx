@@ -1,7 +1,7 @@
-import './styles/Overlay.scss';
-import './styles/OverlayContainer.scss';
+import './styles/Wowerlay.scss';
+import './styles/WowerlayContainer.scss';
 
-export * from './components/Overlay';
-export * from './components/OverlayContainer';
+export * from './components/Wowerlay';
+export * from './components/WowerlayContainer';
 
-export { OverlayPlugin } from './plugin/index';
+export { createWowerlay } from './plugin/index';

@@ -1,8 +1,8 @@
 import { PropType, Teleport, Transition, defineComponent, ref, watch } from 'vue';
+import { cWowerlayAnimEnter, cWowerlayAnimLeave, cWowerlayContainer } from '../consts';
 
-import { Overlay } from './Overlay';
 import { OverlayProps } from './OverlayReusables';
-import { overlayContainerClassName } from '../consts';
+import { WowerlayRenderer } from './WowerlayRenderer';
 import { useOverlayContext } from '../event';
 
 export interface OverlayRendererProps extends OverlayProps {
@@ -20,8 +20,8 @@ const Emits = {
    'update:visible': (value: boolean): any => typeof value === 'boolean'
 } as const;
 
-export const OverlayRenderer = defineComponent({
-   name: 'OverlayRenderer',
+export const Wowerlay = defineComponent({
+   name: 'Wowerlay',
    inheritAttrs: false,
    props: {
       ...OverlayProps,
@@ -32,7 +32,7 @@ export const OverlayRenderer = defineComponent({
       const { onWindowClick } = useOverlayContext();
       const canClose = ref(false);
 
-      const toClass = `.${overlayContainerClassName}`;
+      const toClass = `.${cWowerlayContainer}`;
 
       onWindowClick(() => {
          if (canClose.value) {
@@ -53,13 +53,20 @@ export const OverlayRenderer = defineComponent({
          }
       );
 
-      return () => (
-         <Teleport to={toClass}>
-            <Transition enterActiveClass="k-overlay-anim-enter" leaveActiveClass="k-overlay-anim-leave">
-               {!props.visible ? null : (
-                  <Overlay {...props} {...attrs}>
-                     {slots.default?.()}
-                  </Overlay>
+      return {
+         toClass,
+         canClose
+      };
+   },
+   render() {
+      return (
+         <Teleport to={this.toClass}>
+            {/*//Todo- Add user made animation support. */}
+            <Transition enterActiveClass={cWowerlayAnimEnter} leaveActiveClass={cWowerlayAnimLeave}>
+               {!this.visible ? null : (
+                  <WowerlayRenderer {...this.$props} {...this.$attrs}>
+                     {this.$slots.default?.()}
+                  </WowerlayRenderer>
                )}
             </Transition>
          </Teleport>
