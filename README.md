@@ -4,7 +4,7 @@
 
 ### A Overlay/Popup library for Vue3. (WORK IN PROGRESS BUT WORKS)
 
-[![wowerley](https://img.shields.io/npm/v/wowerlay)](https://npmjs.com/package/wowerlay)
+[![wowerlay](https://img.shields.io/npm/v/wowerlay)](https://npmjs.com/package/wowerlay)
 
 ## Intallation
 
@@ -28,11 +28,14 @@ yarn add wowerlay
 
 ## Usage
 
-First you have to register the plugin.
+First you have to register the plugin and import `style` file.
 
 ### `main.(js|ts)`
 
 ```ts
+// import style file!
+import 'wowerlay/style.css';
+
 import { createWowerlay } from 'wowerlay';
 import { createApp } from 'vue';
 import App from './App.vue';
@@ -76,24 +79,24 @@ You must have `<WowerlayContainer/>` in your `App.vue`. WowerlayContainer is jus
 
 To create an overlay you must at least set a `visibility` handler value and give a target element, template ref values can be given.
 
-Don't worry, anthing goes to `<Wowerley/>` will be unmounted when visible is `false` but currently I don't recommend you to use it with `<KeepAlive/>` because I haven't test it yet.
+Don't worry, anthing goes to `<Wowerlay/>` will be unmounted when visible is `false` but currently I don't recommend you to use it with `<KeepAlive/>` because I haven't test it yet.
 
-And `<Wowerley/>` component is jut a `div` with extra features, you can change tag of it with `tag` prop.
+And `<Wowerlay/>` component is jut a `div` with extra features, you can change tag of it with `tag` prop.
 
 ```html
 <template>
    <button ref="targetElement" @click="toggle">Hi How Are you?</button>
    <!-- tag prop is "div" by default -->
-   <Wowerley tag="section" :target="targetElement" v-model:visible="isVisible">
+   <Wowerlay tag="section" :target="targetElement" v-model:visible="isVisible">
       <div>Hey how you doin?</div>
       <button>Good</button>
       <button>Bad</button>
-   </Wowerley>
+   </Wowerlay>
 </template>
 
 <!-- Typescript is optional -->
 <script setup lang="ts">
-   import { Wowerley } from 'wowerley';
+   import { Wowerlay } from 'wowerlay';
    import { ref } from 'vue';
 
    // if you are using typescript define template ref like this otherwise
@@ -111,7 +114,7 @@ If you don't prefer `v-model:visible` syntax you can use this one;
 <template>
    <button ref="targetElement" @click="toggle">Hi How Are you?</button>
 
-   <Wowerley
+   <Wowerlay
       tag="span"
       :target="targetElement"
       :visible="isVisible"
@@ -120,19 +123,19 @@ If you don't prefer `v-model:visible` syntax you can use this one;
       <div>Hey how you doin?</div>
       <button>Good</button>
       <button>Bad</button>
-   </Wowerley>
+   </Wowerlay>
 </template>
 ```
 
 And lastly if you don't want to stop [`attribute inheritance`](https://v3.vuejs.org/guide/component-attrs.html#attribute-inheritance) you can use
-`<Wowerley/>` component inside of target button, it will work as expected because it will be `teleported` to `body` eventually.
+`<Wowerlay/>` component inside of target button, it will work as expected because it will be `teleported` to `body` eventually.
 
 ```html
 <template>
    <button ref="targetElement" @click="toggle">
       Hi How Are you?
       <!-- nice right? but be careful with recursive components :) -->
-      <Wowerley
+      <Wowerlay
          tag="div"
          :target="targetElement"
          :visible="isVisible"
@@ -141,7 +144,7 @@ And lastly if you don't want to stop [`attribute inheritance`](https://v3.vuejs.
          <div>Hey how you doin?</div>
          <button>Good</button>
          <button>Bad</button>
-      </Wowerley>
+      </Wowerlay>
    </button>
 </template>
 ```
@@ -150,9 +153,9 @@ And lastly if you don't want to stop [`attribute inheritance`](https://v3.vuejs.
 
 Styling wowerlay is too simple because `<Wowerlay/>` is just a single wrapper element. You can give any class any style and any attribute to it, that's why I didn't make props like `width`, `height` because you have full control with styles.
 
-`!!! Expect necessary ones, please do not break them :)`
+`!!! Except necessary ones, please do not break them :)`
 
-By default `<Wowerley/>` will try to fit in viewport. If you don't want that behavior in future you can use `disableFit: boolean` prop but not implemented yet.
+By default `<Wowerlay/>` will try to fit in viewport. If you don't want that behavior in future you can use `disableFit: boolean` prop but not implemented yet.
 
 ```html
 <Wowerlay tag="something" style="width: 300px; height: 300px;"> Content Goes Here </Wowerlay>
