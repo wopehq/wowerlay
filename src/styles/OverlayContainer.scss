@@ -1,0 +1,14 @@
+.k-overlay-container {
+   display: block;
+   position: fixed;
+   left: 0;
+   top: 0;
+   width: 100vw;
+   max-width: fill-available;
+   max-width: -webkit-fill-available;
+   height: 100vh;
+   max-height: fill-available;
+   max-height: -webkit-fill-available;
+   pointer-events: none;
+   z-index: var(--k-overlay-z-index, 1500);
+}

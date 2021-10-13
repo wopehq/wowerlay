@@ -1,0 +1,6 @@
+{
+   "typescript.tsdk": "node_modules/typescript/lib",
+   "volar.preferredTagNameCase": "pascal",
+   "volar.preferredAttrNameCase": "camel",
+   "cssModules.camelCase": true
+}

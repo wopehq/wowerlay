@@ -1,0 +1,12 @@
+.vscode
+node_modules
+scripts
+src
+.gitignore
+.prettierrc
+index.html
+pnpm-lock.yaml
+tsconfig.json
+vite.config.ts
+env.d.ts
+test

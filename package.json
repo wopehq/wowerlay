@@ -1,0 +1,54 @@
+{
+   "name": "overlay-vue3",
+   "version": "0.0.1",
+   "main": "./dist/overlay-vue3.umd.js",
+   "module": "./dist/overlay-vue3.es.js",
+   "types": "./dist/types/lib.d.ts",
+   "exports": {
+      ".": {
+         "require": "./dist/overlay-vue3.umd.js",
+         "import": "./dist/overlay-vue3.es.js"
+      }
+   },
+   "repository": {
+      "url": "git+https://github.com/teamseodo/overlay-vue3.git",
+      "type": "git"
+   },
+   "bugs": {
+      "url": "https://github.com/teamseodo/overlay-vue3/issues"
+   },
+   "homepage": "https://github.com/teamseodo/overlay-vue3#readme",
+   "keywords": [
+      "vue 3",
+      "simplebar"
+   ],
+   "license": "MIT",
+   "scripts": {
+      "dev": "vite",
+      "build": "tsc --noEmit && cross-env MODE=production vite build",
+      "script:release": "ts-node --transpile-only scripts/release.ts",
+      "script:build": "ts-node --transpile-only scripts/build.ts",
+      "watch": "cross-env MODE=production vite build --watch"
+   },
+   "devDependencies": {
+      "@types/fs-extra": "^9.0.13",
+      "@types/node": "^16.10.3",
+      "@types/prompts": "^2.0.14",
+      "@vitejs/plugin-vue-jsx": "^1.2.0",
+      "chalk": "^4.1.2",
+      "cross-env": "^7.0.3",
+      "execa": "^5.1.1",
+      "fast-glob": "^3.2.7",
+      "fs-extra": "^10.0.0",
+      "prompts": "^2.4.2",
+      "sass": "^1.42.1",
+      "ts-node": "^10.2.1",
+      "typescript": "4.3.5",
+      "vite": "^2.6.4",
+      "vite-plugin-dts": "^0.8.3",
+      "vue": "3.2.20"
+   },
+   "peerDependencies": {
+      "vue": "3.2.0"
+   }
+}
