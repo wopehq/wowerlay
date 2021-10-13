@@ -139,9 +139,9 @@ async function main() {
    const newPkgJson = { ...pkgJSON, version: newVersion };
    await writeNewPackageJson(newPkgJson);
 
-   // await execute('git', ['add', ...gitAddFiles]);
-   // await execute('git', ['commit', '-m', commitMessage]);
-   // await execute('git', ['push', 'origin', branchName]);
+   await execute('git', ['add', ...gitAddFiles]);
+   await execute('git', ['commit', '-m', commitMessage]);
+   await execute('git', ['push', 'origin', branchName]);
 
    if (willBePublished) {
       await execute('npm', ['run', 'build']);

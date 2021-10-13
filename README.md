@@ -1,6 +1,8 @@
-### A Overlay/Popup library for Vue3. (WORK IN PROGRESS BUT WORKS)
+<p align="center">
+   <img src="md/wowerlay.png">
+</p>
 
-![wowarley logo](md/wowerley.png)
+### A Overlay/Popup library for Vue3. (WORK IN PROGRESS BUT WORKS)
 
 [![wowarley](https://img.shields.io/npm/v/wowerlay)](https://npmjs.com/package/wowerlay)
 

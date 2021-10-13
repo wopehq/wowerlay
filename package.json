@@ -1,6 +1,6 @@
 {
    "name": "wowerlay",
-   "version": "0.0.1",
+   "version": "0.0.2",
    "main": "./dist/wowerlay.umd.js",
    "module": "./dist/wowerlay.es.js",
    "types": "./dist/types/lib.d.ts",
@@ -26,7 +26,7 @@
    "scripts": {
       "dev": "vite",
       "build": "ts-node --transpile-only scripts/build.ts",
-      "script:release": "ts-node --transpile-only scripts/release.ts",
+      "release": "ts-node --transpile-only scripts/release.ts",
       "script:build": "tsc --noEmit && cross-env MODE=production vite build",
       "watch": "cross-env MODE=production vite build --watch"
    },
