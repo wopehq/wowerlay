@@ -4,26 +4,25 @@ export interface WowerlayBaseProps {
    align?: 'auto' | 'top' | 'bottom';
    canLeaveViewport?: boolean;
    noFollow?: boolean;
-   target: HTMLElement | null;
+   target: any;
    tag?: string;
 }
-type WowerlayProp<T extends keyof WowerlayBaseProps> = PropType<WowerlayBaseProps[T]>;
 
 export const wowerlayBaseProps = {
    target: {
       required: true,
-      type: null as WowerlayProp<'target'>
+      type: null
    },
    align: {
       default: 'auto',
-      type: String as WowerlayProp<'align'>
+      type: String as PropType<WowerlayBaseProps['align']>
    },
    canLeaveViewport: {
       default: false,
-      type: Boolean as WowerlayProp<'canLeaveViewport'>
+      type: Boolean as PropType<WowerlayBaseProps['canLeaveViewport']>
    },
    tag: {
       default: 'div',
-      type: String as WowerlayProp<'tag'>
+      type: String as PropType<WowerlayBaseProps['tag']>
    }
 } as const;

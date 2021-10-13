@@ -34,5 +34,5 @@ export const runEvents = (store: EventsStore[]) => {
 export const createEventStore = () => [] as EventsStore[];
 
 export const useWowerlayContext = () => {
-   return inject(injectionKey);
+   return inject(injectionKey)!;
 };

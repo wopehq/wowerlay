@@ -16,8 +16,8 @@
       "resolveJsonModule": true,
       "esModuleInterop": true,
       "skipLibCheck": true,
-      "lib": ["esnext", "dom"],
-      "strictNullChecks": false
+      "lib": ["esnext", "dom"]
+      // "strictNullChecks": false
    },
    "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
    "exclude": ["node_modules"]

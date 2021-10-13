@@ -8,12 +8,11 @@ import { useWowerlayContext } from '../event';
 export interface WowerlayProps extends WowerlayBaseProps {
    visible: boolean;
 }
-type WowerlayProp<T extends keyof WowerlayProps> = PropType<WowerlayProps[T]>;
 
 const Props = {
    visible: {
       required: true,
-      type: Boolean as WowerlayProp<'visible'>
+      type: Boolean as PropType<WowerlayProps['visible']>
    } as const
 };
 const Emits = {

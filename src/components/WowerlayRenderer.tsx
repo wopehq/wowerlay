@@ -34,6 +34,9 @@ export const WowerlayRenderer = defineComponent({
       }));
 
       const fixPosition = (pos: number, direction: Direction) => {
+         if (!overlayElement.value) {
+            return 0;
+         }
          const { width, height, y } = overlayElement.value.getBoundingClientRect();
          const scrollbarGap = gap * 2;
          switch (direction) {
@@ -57,7 +60,7 @@ export const WowerlayRenderer = defineComponent({
          if (!props.target || !overlayElement.value) {
             throw new Error('overlayElement.value or target prop is undefined');
          }
-         const { height, x: newX, y } = props.target.getBoundingClientRect();
+         const { height, x: newX, y } = (props.target as HTMLElement).getBoundingClientRect();
          const newY = height + y + gap;
          posY.value = fixPosition(newY, Direction.Y);
          posX.value = fixPosition(newX, Direction.X);
