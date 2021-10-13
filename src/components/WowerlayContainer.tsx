@@ -3,25 +3,25 @@ import { PropType, Teleport, defineComponent, onBeforeUnmount, onMounted } from 
 import { cWowerlayContainer } from '../consts';
 import { useWowerlayContext } from '../event';
 
-export interface OverlayContainerProps {
+export interface WowerlayContainerProps {
    zIndex?: number;
 }
-export interface OverlayContainerEmits {
+export interface WowerlayContainerEmits {
    overlayClose: (value: any) => void;
 }
 
-type WProp<T extends keyof OverlayContainerProps> = PropType<OverlayContainerProps[T]>;
-type WEmit<T extends keyof OverlayContainerEmits> = OverlayContainerEmits[T];
+type WowerlayProp<T extends keyof WowerlayContainerProps> = PropType<WowerlayContainerProps[T]>;
+type WowerlayEmit<T extends keyof WowerlayContainerEmits> = WowerlayContainerEmits[T];
 
 const Props = {
    zIndex: {
-      type: Number as WProp<'zIndex'>,
+      type: Number as WowerlayProp<'zIndex'>,
       default: 1500
    }
 } as const;
 
 const Emits = {
-   overlayClose: null as WEmit<'overlayClose'>
+   overlayClose: null as WowerlayEmit<'overlayClose'>
 } as const;
 
 export const WowerlayContainer = defineComponent({
