@@ -26,27 +26,39 @@ const App = defineComponent({
       return () => (
          <>
             <OverlayContainer />
-            <div style={{ height: '1000px', width: '100000px' }}></div>
-            <h3
+            <div
                style={{
-                  margin: 'auto'
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: '1000px',
+                  width: '3000px'
                }}
-               onClick={() => {
-                  isOpen.value = !isOpen.value;
-               }}
-               ref={targetEl}
             >
-               Vue Overlay Yeah
-            </h3>
-            <OverlayRenderer
-               onUpdate:visible={(state) => (isOpen.value = state)}
-               visible={isOpen.value}
-               tag="span"
-               target={targetEl.value}
-            >
-               <div>Selamlar Herkese</div>
-               <Mycomponent />
-            </OverlayRenderer>
+               <div style="text-align: center; width: 100%">
+                  <h3
+                     style={{
+                        margin: 'auto',
+                        display: 'inline-block'
+                     }}
+                     onClick={() => {
+                        isOpen.value = !isOpen.value;
+                     }}
+                     ref={targetEl}
+                  >
+                     Vue Overlay Yeah
+                  </h3>
+               </div>
+               <OverlayRenderer
+                  onUpdate:visible={(state) => (isOpen.value = state)}
+                  visible={isOpen.value}
+                  tag="div"
+                  target={targetEl.value}
+               >
+                  <div>Selamlar Herkese</div>
+                  <Mycomponent />
+               </OverlayRenderer>
+            </div>
             <div style={{ height: '1000px' }}></div>
          </>
       );

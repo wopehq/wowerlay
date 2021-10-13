@@ -1,4 +1,4 @@
-import { PropType, Teleport, defineComponent, ref, watch } from 'vue';
+import { PropType, Teleport, Transition, defineComponent, ref, watch } from 'vue';
 
 import { Overlay } from './Overlay';
 import { OverlayProps } from './OverlayReusables';
@@ -55,12 +55,13 @@ export const OverlayRenderer = defineComponent({
 
       return () => (
          <Teleport to={toClass}>
-            {/* I want it to do linebreak :) */}
-            {!props.visible ? null : (
-               <Overlay {...props} {...attrs}>
-                  {slots.default?.()}
-               </Overlay>
-            )}
+            <Transition enterActiveClass="k-overlay-anim-enter" leaveActiveClass="k-overlay-anim-leave">
+               {!props.visible ? null : (
+                  <Overlay {...props} {...attrs}>
+                     {slots.default?.()}
+                  </Overlay>
+               )}
+            </Transition>
          </Teleport>
       );
    }
