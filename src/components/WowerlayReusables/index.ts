@@ -4,7 +4,7 @@ export interface WowerlayBaseProps {
    align?: 'auto' | 'top' | 'bottom';
    canLeaveViewport?: boolean;
    noFollow?: boolean;
-   target: null | HTMLElement;
+   target: HTMLElement | null;
    tag?: string;
 }
 type WowerlayProp<T extends keyof WowerlayBaseProps> = PropType<WowerlayBaseProps[T]>;
