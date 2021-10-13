@@ -17,7 +17,7 @@ const Props = {
    }
 };
 const Emits = {
-   'update:visible': (value: boolean): any => true
+   'update:visible': (value: boolean): any => typeof value === 'boolean'
 } as const;
 
 export const OverlayRenderer = defineComponent({

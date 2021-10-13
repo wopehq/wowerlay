@@ -63,12 +63,6 @@ export const Overlay = defineComponent({
       };
 
       const mountHandler = async (status: boolean) => {
-         // if (!status) {
-         //    canTransition.value = false;
-         //    return;
-         // }
-
-         // canClose.value = false;
          if (!props.target) {
             await nextTick();
          }
@@ -88,7 +82,7 @@ export const Overlay = defineComponent({
       });
 
       return () => (
-         <div
+         <Tag.value
             onClick={handleOverlayClick}
             ref={overlayElement}
             style={positionClassNames.value}
@@ -96,7 +90,7 @@ export const Overlay = defineComponent({
             {...attrs}
          >
             {slots.default?.()}
-         </div>
+         </Tag.value>
       );
    }
 });

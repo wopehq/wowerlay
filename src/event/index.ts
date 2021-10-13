@@ -1,4 +1,4 @@
-import { InjectionKey, Plugin, inject, onBeforeUnmount } from 'vue';
+import { InjectionKey, inject, onBeforeUnmount } from 'vue';
 
 export type Handler<T = any> = (e?: T) => any;
 export interface EventsStore {
