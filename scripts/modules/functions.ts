@@ -50,17 +50,14 @@ export async function refactorTypes() {
    const basePath = join(dist, 'src');
    const targetPath = join(dist, 'types');
 
-   const toBeRemovedTypes = [
-      join(dist, 'types', 'plugin'),
-      join(dist, 'types', 'event'),
-      join(dist, 'types', 'consts.d.ts')
-   ];
-
+   const toBeRemovedTypes = ['consts.d.ts', 'event'];
    if (await fse.pathExists(basePath)) {
       await fse.move(basePath, targetPath);
-      for (const path of toBeRemovedTypes) {
-         fse.rm(path, { recursive: true });
+      for (const directoryOrFileName of toBeRemovedTypes) {
+         const path = join(dist, 'types', directoryOrFileName);
+         await fse.rm(path, { recursive: true });
       }
+      return;
    }
    throw new Error('types folder does not exist');
 }
