@@ -10,6 +10,10 @@ export interface WowerlayBaseProps {
 type WowerlayProp<T extends keyof WowerlayBaseProps> = PropType<WowerlayBaseProps[T]>;
 
 export const wowerlayBaseProps = {
+   target: {
+      required: true,
+      type: null as WowerlayProp<'target'>
+   },
    align: {
       default: 'auto',
       type: String as WowerlayProp<'align'>
@@ -17,10 +21,6 @@ export const wowerlayBaseProps = {
    canLeaveViewport: {
       default: false,
       type: Boolean as WowerlayProp<'canLeaveViewport'>
-   },
-   target: {
-      required: true,
-      type: null as WowerlayProp<'target'>
    },
    tag: {
       default: 'div',

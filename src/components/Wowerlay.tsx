@@ -14,7 +14,7 @@ const Props = {
    visible: {
       required: true,
       type: Boolean as WowerlayProp<'visible'>
-   }
+   } as const
 };
 const Emits = {
    'update:visible': (value: boolean): any => typeof value === 'boolean'
