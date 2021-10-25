@@ -52,26 +52,26 @@ You must have `<WowerlayContainer/>` in your `App.vue`. WowerlayContainer is jus
 
 ```html
 <template>
-   <!-- IMPORTANT | DO NOT FORGET THIS -->
-   <WowerlayContainer />
-   <Navbar />
-   <router-view />
-   <!-- don't use multiple times! -->
-   <WowerlayContainer_But_Shouldnt_Be_Used_More_Than_Once />
+  <!-- IMPORTANT | DO NOT FORGET THIS -->
+  <WowerlayContainer />
+  <Navbar />
+  <router-view />
+  <!-- don't use multiple times! -->
+  <WowerlayContainer_But_Shouldnt_Be_Used_More_Than_Once />
 </template>
 
 <script setup>
-   import { WowerlayContainer } from 'wowerlay';
+  import { WowerlayContainer } from 'wowerlay';
 </script>
 
 <!-- FOR NORMAL SCRIPT -->
 <script>
-   import { WowerlayContainer } from 'wowerlay';
-   import { defineComponent } from 'vue';
+  import { WowerlayContainer } from 'wowerlay';
+  import { defineComponent } from 'vue';
 
-   export default defineComponent({
-      components: { WowerlayContainer }
-   });
+  export default defineComponent({
+    components: { WowerlayContainer }
+  });
 </script>
 ```
 
@@ -85,26 +85,26 @@ And `<Wowerlay/>` component is jut a `div` with extra features, you can change t
 
 ```html
 <template>
-   <button ref="targetElement" @click="toggle">Hi How Are you?</button>
-   <!-- tag prop is "div" by default -->
-   <Wowerlay tag="section" :target="targetElement" v-model:visible="isVisible">
-      <div>Hey how you doin?</div>
-      <button>Good</button>
-      <button>Bad</button>
-   </Wowerlay>
+  <button ref="targetElement" @click="toggle">Hi How Are you?</button>
+  <!-- tag prop is "div" by default -->
+  <Wowerlay tag="section" :target="targetElement" v-model:visible="isVisible">
+    <div>Hey how you doin?</div>
+    <button>Good</button>
+    <button>Bad</button>
+  </Wowerlay>
 </template>
 
 <!-- Typescript is optional -->
 <script setup lang="ts">
-   import { Wowerlay } from 'wowerlay';
-   import { ref } from 'vue';
+  import { Wowerlay } from 'wowerlay';
+  import { ref } from 'vue';
 
-   // if you are using typescript define template ref like this otherwise
-   // you will get a type error.
-   // const targetElement = ref<HTMLElement | null>(null);
-   const targetElement = ref(null);
-   const isVisible = ref(false);
-   const toggle = () => (isVisible.value = !isVisible.value);
+  // if you are using typescript define template ref like this otherwise
+  // you will get a type error.
+  // const targetElement = ref<HTMLElement | null>(null);
+  const targetElement = ref(null);
+  const isVisible = ref(false);
+  const toggle = () => (isVisible.value = !isVisible.value);
 </script>
 ```
 
@@ -112,18 +112,18 @@ If you don't prefer `v-model:visible` syntax you can use this one;
 
 ```html
 <template>
-   <button ref="targetElement" @click="toggle">Hi How Are you?</button>
+  <button ref="targetElement" @click="toggle">Hi How Are you?</button>
 
-   <Wowerlay
-      tag="span"
-      :target="targetElement"
-      :visible="isVisible"
-      @update:visible="(state) => isVisible = state"
-   >
-      <div>Hey how you doin?</div>
-      <button>Good</button>
-      <button>Bad</button>
-   </Wowerlay>
+  <Wowerlay
+    tag="span"
+    :target="targetElement"
+    :visible="isVisible"
+    @update:visible="(state) => isVisible = state"
+  >
+    <div>Hey how you doin?</div>
+    <button>Good</button>
+    <button>Bad</button>
+  </Wowerlay>
 </template>
 ```
 
@@ -132,20 +132,20 @@ And lastly if you don't want to stop [`attribute inheritance`](https://v3.vuejs.
 
 ```html
 <template>
-   <button ref="targetElement" @click="toggle">
-      Hi How Are you?
-      <!-- nice right? but be careful with recursive components :) -->
-      <Wowerlay
-         tag="div"
-         :target="targetElement"
-         :visible="isVisible"
-         @update:visible="(state) => isVisible = state"
-      >
-         <div>Hey how you doin?</div>
-         <button>Good</button>
-         <button>Bad</button>
-      </Wowerlay>
-   </button>
+  <button ref="targetElement" @click="toggle">
+    Hi How Are you?
+    <!-- nice right? but be careful with recursive components :) -->
+    <Wowerlay
+      tag="div"
+      :target="targetElement"
+      :visible="isVisible"
+      @update:visible="(state) => isVisible = state"
+    >
+      <div>Hey how you doin?</div>
+      <button>Good</button>
+      <button>Bad</button>
+    </Wowerlay>
+  </button>
 </template>
 ```
 
@@ -167,12 +167,12 @@ Currently `target` and `visible` props are supported, other ones will be finishe
 
 ```ts
 export interface OverlayProps {
-   align?: 'auto' | 'top' | 'bottom'; // not implemented yet
-   canLeaveViewport?: boolean; // not implemented yet
-   disableFit?: boolean; // not implemented yet
-   noFollow?: boolean; // not implemented yet
-   target: null | HTMLElement;
-   tag?: string; // default: "div"
+  align?: 'auto' | 'top' | 'bottom'; // not implemented yet
+  canLeaveViewport?: boolean; // not implemented yet
+  disableFit?: boolean; // not implemented yet
+  noFollow?: boolean; // not implemented yet
+  target: null | HTMLElement;
+  tag?: string; // default: "div"
 }
 ```
 
