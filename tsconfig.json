@@ -1,9 +1,8 @@
 {
   "compilerOptions": {
-    "disableSizeLimit": true,
-    "target": "esnext",
+    "target": "ESNext",
     "useDefineForClassFields": true,
-    "module": "ESNext",
+    "module": "CommonJS",
     "moduleResolution": "node",
     "strict": true,
     "jsx": "preserve",
@@ -16,6 +15,7 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
     "lib": ["esnext", "dom"],
     "noUnusedLocals": true,
     "noUnusedParameters": true,
