@@ -44,7 +44,7 @@ async function main() {
   });
 
   if (purpose === Purpose.OnlyPublish) {
-    return publish();
+    return publish(true);
   }
 
   const gitignore = await readGitignore();
@@ -151,7 +151,12 @@ async function main() {
 
 async function publish(askForSure = false) {
   if (askForSure) {
+    const isSure = await ask('Are you sure to publish?');
+    if (!isSure) {
+      return askForReset();
+    }
   }
+
   log(`Publishing to npm`, 'cyan');
   await sleep(500);
   await execute('npm', ['run', 'build']);
