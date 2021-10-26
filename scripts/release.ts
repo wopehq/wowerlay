@@ -145,6 +145,7 @@ async function main() {
 
   const coloredBranchName = chalk.magentaBright('[', currentBranch + ']');
   log(`Pulling latest state of ${coloredBranchName}`, 'cyan');
+  await sleep(300);
   try {
     await execute('git', ['pull', 'origin', currentBranch]);
   } catch (error) {
@@ -155,12 +156,15 @@ async function main() {
   }
 
   log('Adding selected files to current commit', 'cyan');
+  await sleep(300);
   await execute('git', ['add', ...gitAddFiles]);
 
   log('Commiting changes', 'cyan');
+  await sleep(300);
   await execute('git', ['commit', '-m', commitMessage]);
 
   log(`Pushing changes to ${coloredBranchName}`, 'cyan');
+  await sleep(300);
   await execute('git', ['push', 'origin', branchName]);
 
   if (willBePublished) {
