@@ -1,5 +1,6 @@
 import {
   execute,
+  getCurrentBranchName,
   indent,
   log,
   readGitignore,
@@ -8,6 +9,7 @@ import {
 } from './modules/functions';
 import prompt, { Choice } from 'prompts';
 
+import chalk from 'chalk';
 import fg from 'fast-glob';
 import pkgJSON from '../package.json';
 
@@ -81,11 +83,12 @@ async function main() {
     min: 3
   });
 
+  const currentBranch = await getCurrentBranchName();
   const { value: branchName }: PromptVal<string> = await prompt({
     type: 'text',
     name: 'value',
-    message: 'branch',
-    initial: 'main'
+    message: 'type the branch you want to push, default:',
+    initial: currentBranch
   });
 
   log('Choices you made:', 'yellow');
@@ -121,6 +124,7 @@ async function main() {
     active: 'yes',
     inactive: 'no'
   });
+
   if (!isSure) {
     const { value: doCycle }: PromptVal<boolean> = await prompt({
       type: 'toggle',
@@ -139,8 +143,24 @@ async function main() {
   const newPkgJson = { ...pkgJSON, version: newVersion };
   await writeNewPackageJson(newPkgJson);
 
+  const coloredBranchName = chalk.magentaBright('[', currentBranch + ']');
+  log(`Pulling latest state of ${coloredBranchName}`, 'cyan');
+  try {
+    await execute('git', ['pull', 'origin', currentBranch]);
+  } catch (error) {
+    log(
+      `Failed to pull ${coloredBranchName}, guessing the branch does not exist, skipped pulling`,
+      'cyan'
+    );
+  }
+
+  log('Adding selected files to current commit', 'cyan');
   await execute('git', ['add', ...gitAddFiles]);
+
+  log('Commiting changes', 'cyan');
   await execute('git', ['commit', '-m', commitMessage]);
+
+  log(`Pushing changes to ${coloredBranchName}`, 'cyan');
   await execute('git', ['push', 'origin', branchName]);
 
   if (willBePublished) {
