@@ -1,40 +1,37 @@
 .wowerlay {
-   $gap: 50px;
-   $varX: var(--wowerlay-x, 0px);
-   $varY: var(--wowerlay-y, 0px);
-   position: absolute;
-   display: inline-block;
-   left: 0;
-   top: 0;
-   z-index: var(--k-z-index, 1500);
-   pointer-events: all !important;
-   transform: translate(#{$varX}, #{$varY});
-   background-color: rgb(238, 238, 238);
-   padding: 15px;
-   box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.259);
-   overflow: auto;
-   max-width: calc(100vw - #{$gap});
-   max-width: calc(#{fill-available} - #{$gap});
-   max-width: calc(#{-webkit-fill-available} - #{$gap});
-   max-height: calc(100vh - #{$gap});
-   max-height: calc(#{fill-available} - 5px);
-   max-height: calc(#{-webkit-fill-available} - #{$gap});
+  $gap: 50px;
+  $varX: var(--wowerlay-x, 0px);
+  $varY: var(--wowerlay-y, 0px);
+  position: absolute;
+  display: inline-block;
+  left: 0;
+  top: 0;
+  z-index: var(--k-z-index, 1500);
+  pointer-events: all !important;
+  transform: translate(#{$varX}, #{$varY});
+  overflow: auto;
+  max-width: calc(100vw - #{$gap});
+  max-width: calc(#{fill-available} - #{$gap});
+  max-width: calc(#{-webkit-fill-available} - #{$gap});
+  max-height: calc(100vh - #{$gap});
+  max-height: calc(#{fill-available} - 5px);
+  max-height: calc(#{-webkit-fill-available} - #{$gap});
 }
 
 .wowerlay-anim-enter {
-   animation: kOverlayAnimation 0.25s;
+  animation: kOverlayAnimation 0.25s;
 }
 .wowerlay-anim-leave {
-   animation: kOverlayAnimation 0.25s reverse;
+  animation: kOverlayAnimation 0.25s reverse;
 }
 
 @keyframes kOverlayAnimation {
-   0% {
-      transform-origin: 0% 0%;
-      opacity: 0;
-   }
-   100% {
-      transform-origin: 0% 0%;
-      opacity: 1;
-   }
+  0% {
+    transform-origin: 0% 0%;
+    opacity: 0;
+  }
+  100% {
+    transform-origin: 0% 0%;
+    opacity: 1;
+  }
 }

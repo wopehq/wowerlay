@@ -1,24 +1,28 @@
 {
-   "compilerOptions": {
-      "disableSizeLimit": true,
-      "target": "esnext",
-      "useDefineForClassFields": true,
-      "module": "CommonJS",
-      "moduleResolution": "node",
-      "strict": true,
-      "jsx": "preserve",
-      "types": ["vite/client"],
-      "sourceMap": true,
-      "rootDir": "src",
-      "outDir": "dist",
-      "declaration": true,
-      "declarationDir": "dist/types",
-      "resolveJsonModule": true,
-      "esModuleInterop": true,
-      "skipLibCheck": true,
-      "lib": ["esnext", "dom"]
-      // "strictNullChecks": false
-   },
-   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
-   "exclude": ["node_modules"]
+  "compilerOptions": {
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "strict": true,
+    "jsx": "preserve",
+    "types": ["vite/client"],
+    "sourceMap": true,
+    "rootDir": "src",
+    "outDir": "dist",
+    "declaration": true,
+    "declarationDir": "dist/types",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "lib": ["esnext", "dom"],
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strictFunctionTypes": true,
+    "alwaysStrict": false,
+    "noImplicitReturns": true
+  },
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  "exclude": ["node_modules"]
 }

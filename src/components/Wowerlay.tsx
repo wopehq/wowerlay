@@ -6,69 +6,71 @@ import { WowerlayRenderer } from './WowerlayRenderer';
 import { useWowerlayContext } from '../event';
 
 export interface WowerlayProps extends WowerlayBaseProps {
-   visible: boolean;
+  visible: boolean;
 }
 
 const Props = {
-   visible: {
-      required: true,
-      type: Boolean as PropType<WowerlayProps['visible']>
-   } as const
+  visible: {
+    required: true,
+    type: Boolean as PropType<WowerlayProps['visible']>
+  } as const
 };
 const Emits = {
-   'update:visible': (value: boolean): any => typeof value === 'boolean'
+  'update:visible': (value: boolean): any => typeof value === 'boolean'
 } as const;
 
 export const Wowerlay = defineComponent({
-   name: 'Wowerlay',
-   inheritAttrs: false,
-   props: {
-      ...wowerlayBaseProps,
-      ...Props
-   },
-   emits: Emits,
-   setup(props, { emit }) {
-      const { onWindowClick } = useWowerlayContext();
-      const canClose = ref(false);
+  name: 'Wowerlay',
+  inheritAttrs: false,
+  props: {
+    ...wowerlayBaseProps,
+    ...Props
+  },
+  emits: Emits,
+  setup(props, { emit }) {
+    const { onWindowClick } = useWowerlayContext();
+    const canClose = ref(false);
 
-      const toClass = `.${cWowerlayContainer}`;
+    const toClass = `.${cWowerlayContainer}`;
 
-      onWindowClick(() => {
-         if (canClose.value) {
-            emit('update:visible', false);
-         }
-      });
+    onWindowClick(() => {
+      if (!props.visible) return;
 
-      watch(
-         () => props.visible,
-         (state) => {
-            if (state) {
-               requestAnimationFrame(() => {
-                  canClose.value = true;
-               });
-               return;
-            }
-            canClose.value = false;
-         }
-      );
+      if (canClose.value) {
+        emit('update:visible', false);
+      }
+    });
 
-      return {
-         toClass,
-         canClose
-      };
-   },
-   render() {
-      return (
-         <Teleport to={this.toClass}>
-            {/*//Todo- Add user made animation support. */}
-            <Transition enterActiveClass={cWowerlayAnimEnter} leaveActiveClass={cWowerlayAnimLeave}>
-               {!this.visible ? null : (
-                  <WowerlayRenderer {...this.$props} {...this.$attrs}>
-                     {this.$slots.default?.()}
-                  </WowerlayRenderer>
-               )}
-            </Transition>
-         </Teleport>
-      );
-   }
+    watch(
+      () => props.visible,
+      (state) => {
+        if (state) {
+          requestAnimationFrame(() => {
+            canClose.value = true;
+          });
+          return;
+        }
+        canClose.value = false;
+      }
+    );
+
+    return {
+      toClass,
+      canClose
+    };
+  },
+  render() {
+    return (
+      <Teleport to={this.toClass}>
+        {/*//Todo- Add user made animation support. */}
+        <Transition enterActiveClass={cWowerlayAnimEnter} leaveActiveClass={cWowerlayAnimLeave}>
+          {!this.visible ? null : (
+            <WowerlayRenderer {...this.$props} {...this.$attrs}>
+              {this.$slots.default?.()}
+            </WowerlayRenderer>
+          )}
+        </Transition>
+      </Teleport>
+    );
+  }
 });

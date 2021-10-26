@@ -7,23 +7,22 @@ const root = process.cwd();
 const mode = process.env.MODE as 'production' | undefined;
 
 export default defineConfig({
-   root: mode !== 'production' ? path.join(root, 'test') : root,
-   plugins: [
-      VueJSX(),
-      DTS({
-         outputDir: 'dist',
-         staticImport: true
-      })
-   ],
-   build: {
-      target: 'es2020',
-      lib: {
-         entry: path.resolve(root, 'src', 'lib.tsx'),
-         name: 'wowerlay',
-         formats: ['es', 'umd']
-      },
-      rollupOptions: {
-         external: ['vue']
-      }
-   }
+  root: mode !== 'production' ? path.join(root, 'test') : root,
+  plugins: [
+    VueJSX(),
+    DTS({
+      outputDir: 'dist'
+    })
+  ],
+  build: {
+    target: 'es2020',
+    lib: {
+      entry: path.resolve(root, 'src', 'lib.tsx'),
+      name: 'wowerlay',
+      formats: ['es', 'umd']
+    },
+    rollupOptions: {
+      external: ['vue']
+    }
+  }
 });
