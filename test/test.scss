@@ -37,7 +37,7 @@
 
 .tests-menu {
   display: flex;
-  flex-flow: column wrap;
+  flex-flow: column nowrap;
   position: fixed;
   left: 15px;
   top: 0;
