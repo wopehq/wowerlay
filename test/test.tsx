@@ -1,70 +1,66 @@
 import './test.scss';
 
-import { Transition, createApp, defineComponent, onMounted, onUnmounted, ref } from 'vue';
-import { Wowerlay, WowerlayContainer, createWowerlay } from '../src/lib';
+import { WowerlayContainer, createWowerlay } from '../src/lib';
+import { computed, createApp, defineComponent, onMounted, ref, watch } from 'vue';
 
-const Mycomponent = defineComponent({
-  setup() {
-    onMounted(() => {
-      console.log('mounted');
+import { ITest } from './helpers';
+
+const testsGlob = import.meta.globEager('./tests/**/*') as Record<string, { Test: ITest }>;
+const tests = Object.values(testsGlob).map((test) => test.Test);
+
+const centerContent = () => {
+  setTimeout(() => {
+    const { scrollWidth, scrollHeight } = document.documentElement;
+    document.documentElement.scroll({
+      left: (scrollWidth - window.innerWidth) / 2,
+      top: (scrollHeight - window.innerHeight) / 2,
+      behavior: 'smooth'
     });
-    onUnmounted(() => {
-      console.log('unmounted');
-    });
-    return () => <div>Selamlar</div>;
-  }
-});
+  }, 250);
+};
 
 const App = defineComponent({
   setup() {
-    const isOpen = ref(false);
-    const targetEl = ref<HTMLElement | null>(null);
+    const activeTestIndex = ref(0);
+    const TestComponent = computed(() => tests[activeTestIndex.value].component);
 
-    return () => (
-      <>
-        <WowerlayContainer />
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '1000px',
-            width: '3000px'
-          }}
-        >
-          <div style="text-align: center; width: 100%">
+    watch(activeTestIndex, centerContent, { flush: 'post' });
+    onMounted(centerContent);
+
+    return () => {
+      const TestsMenu = (
+        <div class="tests-menu">
+          {tests.map((test, index) => (
             <div
-              style={{
-                margin: 'auto',
-                display: 'inline-block'
+              role="button"
+              onClick={() => {
+                activeTestIndex.value = index;
               }}
-              ref={targetEl}
+              class={[
+                'tests-menu-item',
+                {
+                  active: index === activeTestIndex.value
+                }
+              ]}
             >
-              <button
-                onClick={() => {
-                  isOpen.value = !isOpen.value;
-                }}
-              >
-                Vue Overlay Yeah
-                <Wowerlay
-                  onUpdate:visible={(state) => (isOpen.value = state)}
-                  visible={isOpen.value}
-                  target={targetEl.value}
-                >
-                  {Array(100)
-                    .fill(null)
-                    .map(() => (
-                      <Mycomponent />
-                    ))}
-                </Wowerlay>
-              </button>
+              {test.name}
             </div>
-            <h4 style="margin-top: 150px;">Hi</h4>
-          </div>
+          ))}
         </div>
-        <div style={{ height: '1000px' }}></div>
-      </>
-    );
+      );
+
+      return (
+        <>
+          <WowerlayContainer />
+          <div class="test-container">
+            {TestsMenu}
+            <div class="test-content">
+              <TestComponent.value />
+            </div>
+          </div>
+        </>
+      );
+    };
   }
 });
 

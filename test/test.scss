@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
 * {
   font-family: 'Roboto', sans-serif;
+  box-sizing: border-box;
 }
 
 ::-webkit-scrollbar {
@@ -19,4 +20,58 @@
   background-color: rgb(238, 238, 238);
   box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.259);
   padding: 15px;
+}
+
+.test-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 4000px;
+  width: 5000px;
+}
+
+.test-content {
+  text-align: center;
+  width: 100%;
+}
+
+.tests-menu {
+  display: flex;
+  flex-flow: column wrap;
+  position: fixed;
+  left: 15px;
+  top: 0;
+  bottom: 0;
+  height: 0;
+  margin: auto 0;
+  height: calc(100vh - 50px);
+  width: 200px;
+  border-radius: 10px;
+  overflow: auto;
+  box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.191);
+  background-color: rgb(186, 181, 255);
+  padding: 5px;
+  gap: 5px;
+
+  .tests-menu-item {
+    width: 100%;
+    padding: 10px 10px;
+    font-weight: bold;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+
+    &:hover,
+    &.active {
+      background-color: rgba(255, 255, 255, 0.191);
+    }
+  }
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: gray;
+  border-radius: 10px;
 }
