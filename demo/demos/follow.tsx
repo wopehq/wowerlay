@@ -1,7 +1,7 @@
 import { defineComponent, ref } from 'vue';
 
 import { Wowerlay } from '../../src/lib';
-import { defineTest } from '../helpers';
+import { defineDemo } from '../helpers';
 
 const Component = defineComponent({
   name: 'PopoverFollow',
@@ -43,7 +43,7 @@ const Component = defineComponent({
   }
 });
 
-export const Demo = defineTest({
+export const Demo = defineDemo({
   name: 'Following Popover',
   component: Component
 });

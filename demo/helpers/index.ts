@@ -5,7 +5,7 @@ export interface IDemo {
   component: DefineComponent<any, any, any, any, any, any, any, any, any>;
 }
 
-export const defineTest = (demo: IDemo) => {
+export const defineDemo = (demo: IDemo) => {
   demo.component = markRaw(demo.component);
   return demo;
 };
