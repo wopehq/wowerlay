@@ -1,5 +1,6 @@
 import {
   execute,
+  getCurrentBranchName,
   indent,
   log,
   readGitignore,
@@ -8,6 +9,7 @@ import {
 } from './modules/functions';
 import prompt, { Choice } from 'prompts';
 
+import chalk from 'chalk';
 import fg from 'fast-glob';
 import pkgJSON from '../package.json';
 
@@ -22,26 +24,42 @@ enum SelectType {
   SelectFromList
 }
 
+enum Purpose {
+  OnlyPublish,
+  GithubAndMaybePublish
+}
+
 async function main() {
+  const { value: purpose }: PromptVal<Purpose> = await prompt({
+    type: 'select',
+    message: 'What do you want to do?',
+    name: 'value',
+    choices: [
+      {
+        title: 'Commit and maybe publish.',
+        value: Purpose.GithubAndMaybePublish
+      },
+      { title: 'Only publish.', value: Purpose.OnlyPublish }
+    ]
+  });
+
+  if (purpose === Purpose.OnlyPublish) {
+    return publish(true);
+  }
+
   const gitignore = await readGitignore();
   const ignoredList = gitignore.split('\n').filter(Boolean);
 
   const allFiles = await fg('./**/*', {
     cwd: process.cwd(),
     ignore: ignoredList
-    // markDirectories: true
   });
 
   const fileChoices: Choice[] = allFiles.map((v) => {
     return { title: v, value: v };
   });
 
-  const { value: newVersion }: PromptVal<string> = await prompt({
-    type: 'text',
-    name: 'value',
-    message: 'Select new version',
-    initial: pkgJSON.version
-  });
+  const newVersion = await input('Type new version, default:', pkgJSON.version);
 
   const { value: selectionType }: PromptVal<SelectType> = await prompt({
     type: 'select',
@@ -66,27 +84,14 @@ async function main() {
     }
     gitAddFiles = files;
   } else {
-    const { value: files }: PromptVal<string> = await prompt({
-      type: 'text',
-      name: 'value',
-      message: `Type files to be pushed`
-    });
+    const files = await input('Type files to be pushed');
     gitAddFiles = [files];
   }
 
-  const { value: commitMessage }: PromptVal<string> = await prompt({
-    type: 'text',
-    name: 'value',
-    message: 'Git commit message',
-    min: 3
-  });
+  const commitMessage = await input('Type git commit message', undefined, 3);
 
-  const { value: branchName }: PromptVal<string> = await prompt({
-    type: 'text',
-    name: 'value',
-    message: 'branch',
-    initial: 'main'
-  });
+  const currentBranch = await getCurrentBranchName();
+  const branchName = await input('Type branch name you want to push', currentBranch);
 
   log('Choices you made:', 'yellow');
 
@@ -105,48 +110,92 @@ async function main() {
   log('Branch:', 'magenta');
   log(indent(branchName), 'blue');
 
-  const { value: willBePublished }: PromptVal<boolean> = await prompt({
-    type: 'toggle',
-    name: 'value',
-    message: 'Publish to npm?',
-    active: 'yes',
-    inactive: 'no',
-    initial: false
-  });
+  const willBePublished = await ask('Publish to npm?');
 
-  const { value: isSure }: PromptVal<boolean> = await prompt({
-    type: 'toggle',
-    name: 'value',
-    message: 'Are you sure to add these changes?',
-    active: 'yes',
-    inactive: 'no'
-  });
+  const isSure = await ask('Are you sure to add these changes?');
   if (!isSure) {
-    const { value: doCycle }: PromptVal<boolean> = await prompt({
-      type: 'toggle',
-      name: 'value',
-      message: 'Do you want to make selections again?',
-      active: 'yes',
-      inactive: 'no',
-      initial: false
-    });
-    if (doCycle) {
-      return main();
-    }
-    return;
+    return askForReset();
   }
 
   const newPkgJson = { ...pkgJSON, version: newVersion };
   await writeNewPackageJson(newPkgJson);
 
+  const coloredBranchName = chalk.magentaBright('[', currentBranch + ']');
+  log(`Pulling latest state of ${coloredBranchName}`, 'cyan');
+  await sleep(300);
+  try {
+    await execute('git', ['pull', 'origin', currentBranch]);
+  } catch (error) {
+    log(
+      `Failed to pull ${coloredBranchName}, guessing the branch does not exist, skipped pulling`,
+      'cyan'
+    );
+  }
+
+  log('Adding selected files to current commit', 'cyan');
+  await sleep(300);
   await execute('git', ['add', ...gitAddFiles]);
+
+  log('Commiting changes', 'cyan');
+  await sleep(300);
   await execute('git', ['commit', '-m', commitMessage]);
+
+  log(`Pushing changes to ${coloredBranchName}`, 'cyan');
+  await sleep(300);
   await execute('git', ['push', 'origin', branchName]);
 
   if (willBePublished) {
-    await execute('npm', ['run', 'build']);
-    await sleep(300);
-    await execute('npm', ['publish']);
+    await publish();
   }
 }
+
+async function publish(askForSure = false) {
+  if (askForSure) {
+    const isSure = await ask('Are you sure to publish?');
+    if (!isSure) {
+      return askForReset();
+    }
+  }
+
+  log(`Publishing to npm`, 'cyan');
+  await sleep(500);
+  await execute('npm', ['run', 'build']);
+  await sleep(300);
+  await execute('npm', ['publish']);
+}
+
+async function ask(msg: string, initial = false): Promise<boolean> {
+  const { value }: PromptVal<boolean> = await prompt({
+    type: 'toggle',
+    name: 'value',
+    message: msg,
+    active: 'yes',
+    inactive: 'no',
+    initial
+  });
+  return value;
+}
+
+async function input(msg: string, initial?: any, min?: number, max?: number) {
+  const { value }: PromptVal<string> = await prompt({
+    name: 'value',
+    message: msg,
+    type: 'text',
+    initial,
+    min,
+    max
+  });
+  return value;
+}
+
+async function askForReset() {
+  const willReset = await ask('Do you want to select again?');
+  if (willReset) {
+    log('Restarting CLI', 'cyan');
+    await sleep(500);
+    return main();
+  }
+  process.exit();
+}
+
 main();

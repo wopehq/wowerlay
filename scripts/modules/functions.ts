@@ -5,59 +5,66 @@ import fse from 'fs-extra';
 import { join } from 'path';
 
 export function execute(command: string, commandArguments: string[], options?: Options) {
-   return execa(command, commandArguments, {
-      stdio: 'inherit',
-      ...options
-   });
+  return execa(command, commandArguments, {
+    stdio: 'inherit',
+    ...options
+  });
 }
 
 export function log(msg: string, color?: typeof ForegroundColor, bgColor?: typeof BackgroundColor) {
-   if (color) {
-      msg = chalk[color](msg);
-   }
-   if (bgColor) {
-      msg = chalk[bgColor](msg);
-   }
-   return console.log(msg);
+  if (color) {
+    msg = chalk[color](msg);
+  }
+  if (bgColor) {
+    msg = chalk[bgColor](msg);
+  }
+  return console.log(msg);
 }
 
 export function sleep(ms: number): Promise<void> {
-   return new Promise((resolve) => {
-      setTimeout(() => {
-         resolve();
-      }, ms);
-   });
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, ms);
+  });
 }
 
 export function indent(msg: string) {
-   const indentValue = '   ';
-   return indentValue + msg;
+  const indentValue = '   ';
+  return indentValue + msg;
 }
 
 export async function readGitignore() {
-   const root = process.cwd();
-   return await fse.readFile(join(root, '.gitignore'), 'utf8');
+  const root = process.cwd();
+  return await fse.readFile(join(root, '.gitignore'), 'utf8');
 }
 
 export async function writeNewPackageJson(newPKG: typeof import('../../package.json')) {
-   const root = process.cwd();
-   const stringifiedPackageJSON = JSON.stringify(newPKG, undefined, 3);
-   return await fse.writeFile(join(root, 'package.json'), stringifiedPackageJSON);
+  const root = process.cwd();
+  const stringifiedPackageJSON = JSON.stringify(newPKG, undefined, 2);
+  return await fse.writeFile(join(root, 'package.json'), stringifiedPackageJSON);
 }
 
 export async function refactorTypes() {
-   const dist = join(process.cwd(), 'dist');
-   const basePath = join(dist, 'src');
-   const targetPath = join(dist, 'types');
+  const dist = join(process.cwd(), 'dist');
+  const basePath = join(dist, 'src');
+  const targetPath = join(dist, 'types');
 
-   const toBeRemovedTypes = ['consts.d.ts', 'event'];
-   if (await fse.pathExists(basePath)) {
-      await fse.move(basePath, targetPath);
-      for (const directoryOrFileName of toBeRemovedTypes) {
-         const path = join(dist, 'types', directoryOrFileName);
-         await fse.rm(path, { recursive: true });
-      }
-      return;
-   }
-   throw new Error('types folder does not exist');
+  const toBeRemovedTypes = ['consts.d.ts', 'event'];
+  if (await fse.pathExists(basePath)) {
+    await fse.move(basePath, targetPath);
+    for (const directoryOrFileName of toBeRemovedTypes) {
+      const path = join(dist, 'types', directoryOrFileName);
+      await fse.rm(path, { recursive: true });
+    }
+    return;
+  }
+  throw new Error('types folder does not exist');
+}
+
+export async function getCurrentBranchName() {
+  const { stdout: branchName } = await execute('git', ['rev-parse', '--abbrev-ref', 'HEAD'], {
+    stdio: 'pipe'
+  });
+  return branchName.trim();
 }
