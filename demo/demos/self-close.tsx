@@ -9,37 +9,34 @@ const Component = defineComponent({
     const targetEl = ref<HTMLElement | null>(null);
     const isOpen = ref(false);
 
+    const handleVisibleChange = (state: boolean) => (isOpen.value = state);
+    const toggleVisible = () => (isOpen.value = !isOpen.value);
+
     return {
       isOpen,
-      targetEl
+      targetEl,
+      handleVisibleChange,
+      toggleVisible
     };
   },
   render() {
     return (
-      <button
-        onClick={() => (this.isOpen = !this.isOpen)}
-        ref={(el) => (this.targetEl = el as HTMLElement)}
-      >
+      <button onClick={this.toggleVisible} ref="targetEl">
         Click to Trigger Popover
         <Wowerlay
-          onUpdate:visible={(state) => (this.isOpen = state)}
+          onUpdate:visible={this.handleVisibleChange}
           visible={this.isOpen}
           target={this.targetEl}
         >
-          {Array(15)
-            .fill(null)
-            .map((_num, index) => (
-              <div>
-                <b>Hi How are you? {index}</b>
-              </div>
-            ))}
+          <div>Hi I'm closable</div>
+          <button onClick={() => (this.isOpen = false)}>Click to close</button>
         </Wowerlay>
       </button>
     );
   }
 });
 
-export const Test = defineTest({
-  name: 'Following Popover',
+export const Demo = defineTest({
+  name: 'Self Closable',
   component: Component
 });

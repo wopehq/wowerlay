@@ -4,5 +4,5 @@
     "module": "CommonJS",
     "noEmit": true
   },
-  "exclude": ["test/**/*"]
+  "exclude": ["demo/**/*"]
 }

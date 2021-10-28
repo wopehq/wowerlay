@@ -22,6 +22,6 @@
     "alwaysStrict": false,
     "noImplicitReturns": true
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "test/**/*"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "demo/**/*"],
   "exclude": ["node_modules"]
 }

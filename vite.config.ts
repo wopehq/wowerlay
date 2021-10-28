@@ -7,7 +7,7 @@ const root = process.cwd();
 const mode = process.env.MODE as 'production' | undefined;
 
 export default defineConfig({
-  root: mode !== 'production' ? path.join(root, 'test') : root,
+  root: mode !== 'production' ? path.join(root, 'demo') : root,
   plugins: [
     VueJSX(),
     DTS({
