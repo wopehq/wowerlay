@@ -34,7 +34,7 @@ const App = defineComponent({
   },
   render() {
     const TestsMenu = (
-      <div class="tests-menu">
+      <div class="demo-menu">
         {demos.map((demo, index) => (
           <div
             role="button"
@@ -42,7 +42,7 @@ const App = defineComponent({
               this.activeDemoIndex = index;
             }}
             class={[
-              'tests-menu-item',
+              'demo-menu-item',
               {
                 active: index === this.activeDemoIndex
               }
