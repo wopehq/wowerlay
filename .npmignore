@@ -10,3 +10,4 @@ tsconfig.json
 vite.config.ts
 env.d.ts
 test
+demo
