@@ -1,15 +1,9 @@
 {
   "name": "wowerlay",
-  "version": "0.0.10",
+  "version": "0.0.13",
   "main": "./dist/wowerlay.umd.js",
   "module": "./dist/wowerlay.es.js",
   "types": "./dist/types/lib.d.ts",
-  "exports": {
-    ".": {
-      "require": "./dist/wowerlay.umd.js",
-      "import": "./dist/wowerlay.es.js"
-    }
-  },
   "repository": {
     "url": "git+https://github.com/teamseodo/wowerlay.git",
     "type": "git"
