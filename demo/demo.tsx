@@ -8,15 +8,13 @@ import { IDemo } from './helpers';
 const demosGlob = import.meta.globEager('./demos/**/*') as Record<string, { Demo: IDemo }>;
 const demos = Object.values(demosGlob).map(($export) => $export.Demo);
 
-const centerContent = () => {
-  setTimeout(() => {
-    const { scrollWidth, scrollHeight } = document.documentElement;
-    document.documentElement.scroll({
-      left: (scrollWidth - window.innerWidth) / 2,
-      top: (scrollHeight - window.innerHeight) / 2,
-      behavior: 'smooth'
-    });
-  }, 250);
+const centerScreen = () => {
+  const { scrollWidth, scrollHeight } = document.documentElement;
+  document.documentElement.scroll({
+    left: (scrollWidth - window.innerWidth) / 2,
+    top: (scrollHeight - window.innerHeight) / 2,
+    behavior: 'smooth'
+  });
 };
 
 const App = defineComponent({
@@ -24,43 +22,36 @@ const App = defineComponent({
     const activeDemoIndex = ref(0);
     const DemoComponent = computed(() => demos[activeDemoIndex.value].component);
 
-    watch(activeDemoIndex, centerContent, { flush: 'post' });
-    onMounted(centerContent);
+    const isActive = (index: number) => activeDemoIndex.value === index;
+
+    watch(activeDemoIndex, centerScreen, { flush: 'post' });
+    onMounted(centerScreen);
 
     return {
       activeDemoIndex,
-      DemoComponent
+      DemoComponent,
+      isActive
     };
   },
   render() {
-    const TestsMenu = (
-      <div class="demo-menu">
-        {demos.map((demo, index) => (
-          <div
-            role="button"
-            onClick={() => {
-              this.activeDemoIndex = index;
-            }}
-            class={[
-              'demo-menu-item',
-              {
-                active: index === this.activeDemoIndex
-              }
-            ]}
-          >
-            {demo.name}
-          </div>
-        ))}
+    const AllDemos = demos.map((demo, index) => (
+      <div
+        onClick={() => (this.activeDemoIndex = index)}
+        class={['demo-menu-item', { active: this.isActive(index) }]}
+      >
+        {demo.name}
       </div>
-    );
+    ));
+
+    const Demo = this.DemoComponent;
 
     return (
       <>
         <WowerlayContainer />
-        <div class="test-container">
-          {TestsMenu}
-          <div class="test-content">
-            <this.DemoComponent />
+        <div class="demo-container">
+          <div class="demo-menu">{AllDemos}</div>
+          <div class="demo-content">
+            <Demo />
           </div>
         </div>
       </>

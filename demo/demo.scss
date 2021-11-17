@@ -18,11 +18,11 @@
 
 .wowerlay {
   background-color: rgb(238, 238, 238);
-  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.259);
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.25);
   padding: 15px;
 }
 
-.test-container {
+.demo-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -30,7 +30,7 @@
   width: 5000px;
 }
 
-.test-content {
+.demo-content {
   text-align: center;
   width: 100%;
 }
@@ -47,7 +47,7 @@
   width: 200px;
   border-radius: 10px;
   overflow: auto;
-  box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.191);
+  box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.2);
   background-color: rgb(186, 181, 255);
   padding: 5px;
   gap: 5px;
@@ -62,7 +62,7 @@
 
     &:hover,
     &.active {
-      background-color: rgba(255, 255, 255, 0.191);
+      background-color: rgba(255, 255, 255, 0.2);
     }
   }
 }
