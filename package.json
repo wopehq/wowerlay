@@ -19,9 +19,9 @@
   "license": "MIT",
   "scripts": {
     "dev": "vite",
-    "build": "ts-node --transpile-only scripts/build.ts",
-    "release": "ts-node --transpile-only scripts/release.ts",
-    "script:build": "tsc --noEmit && cross-env MODE=production vite build",
+    "build": "ts-node -T --project tsconfig-build.json scripts/build.ts",
+    "release": "ts-node -T --project tsconfig-build.json scripts/release.ts",
+    "script:build": "tsc --project tsconfig-build.json && cross-env MODE=production vite build",
     "watch": "cross-env MODE=production vite build --watch"
   },
   "devDependencies": {
