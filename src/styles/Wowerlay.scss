@@ -1,21 +1,26 @@
 .wowerlay {
-  $gap: 50px;
-  $varX: var(--wowerlay-x, 0px);
-  $varY: var(--wowerlay-y, 0px);
+  // Varsayılan scrollbar genişliği/yüksekliği / 2
+  $gap: 30px;
+  $horizontalPosition: var(--wowerlay-x);
+  $verticalPosition: var(--wowerlay-y);
+
   position: absolute;
-  display: inline-block;
-  left: 0;
-  top: 0;
+  left: $horizontalPosition;
+  top: $verticalPosition;
+
   z-index: var(--k-z-index, 1500);
-  pointer-events: all !important;
-  transform: translate(#{$varX}, #{$varY});
-  overflow: auto;
+  display: inline-block;
+
   max-width: calc(100vw - #{$gap});
   max-width: calc(#{fill-available} - #{$gap});
   max-width: calc(#{-webkit-fill-available} - #{$gap});
+
   max-height: calc(100vh - #{$gap});
-  max-height: calc(#{fill-available} - 5px);
+  max-height: calc(#{fill-available} - 55px);
   max-height: calc(#{-webkit-fill-available} - #{$gap});
+
+  pointer-events: all !important;
+  overflow: auto;
 }
 
 .wowerlay-anim-enter {

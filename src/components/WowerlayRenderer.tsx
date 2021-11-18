@@ -1,28 +1,22 @@
 import { cWowerlay, sWowerlayX, sWowerlayY } from '../consts';
-import { computed, defineComponent, nextTick, onMounted, ref } from 'vue';
+import { computed, defineComponent, onMounted, ref, watch } from 'vue';
 
 import { useWowerlayContext } from '../event';
 import { wowerlayBaseProps } from './WowerlayReusables';
 
-const Emits = {
-  close: (): any => true
-} as const;
-
 enum Direction {
-  X,
-  Y
+  Horizontal,
+  Vertical
 }
 
 export const WowerlayRenderer = defineComponent({
   name: 'WowerlayRenderer',
   inheritAttrs: false,
   props: wowerlayBaseProps,
-  emits: Emits,
   setup(props) {
     const { onRecalculate } = useWowerlayContext();
-    const gap = 10;
 
-    const overlayElement = ref<HTMLElement | null>(null);
+    const overlayElement = ref<HTMLElement>();
     const posY = ref(0);
     const posX = ref(0);
 
@@ -33,21 +27,22 @@ export const WowerlayRenderer = defineComponent({
     }));
 
     const fixPosition = (pos: number, direction: Direction) => {
-      if (!overlayElement.value) {
-        return 0;
-      }
+      // if wowerlay is not mounted, keep it out of view
+      if (!overlayElement.value) return -1000;
+
       const { width, height } = overlayElement.value.getBoundingClientRect();
-      const scrollbarGap = gap * 2;
+      // gap for edge of screen
+      const edgeGap = 20;
 
       switch (direction) {
-        case Direction.X: {
-          const limitX = window.innerWidth - width - scrollbarGap;
-          return Math.max(0, Math.min(limitX, pos));
+        case Direction.Horizontal: {
+          const limitX = window.innerWidth - width - edgeGap;
+          return Math.max(edgeGap, Math.min(limitX, pos));
         }
 
-        case Direction.Y: {
-          const limitY = window.innerHeight - height - scrollbarGap;
-          return Math.max(0, Math.min(limitY, pos));
+        case Direction.Vertical: {
+          const limitY = window.innerHeight - height - edgeGap;
+          return Math.max(edgeGap, Math.min(limitY, pos));
         }
       }
     };
@@ -57,26 +52,24 @@ export const WowerlayRenderer = defineComponent({
     };
 
     const updateOverlayPosition = () => {
-      if (!props.target || !overlayElement.value) {
-        throw new Error('overlayElement.value or target prop is undefined');
-      }
+      if (!props.target || !overlayElement.value) return;
+
       const { height, x: newX, y } = (props.target as HTMLElement).getBoundingClientRect();
-      const newY = height + y + gap;
-      posY.value = fixPosition(newY, Direction.Y);
-      posX.value = fixPosition(newX, Direction.X);
+      const newY = height + y;
+      posY.value = fixPosition(newY, Direction.Vertical);
+      posX.value = fixPosition(newX, Direction.Horizontal);
     };
 
-    onRecalculate(updateOverlayPosition);
-    onMounted(async () => {
-      if (!props.target) {
-        await nextTick();
-      }
-      if (props.target) {
-        updateOverlayPosition();
-      } else {
-        throw new Error('Overlay should have a valid target');
-      }
+    watch(
+      () => props.target,
+      (newTarget) => newTarget instanceof HTMLElement && updateOverlayPosition()
+    );
+
+    onRecalculate(() => {
+      if (props.fixed) return;
+      updateOverlayPosition();
     });
+    onMounted(() => props.target instanceof HTMLElement && updateOverlayPosition());
 
     return {
       handleOverlayClick,
@@ -86,16 +79,19 @@ export const WowerlayRenderer = defineComponent({
     };
   },
   render() {
+    const Element = this.Tag;
     return (
-      <this.Tag
-        onClick={this.handleOverlayClick}
-        ref={(el) => (this.overlayElement = el as HTMLElement)}
-        style={this.positionClassNames}
-        class={cWowerlay}
-        {...this.$attrs}
-      >
-        {this.$slots.default?.()}
-      </this.Tag>
+      this.target && (
+        <Element
+          onClick={this.handleOverlayClick}
+          ref="overlayElement"
+          style={this.positionClassNames}
+          class={cWowerlay}
+          {...this.$attrs}
+        >
+          {this.$slots.default?.()}
+        </Element>
+      )
     );
   }
 });

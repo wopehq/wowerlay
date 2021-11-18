@@ -3,7 +3,7 @@ import { PropType } from 'vue';
 export interface WowerlayBaseProps {
   align?: 'auto' | 'top' | 'bottom';
   canLeaveViewport?: boolean;
-  noFollow?: boolean;
+  fixed?: boolean;
   target: any;
   tag?: string;
 }
@@ -16,6 +16,10 @@ export const wowerlayBaseProps = {
   align: {
     default: 'auto',
     type: String as PropType<WowerlayBaseProps['align']>
+  },
+  fixed: {
+    default: false,
+    type: Boolean as PropType<WowerlayBaseProps['fixed']>
   },
   canLeaveViewport: {
     default: false,
