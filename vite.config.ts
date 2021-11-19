@@ -29,6 +29,7 @@ const productionConfig = defineConfig({
 
 const demoConfig = defineConfig({
   root: path.join(root, 'demo'),
+  base: '/wowerlay/',
   plugins: [VueJSX()],
   build: {
     outDir: path.join(root, 'dist-demo')
