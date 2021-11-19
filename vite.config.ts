@@ -4,10 +4,10 @@ import { defineConfig } from 'vite';
 import path from 'path';
 
 const root = process.cwd();
-const mode = process.env.MODE as 'production' | undefined;
+const mode = process.env.MODE as 'production' | 'demo';
 
-export default defineConfig({
-  root: mode !== 'production' ? path.join(root, 'demo') : root,
+const productionConfig = defineConfig({
+  root,
   plugins: [
     VueJSX(),
     DTS({
@@ -26,3 +26,13 @@ export default defineConfig({
     }
   }
 });
+
+const demoConfig = defineConfig({
+  root: path.join(root, 'demo'),
+  plugins: [VueJSX()],
+  build: {
+    outDir: path.join(root, 'dist-demo')
+  }
+});
+
+export default mode === 'demo' ? demoConfig : productionConfig;
