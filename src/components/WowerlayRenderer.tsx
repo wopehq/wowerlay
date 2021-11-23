@@ -89,11 +89,11 @@ export const WowerlayRenderer = defineComponent({
       let x = targetX;
 
       if (props.priority === 'left') {
-        x = targetX - wowerlayWidth - props.verticalGap;
+        x = targetX - wowerlayWidth - props.horizontalGap;
         return { x, y: targetY };
       }
 
-      x = targetWidth + x + props.verticalGap;
+      x = targetWidth + x + props.horizontalGap;
       return { x, y: targetY };
     };
 
