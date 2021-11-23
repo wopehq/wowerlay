@@ -1,6 +1,6 @@
 {
   "name": "wowerlay",
-  "version": "0.0.13",
+  "version": "0.1.0",
   "main": "./dist/wowerlay.umd.js",
   "module": "./dist/wowerlay.es.js",
   "types": "./dist/types/lib.d.ts",
@@ -14,7 +14,8 @@
   "homepage": "https://github.com/teamseodo/wowerlay#readme",
   "keywords": [
     "vue 3",
-    "simplebar"
+    "wowerlay",
+    "popover"
   ],
   "license": "MIT",
   "scripts": {
@@ -38,7 +39,7 @@
     "prompts": "^2.4.2",
     "sass": "^1.42.1",
     "ts-node": "^10.2.1",
-    "typescript": "4.3.5",
+    "typescript": "4.5.2",
     "vite": "^2.6.4",
     "vite-plugin-dts": "^0.8.3",
     "vue": "3.2.20"

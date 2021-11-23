@@ -6,7 +6,7 @@ import { defineDemo } from '../helpers';
 const Component = defineComponent({
   name: 'PopoverFollow',
   setup() {
-    const targetEl = ref<HTMLElement | null>(null);
+    const targetEl = ref<HTMLElement>();
     const isOpen = ref(false);
 
     const handleVisibleChange = (state: boolean) => (isOpen.value = state);
