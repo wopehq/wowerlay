@@ -1,18 +1,21 @@
 .wowerlay {
   $gap: 50px;
-  $varX: var(--wowerlay-x, 0px);
-  $varY: var(--wowerlay-y, 0px);
+  $positionX: var(--wowerlay-x, 0px);
+  $positionY: var(--wowerlay-y, 0px);
+
   position: absolute;
   display: inline-block;
-  left: 0;
-  top: 0;
+  left: #{$positionX};
+  top: #{$positionY};
+
   z-index: var(--k-z-index, 1500);
   pointer-events: all !important;
-  transform: translate(#{$varX}, #{$varY});
   overflow: auto;
+
   max-width: calc(100vw - #{$gap});
   max-width: calc(#{fill-available} - #{$gap});
   max-width: calc(#{-webkit-fill-available} - #{$gap});
+
   max-height: calc(100vh - #{$gap});
   max-height: calc(#{fill-available} - 5px);
   max-height: calc(#{-webkit-fill-available} - #{$gap});

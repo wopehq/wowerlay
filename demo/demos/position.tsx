@@ -11,7 +11,6 @@ const Component = defineComponent({
     const isOpen = ref(false);
 
     const position = ref('');
-    const priority = ref('');
 
     const handleVisibleChange = (state: boolean) => (isOpen.value = state);
     const toggleVisible = () => (isOpen.value = !isOpen.value);
@@ -21,8 +20,7 @@ const Component = defineComponent({
       targetEl,
       handleVisibleChange,
       toggleVisible,
-      position,
-      priority
+      position
     };
   },
   render() {
@@ -35,11 +33,6 @@ const Component = defineComponent({
       >
         <select v-model={this.position} placeholder="Select Position">
           <option value="">Select Position</option>
-          <option value="horizontal">Horizontal</option>
-          <option value="vertical">Vertical</option>
-        </select>
-        <select v-model={this.priority} placeholder="Select Position">
-          <option value="">Select Priority</option>
           <option value="left">Left</option>
           <option value="right">Right</option>
           <option value="top">Top</option>
@@ -55,7 +48,6 @@ const Component = defineComponent({
             onUpdate:visible={this.handleVisibleChange}
             visible={this.isOpen}
             target={this.targetEl}
-            priority={this.priority as WowerlayBaseProps['priority']}
             position={this.position as WowerlayBaseProps['position']}
           >
             {Array(15)

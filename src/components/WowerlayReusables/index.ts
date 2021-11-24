@@ -1,12 +1,11 @@
 import { PropType } from 'vue';
 
 export interface WowerlayBaseProps {
-  position?: 'horizontal' | 'vertical';
-  priority?: 'left' | 'right' | 'top' | 'bottom';
+  position?: 'left' | 'right' | 'top' | 'bottom';
   verticalGap: number;
   horizontalGap: number;
   canLeaveViewport?: boolean;
-  noFollow?: boolean;
+  fixed?: boolean;
   target?: HTMLElement;
   tag?: string;
 }
@@ -16,13 +15,13 @@ export const wowerlayBaseProps = {
     required: true,
     type: null as unknown as PropType<WowerlayBaseProps['target']>
   },
-  position: {
-    default: 'vertical',
-    type: String as PropType<WowerlayBaseProps['position']>
+  fixed: {
+    default: false,
+    type: Boolean as PropType<WowerlayBaseProps['fixed']>
   },
-  priority: {
-    default: null,
-    type: String as PropType<WowerlayBaseProps['priority']>
+  position: {
+    default: 'bottom',
+    type: String as PropType<WowerlayBaseProps['position']>
   },
   verticalGap: {
     default: 0,
