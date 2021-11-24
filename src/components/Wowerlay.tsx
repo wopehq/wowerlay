@@ -62,9 +62,9 @@ export const Wowerlay = defineComponent({
   render() {
     return (
       <Teleport to={this.toClass}>
-        {/*//Todo- Add user made animation support. */}
+        {/*// Todo: Add user made animation support. */}
         <Transition enterActiveClass={cWowerlayAnimEnter} leaveActiveClass={cWowerlayAnimLeave}>
-          {!this.visible ? null : (
+          {this.visible && (
             <WowerlayRenderer {...this.$props} {...this.$attrs}>
               {this.$slots.default?.()}
             </WowerlayRenderer>

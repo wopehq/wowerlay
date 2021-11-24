@@ -25,7 +25,11 @@ const App = defineComponent({
     const isActive = (index: number) => activeDemoIndex.value === index;
 
     watch(activeDemoIndex, centerScreen, { flush: 'post' });
-    onMounted(centerScreen);
+    onMounted(() => {
+      setTimeout(() => {
+        centerScreen();
+      }, 250);
+    });
 
     return {
       activeDemoIndex,

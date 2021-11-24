@@ -1,5 +1,5 @@
 import { cWowerlay, sWowerlayX, sWowerlayY } from '../consts';
-import { computed, defineComponent, nextTick, onMounted, ref } from 'vue';
+import { computed, defineComponent, nextTick, onMounted, ref, watch } from 'vue';
 
 import { useWowerlayContext } from '../event';
 import { wowerlayBaseProps } from './WowerlayReusables';
@@ -9,8 +9,8 @@ const Emits = {
 } as const;
 
 enum Direction {
-  X,
-  Y
+  Horizontal,
+  Vertical
 }
 
 export const WowerlayRenderer = defineComponent({
@@ -20,9 +20,8 @@ export const WowerlayRenderer = defineComponent({
   emits: Emits,
   setup(props) {
     const { onRecalculate } = useWowerlayContext();
-    const gap = 10;
 
-    const overlayElement = ref<HTMLElement | null>(null);
+    const overlayElement = ref<HTMLElement>();
     const posY = ref(0);
     const posX = ref(0);
 
@@ -37,15 +36,19 @@ export const WowerlayRenderer = defineComponent({
         return 0;
       }
       const { width, height } = overlayElement.value.getBoundingClientRect();
-      const scrollbarGap = gap * 2;
+      const scrollbarGap = 15;
+
+      if (props.canLeaveViewport) {
+        return pos;
+      }
 
       switch (direction) {
-        case Direction.X: {
+        case Direction.Horizontal: {
           const limitX = window.innerWidth - width - scrollbarGap;
           return Math.max(0, Math.min(limitX, pos));
         }
 
-        case Direction.Y: {
+        case Direction.Vertical: {
           const limitY = window.innerHeight - height - scrollbarGap;
           return Math.max(0, Math.min(limitY, pos));
         }
@@ -56,27 +59,85 @@ export const WowerlayRenderer = defineComponent({
       e.stopPropagation();
     };
 
-    const updateOverlayPosition = () => {
-      if (!props.target || !overlayElement.value) {
-        throw new Error('overlayElement.value or target prop is undefined');
+    const getVerticalPosition = () => {
+      const {
+        height: targetHeight,
+        x: targetX,
+        y: targetY
+      } = (props.target as HTMLElement)?.getBoundingClientRect();
+      const { height: wowerlayHeight } = overlayElement.value!.getBoundingClientRect();
+
+      let targetPosition = props.position!;
+      let y = targetY;
+
+      if (props.position === 'top') {
+        if (targetY - wowerlayHeight < 0) {
+          targetPosition = 'bottom';
+        }
+      } else {
+        if (targetY + targetHeight + wowerlayHeight >= window.innerHeight) {
+          targetPosition = 'top';
+        }
       }
-      const { height, x: newX, y } = (props.target as HTMLElement).getBoundingClientRect();
-      const newY = height + y + gap;
-      posY.value = fixPosition(newY, Direction.Y);
-      posX.value = fixPosition(newX, Direction.X);
+
+      if (targetPosition === 'top') {
+        y = targetY - wowerlayHeight - props.verticalGap;
+      } else {
+        y = targetHeight + y + props.verticalGap;
+      }
+
+      return { x: targetX, y };
     };
 
-    onRecalculate(updateOverlayPosition);
-    onMounted(async () => {
-      if (!props.target) {
-        await nextTick();
-      }
-      if (props.target) {
-        updateOverlayPosition();
+    const getHorizontalPosition = () => {
+      const {
+        width: targetWidth,
+        x: targetX,
+        y: targetY
+      } = (props.target as HTMLElement)?.getBoundingClientRect();
+      const { width: wowerlayWidth } = overlayElement.value!.getBoundingClientRect();
+
+      let targetPosition = props.position!;
+      let x = targetX;
+
+      if (props.position === 'left') {
+        if (targetX - wowerlayWidth < 0) {
+          targetPosition = 'right';
+        }
       } else {
-        throw new Error('Overlay should have a valid target');
+        if (targetX + targetWidth + wowerlayWidth > window.innerWidth) {
+          targetPosition = 'left';
+        }
       }
-    });
+
+      if (targetPosition === 'left') {
+        x = targetX - wowerlayWidth - props.horizontalGap;
+      } else {
+        x = targetWidth + x + props.horizontalGap;
+      }
+
+      return { x, y: targetY };
+    };
+
+    const updateOverlayPosition = () => {
+      if (!props.target || !overlayElement.value) return;
+
+      let newPosition = { x: 0, y: 0 };
+
+      if (props.position === 'left' || props.position === 'right') {
+        newPosition = getHorizontalPosition();
+      } else {
+        newPosition = getVerticalPosition();
+      }
+
+      posX.value = fixPosition(newPosition.x, Direction.Horizontal);
+      posY.value = fixPosition(newPosition.y, Direction.Vertical);
+    };
+
+    watch(() => [props.position, props.target], updateOverlayPosition);
+
+    onRecalculate(() => !props.fixed && updateOverlayPosition());
+    onMounted(() => props.target instanceof HTMLElement && updateOverlayPosition());
 
     return {
       handleOverlayClick,
@@ -86,16 +147,19 @@ export const WowerlayRenderer = defineComponent({
     };
   },
   render() {
+    const Element = this.Tag;
     return (
-      <this.Tag
-        onClick={this.handleOverlayClick}
-        ref={(el) => (this.overlayElement = el as HTMLElement)}
-        style={this.positionClassNames}
-        class={cWowerlay}
-        {...this.$attrs}
-      >
-        {this.$slots.default?.()}
-      </this.Tag>
+      this.target && (
+        <Element
+          onClick={this.handleOverlayClick}
+          ref="overlayElement"
+          style={this.positionClassNames}
+          class={cWowerlay}
+          {...this.$attrs}
+        >
+          {this.$slots.default?.()}
+        </Element>
+      )
     );
   }
 });
