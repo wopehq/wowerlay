@@ -1,10 +1,14 @@
-### A Overlay/Popover library for Vue3. (WORK IN PROGRESS BUT WORKS)
+### A Overlay/Popover library for Vue3. (WORK IN PROGRESS)
 
 <p align="center">
    <img src="md/wowerlay.png">
 </p>
 
 [![wowerlay](https://img.shields.io/npm/v/wowerlay)](https://npmjs.com/package/wowerlay)
+
+## Demos
+
+You can view current demos [Click](https://wowerlay.pages.dev).
 
 ## Intallation
 
@@ -163,22 +167,20 @@ By default `<Wowerlay/>` will try to fit in viewport. If you don't want that beh
 
 ## Props
 
-Currently `target` and `visible` props are supported, other ones will be finished in the future.
-
 ```ts
-export interface OverlayProps {
-  align?: 'auto' | 'top' | 'bottom'; // not implemented yet
-  canLeaveViewport?: boolean; // not implemented yet
-  disableFit?: boolean; // not implemented yet
-  noFollow?: boolean; // not implemented yet
-  target: null | HTMLElement;
-  tag?: string; // default: "div"
+export interface WowerlayBaseProps {
+  position?: 'left' | 'right' | 'top' | 'bottom'; // forced position for Wowerlay. default: bottom
+  verticalGap: number; // vertical gap between Wowerlay and target. default: 0
+  horizontalGap: number; // horizontal gap between Wowerlay and target. default: 0
+  fixed?: boolean; // if set wowerlay will not update it's position after mount
+  target?: HTMLElement; // target element for Wowerlay to follow
+  tag?: string; // tagName for Wowerlay container. default: 'div'
 }
 ```
 
 ## What about TypeScript?
 
-This package has built-in typescript support for events and props it should work with `.tsx` files. If you check source code of this project you can see I wrote whole plugin with tsx.
+This package has built-in typescript support for events and props it should work with `.tsx` files. If you check source code of this project you can see we this library in tsx.
 
 To have types support in vue files we recommend you to use `Volar` plugin. <br>
 [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar) <br>
