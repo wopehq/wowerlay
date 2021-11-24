@@ -1,5 +1,5 @@
 import { cWowerlay, sWowerlayX, sWowerlayY } from '../consts';
-import { computed, defineComponent, nextTick, onMounted, ref, watch } from 'vue';
+import { computed, defineComponent, onMounted, ref, watch } from 'vue';
 
 import { useWowerlayContext } from '../event';
 import { wowerlayBaseProps } from './WowerlayReusables';
