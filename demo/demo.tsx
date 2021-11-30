@@ -8,13 +8,9 @@ import { computed, createApp, defineComponent, onMounted, ref, watch } from 'vue
 import { Highlight } from './components/Highlight';
 import { IDemo } from './helpers';
 import { Sheet } from 'bottom-sheet-vue3';
-import hljs from 'highlight.js/lib/core';
-import javascript from 'highlight.js/lib/languages/javascript';
-import xml from 'highlight.js/lib/languages/xml';
+import { highlightInit } from './helpers/highlight';
 
-hljs.registerLanguage('javascript', javascript);
-hljs.registerLanguage('xml', xml);
-hljs.registerLanguage('html', xml);
+highlightInit();
 
 const demosGlob = import.meta.globEager('./demos/**/*') as Record<string, { Demo: IDemo }>;
 const demos = Object.values(demosGlob).map(($export) => $export.Demo);

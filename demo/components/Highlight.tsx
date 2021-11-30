@@ -1,6 +1,6 @@
 import { CSSProperties, PropType, defineComponent, onMounted, shallowRef, watch } from 'vue';
 
-import hljs from 'highlight.js';
+import { useHighlight } from '../helpers/highlight';
 
 const style: CSSProperties = {
   whiteSpace: 'pre',
@@ -24,6 +24,7 @@ export const Highlight = defineComponent({
   },
   setup(props) {
     const code = shallowRef('');
+    const hljs = useHighlight();
 
     const highlight = () => {
       code.value = hljs.highlight(props.code, { language: props.language }).value;
