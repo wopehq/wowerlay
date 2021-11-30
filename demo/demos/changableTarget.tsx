@@ -1,7 +1,7 @@
 import { computed, defineComponent, ref } from 'vue';
+import { defineDemo, html } from '../helpers';
 
 import { Wowerlay } from '../../src/lib';
-import { defineDemo } from '../helpers';
 
 const Component = defineComponent({
   name: 'PopoverChangeTarget',
@@ -41,16 +41,16 @@ const Component = defineComponent({
             justifyContent: 'space-between'
           }}
         >
-          <button style={{ color: this.isLeftButtonActive ? 'blue' : 'initial' }} ref="leftButton">
+          <button disabled ref="leftButton">
             Left Target
           </button>
-          <button style={{ color: this.isLeftButtonActive ? 'initial' : 'blue' }} ref="rightButton">
+          <button disabled ref="rightButton">
             Right Target
           </button>
         </div>
         <br />
         <button onClick={this.toggleVisible}>
-          Click to Trigger Popover
+          Click to Show Popover
           <Wowerlay
             onUpdate:visible={(visibility) => (this.isOpen = visibility)}
             visible={this.isOpen}
@@ -72,5 +72,26 @@ const Component = defineComponent({
 
 export const Demo = defineDemo({
   name: 'Changeable Target',
-  component: Component
+  component: Component,
+  template: html`
+    <template>
+      <button ref="firstTarget">Target 1</button>
+      <button ref="secondTarget">Target 2</button>
+
+      <Wowerlay :visible="true" :target="wowerlayTarget">
+        <div>Wowerlay Content</div>
+        <div>Here</div>
+      </Wowerlay>
+    </template>
+  `,
+  script: html`
+    <script setup>
+      import { ref, computed } from 'vue';
+
+      const firstTarget = ref();
+      const secondTarget = ref();
+
+      const wowerlayTarget = computed(() => firstTarget.value || secondTarget.value);
+    </script>
+  `
 });

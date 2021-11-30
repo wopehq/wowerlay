@@ -1,6 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
-* {
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@500&display=swap');
+
+$accentColor: rgb(28, 179, 255);
+$secondaryColor: #1a1a1a;
+
+html {
   font-family: 'Roboto', sans-serif;
+  background-color: rgb(44, 44, 44);
+}
+* {
   box-sizing: border-box;
 }
 
@@ -17,7 +25,9 @@
 }
 
 .wowerlay {
-  background-color: rgb(238, 238, 238);
+  background-color: $secondaryColor;
+  border-radius: 3px;
+  color: #fff;
   box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.25);
   padding: 15px;
 }
@@ -39,30 +49,43 @@
   display: flex;
   flex-flow: column nowrap;
   position: fixed;
-  left: 15px;
+  left: 10px;
   top: 0;
   bottom: 0;
   margin: auto 0;
-  height: calc(100vh - 50px);
-  width: 200px;
+  height: calc(100vh - 20px);
+  min-width: 200px;
   border-radius: 10px;
-  overflow: auto;
   box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.2);
-  background-color: rgb(186, 181, 255);
+  background-color: $secondaryColor;
   padding: 5px;
-  gap: 5px;
+
+  .demo-show-code-button {
+    position: absolute;
+    white-space: nowrap;
+    left: calc(100% + 10px);
+  }
 
   .demo-menu-item {
     width: 100%;
     padding: 10px 10px;
-    font-weight: bold;
     border-radius: 10px;
     font-size: 16px;
-    cursor: pointer;
+    font-weight: 600;
+    color: rgb(121, 121, 121);
+    margin: 3px 0;
+    cursor: default;
 
-    &:hover,
+    &:hover {
+      color: rgb(160, 160, 160);
+      background-color: rgba(68, 68, 68, 0.1);
+    }
+
     &.active {
-      background-color: rgba(255, 255, 255, 0.2);
+      background-color: rgba(68, 68, 68, 0.2);
+      text-shadow: 0px 0px 1px $accentColor;
+      font-weight: 900;
+      color: $accentColor;
     }
   }
 }
@@ -73,4 +96,25 @@
 ::-webkit-scrollbar-thumb {
   background-color: gray;
   border-radius: 10px;
+}
+
+.hljs-tag {
+  color: #c9c9c9;
+}
+
+button,
+select {
+  border-radius: 5px;
+  padding: 7px;
+  background-color: $secondaryColor;
+  border: 1px solid $accentColor;
+  color: $accentColor;
+  font-size: 15px;
+  transition: all 0.25s;
+  outline: none;
+
+  &:hover {
+    background-color: $accentColor;
+    color: $secondaryColor;
+  }
 }

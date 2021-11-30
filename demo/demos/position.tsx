@@ -1,8 +1,8 @@
 import { defineComponent, ref } from 'vue';
+import { defineDemo, html } from '../helpers';
 
 import { Wowerlay } from '../../src/lib';
 import { WowerlayBaseProps } from '../../src/components/WowerlayReusables';
-import { defineDemo } from '../helpers';
 
 const Component = defineComponent({
   name: 'PopoverFollow',
@@ -43,7 +43,7 @@ const Component = defineComponent({
         <br />
 
         <button onClick={this.toggleVisible} ref="targetEl">
-          Click to Trigger Popover
+          Click to Show Popover
           <Wowerlay
             onUpdate:visible={this.handleVisibleChange}
             visible={this.isOpen}
@@ -68,5 +68,24 @@ const Component = defineComponent({
 
 export const Demo = defineDemo({
   name: 'Position',
-  component: Component
+  component: Component,
+  template: html`
+    <template>
+      <button @click="visible = !visible" ref="target">
+        Click To Trigger Popover
+
+        <Wowerlay position="left" v-model:visible="visible" :target="target">
+          Hi This is Content
+        </Wowerlay>
+      </button>
+    </template>
+  `,
+  script: html`
+    <script setup>
+      import { ref } from 'vue';
+
+      const visible = ref(false);
+      const target = ref();
+    </script>
+  `
 });
