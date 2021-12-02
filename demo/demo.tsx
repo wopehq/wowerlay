@@ -1,9 +1,16 @@
 import './demo.scss';
+import 'highlight.js/styles/atom-one-dark.css';
+import 'bottom-sheet-vue3/css/style.css';
 
 import { WowerlayContainer, createWowerlay } from '../src/lib';
 import { computed, createApp, defineComponent, onMounted, ref, watch } from 'vue';
 
+import { Highlight } from './components/Highlight';
 import { IDemo } from './helpers';
+import { Sheet } from 'bottom-sheet-vue3';
+import { highlightInit } from './helpers/highlight';
+
+highlightInit();
 
 const demosGlob = import.meta.globEager('./demos/**/*') as Record<string, { Demo: IDemo }>;
 const demos = Object.values(demosGlob).map(($export) => $export.Demo);
@@ -20,7 +27,13 @@ const centerScreen = () => {
 const App = defineComponent({
   setup() {
     const activeDemoIndex = ref(0);
+    const isCodeSampleVisible = ref(false);
+
     const DemoComponent = computed(() => demos[activeDemoIndex.value].component);
+    const activeDemo = computed(() => demos[activeDemoIndex.value]);
+    const isWithCodeSamples = computed(
+      () => !!activeDemo.value.script || !!activeDemo.value.template
+    );
 
     const isActive = (index: number) => activeDemoIndex.value === index;
 
@@ -34,28 +47,61 @@ const App = defineComponent({
     return {
       activeDemoIndex,
       DemoComponent,
-      isActive
+      isActive,
+      activeDemo,
+      isCodeSampleVisible,
+      isWithCodeSamples
     };
   },
   render() {
-    const AllDemos = demos.map((demo, index) => (
-      <div
-        onClick={() => (this.activeDemoIndex = index)}
-        class={['demo-menu-item', { active: this.isActive(index) }]}
-      >
-        {demo.name}
-      </div>
-    ));
-
     const Demo = this.DemoComponent;
+
+    const AllDemos = () =>
+      demos.map((demo, index) => (
+        <div
+          onClick={() => (this.activeDemoIndex = index)}
+          class={['demo-menu-item', { active: this.isActive(index) }]}
+        >
+          {demo.name}
+        </div>
+      ));
+
+    const Modal = () =>
+      this.isWithCodeSamples && (
+        // @ts-ignore
+        <Sheet
+          sliderIconColor="rgb(15, 15, 15)"
+          containerColor="rgba(55,55,55, .6)"
+          sheetColor="rgb(28, 28, 28)"
+          v-model:visible={this.isCodeSampleVisible}
+        >
+          {this.activeDemo.template && (
+            <Highlight language="html" code={this.activeDemo.template} />
+          )}
+          {this.activeDemo.script /* */ && (
+            <Highlight language="html" code={this.activeDemo.script} />
+          )}
+        </Sheet>
+      );
 
     return (
       <>
         <WowerlayContainer />
         <div class="demo-container">
-          <div class="demo-menu">{AllDemos}</div>
+          <div class="demo-menu">
+            {AllDemos()}
+            {this.isWithCodeSamples && (
+              <button
+                onClick={() => (this.isCodeSampleVisible = true)}
+                class="demo-show-code-button"
+              >
+                Show Code
+              </button>
+            )}
+          </div>
           <div class="demo-content">
             <Demo />
+            {Modal()}
           </div>
         </div>
       </>

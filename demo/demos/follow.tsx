@@ -1,7 +1,7 @@
 import { defineComponent, ref } from 'vue';
+import { defineDemo, html } from '../helpers';
 
 import { Wowerlay } from '../../src/lib';
-import { defineDemo } from '../helpers';
 
 const Component = defineComponent({
   name: 'PopoverFollow',
@@ -22,21 +22,19 @@ const Component = defineComponent({
   render() {
     return (
       <button onClick={this.toggleVisible} ref="targetEl">
-        Click to Trigger Popover
+        Click to Show Popover
         <Wowerlay
           onUpdate:visible={this.handleVisibleChange}
           visible={this.isOpen}
           target={this.targetEl}
         >
-          {Array(15)
-            .fill(null)
-            .map((_num, index) => {
-              return (
-                <div>
-                  <b>Hi How are you? {index}</b>
-                </div>
-              );
-            })}
+          <div style="max-width: 300px">
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rerum quam, qui asperiores,
+            sed ipsa fuga, repellendus officiis labore odit temporibus quisquam necessitatibus? Illo
+            vitae quis reprehenderit sequi quae iste, fuga quasi atque et voluptatibus. Debitis,
+            facere, libero voluptate tempore omnis voluptas corporis fugiat sequi quidem cumque
+            quisquam exercitationem a doloribus.
+          </div>
         </Wowerlay>
       </button>
     );
@@ -45,5 +43,30 @@ const Component = defineComponent({
 
 export const Demo = defineDemo({
   name: 'Following Popover',
-  component: Component
+  component: Component,
+  template: html`
+    <template>
+      <button @click="visible = !visible" ref="target">
+        Click To Trigger Popover
+
+        <Wowerlay v-model:visible="visible" :target="target">
+          <div style="max-width: 300px">
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rerum quam, qui asperiores,
+            sed ipsa fuga, repellendus officiis labore odit temporibus quisquam necessitatibus? Illo
+            vitae quis reprehenderit sequi quae iste, fuga quasi atque et voluptatibus. Debitis,
+            facere, libero voluptate tempore omnis voluptas corporis fugiat sequi quidem cumque
+            quisquam exercitationem a doloribus.
+          </div>
+        </Wowerlay>
+      </button>
+    </template>
+  `,
+  script: html`
+    <script setup>
+      import { ref } from 'vue';
+
+      const visible = ref(false);
+      const target = ref();
+    </script>
+  `
 });

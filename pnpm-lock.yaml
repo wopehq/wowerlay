@@ -5,29 +5,33 @@ specifiers:
   '@types/node': ^16.10.3
   '@types/prompts': ^2.0.14
   '@vitejs/plugin-vue-jsx': ^1.2.0
+  bottom-sheet-vue3: ^1.0.2
   chalk: ^4.1.2
   cross-env: ^7.0.3
   execa: ^5.1.1
   fast-glob: ^3.2.7
   fs-extra: ^10.0.0
+  highlight.js: ^11.3.1
   prompts: ^2.4.2
   sass: ^1.42.1
   ts-node: ^10.2.1
   typescript: 4.5.2
   vite: ^2.6.4
   vite-plugin-dts: ^0.8.3
-  vue: 3.2.20
+  vue: ^3.2.0
 
 devDependencies:
   '@types/fs-extra': 9.0.13
   '@types/node': 16.11.4
   '@types/prompts': 2.0.14
   '@vitejs/plugin-vue-jsx': 1.2.0
+  bottom-sheet-vue3: 1.0.2
   chalk: 4.1.2
   cross-env: 7.0.3
   execa: 5.1.1
   fast-glob: 3.2.7
   fs-extra: 10.0.0
+  highlight.js: 11.3.1
   prompts: 2.4.2
   sass: 1.43.3
   ts-node: 10.4.0_8afc36db0be9232889a86861c4e1f501
@@ -569,6 +573,12 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
+  /bottom-sheet-vue3/1.0.2:
+    resolution: {integrity: sha512-+sCI7I1JGO2tB000mt1k+B/2m3BP4mD5WhtlJMyn5zXPFX+GIAYdwrj+ZLl+Ke/yNiAgDyG6d0QrG/lg2vQVnQ==}
+    dependencies:
+      vue: 3.2.20
+    dev: true
+
   /brace-expansion/1.1.11:
     resolution: {integrity: sha512-iCuPHDFgrHX7H2vEI/5xpz07zSHB00TpugqhmYtVmMO6518mCuRMoOYFldEBl0g187ufozdaHgWKcYFb61qGiA==}
     dependencies:
@@ -978,6 +988,11 @@ packages:
 
   /hash-sum/2.0.0:
     resolution: {integrity: sha512-WdZTbAByD+pHfl/g9QSsBIIwy8IT+EsPiKDs0KNX+zSHhdDLFKdZu0BQHljvO+0QI/BasbMSUa8wYNCZTvhslg==}
+    dev: true
+
+  /highlight.js/11.3.1:
+    resolution: {integrity: sha512-PUhCRnPjLtiLHZAQ5A/Dt5F8cWZeMyj9KRsACsWT+OD6OP0x6dp5OmT5jdx0JgEyPxPZZIPQpRN2TciUT7occw==}
+    engines: {node: '>=12.0.0'}
     dev: true
 
   /html-tags/3.1.0:

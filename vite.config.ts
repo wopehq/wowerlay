@@ -31,7 +31,11 @@ const demoConfig = defineConfig({
   root: path.join(root, 'demo'),
   plugins: [VueJSX()],
   build: {
+    emptyOutDir: true,
     outDir: path.join(root, 'dist-demo')
+  },
+  optimizeDeps: {
+    include: ['highlight.js', 'bottom-sheet-vue3']
   }
 });
 

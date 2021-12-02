@@ -1,7 +1,7 @@
 import { computed, defineComponent, ref } from 'vue';
+import { defineDemo, html } from '../helpers';
 
 import { Wowerlay } from '../../src/lib';
-import { defineDemo } from '../helpers';
 
 const Component = defineComponent({
   name: 'PopoverChangeTarget',
@@ -9,11 +9,11 @@ const Component = defineComponent({
     const isOpen = ref(false);
     const isLeftButtonActive = ref(false);
 
-    const leftButton = ref<HTMLButtonElement>();
-    const rightButton = ref<HTMLButtonElement>();
+    const firstTarget = ref<HTMLButtonElement>();
+    const secondTarget = ref<HTMLButtonElement>();
 
     const targetEl = computed(() =>
-      isLeftButtonActive.value ? leftButton.value : rightButton.value
+      isLeftButtonActive.value ? firstTarget.value : secondTarget.value
     );
 
     const toggleVisible = () => (isOpen.value = !isOpen.value);
@@ -23,8 +23,8 @@ const Component = defineComponent({
       isOpen,
       targetEl,
       toggleVisible,
-      leftButton,
-      rightButton,
+      firstTarget,
+      secondTarget,
       isLeftButtonActive,
       toggleTargetElement
     };
@@ -41,26 +41,28 @@ const Component = defineComponent({
             justifyContent: 'space-between'
           }}
         >
-          <button style={{ color: this.isLeftButtonActive ? 'blue' : 'initial' }} ref="leftButton">
-            Left Target
-          </button>
-          <button style={{ color: this.isLeftButtonActive ? 'initial' : 'blue' }} ref="rightButton">
-            Right Target
-          </button>
+          <div class="object" ref="firstTarget">
+            Target 1
+          </div>
+          <div class="object" ref="secondTarget">
+            Target 2
+          </div>
         </div>
         <br />
         <button onClick={this.toggleVisible}>
-          Click to Trigger Popover
+          Click to Show Popover
           <Wowerlay
             onUpdate:visible={(visibility) => (this.isOpen = visibility)}
             visible={this.isOpen}
             target={this.targetEl}
           >
-            <div>
-              <div>Bruh Moment is real</div>
-              <div>Who Whom</div>
+            <div style="max-width: 300px">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum porro accusantium sed
+              perspiciatis quo! Esse omnis blanditiis atque itaque nemo, eligendi perferendis
+              inventore aspernatur vero ipsum rerum porro suscipit repudiandae numquam quasi dolores
+              fugit tenetur soluta labore dicta? Vitae fuga officiis, incidunt laboriosam blanditiis
+              reprehenderit voluptatem assumenda impedit aliquid fugiat.
               <br />
-              <div>Hi How</div>
               <button onClick={this.toggleTargetElement}>Toggle Target</button>
             </div>
           </Wowerlay>
@@ -72,5 +74,31 @@ const Component = defineComponent({
 
 export const Demo = defineDemo({
   name: 'Changeable Target',
-  component: Component
+  component: Component,
+  template: html`
+    <template>
+      <div class="object" ref="firstTarget">Target 1</div>
+      <div class="object" ref="secondTarget">Target 2</div>
+
+      <Wowerlay :visible="true" :target="wowerlayTarget">
+        <div style="max-width: 300px">
+          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rerum quam, qui asperiores, sed
+          ipsa fuga, repellendus officiis labore odit temporibus quisquam necessitatibus? Illo vitae
+          quis reprehenderit sequi quae iste, fuga quasi atque et voluptatibus. Debitis, facere,
+          libero voluptate tempore omnis voluptas corporis fugiat sequi quidem cumque quisquam
+          exercitationem a doloribus.
+        </div>
+      </Wowerlay>
+    </template>
+  `,
+  script: html`
+    <script setup>
+      import { ref, computed } from 'vue';
+
+      const firstTarget = ref();
+      const secondTarget = ref();
+
+      const wowerlayTarget = computed(() => firstTarget.value || secondTarget.value);
+    </script>
+  `
 });
