@@ -71,14 +71,16 @@ const App = defineComponent({
         // @ts-ignore
         <Sheet
           sliderIconColor="rgb(15, 15, 15)"
-          sheetColor="rgb(45, 45, 45)"
-          maxWidth="850px"
+          containerColor="rgba(55,55,55, .6)"
+          sheetColor="rgb(28, 28, 28)"
           v-model:visible={this.isCodeSampleVisible}
         >
           {this.activeDemo.template && (
             <Highlight language="html" code={this.activeDemo.template} />
           )}
-          {this.activeDemo.script && <Highlight language="html" code={this.activeDemo.script} />}
+          {this.activeDemo.script /* */ && (
+            <Highlight language="html" code={this.activeDemo.script} />
+          )}
         </Sheet>
       );
 

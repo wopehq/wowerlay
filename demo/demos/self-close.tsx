@@ -28,7 +28,14 @@ const Component = defineComponent({
           visible={this.isOpen}
           target={this.targetEl}
         >
-          <div>Hi I'm closable</div>
+          <div style="max-width: 300px">
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rerum quam, qui asperiores,
+            sed ipsa fuga, repellendus officiis labore odit temporibus quisquam necessitatibus? Illo
+            vitae quis reprehenderit sequi quae iste, fuga quasi atque et voluptatibus. Debitis,
+            facere, libero voluptate tempore omnis voluptas corporis fugiat sequi quidem cumque
+            quisquam exercitationem a doloribus.
+          </div>
+          <br />
           <button onClick={() => (this.isOpen = false)}>Click to close</button>
         </Wowerlay>
       </button>
@@ -45,8 +52,15 @@ export const Demo = defineDemo({
         Click To Trigger Popover
 
         <Wowerlay v-model:visible="visible" :target="target">
-          Hi This is Content
-          <button @click="visible = false">Close Popover</button>
+          <div style="max-width: 300px">
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rerum quam, qui asperiores,
+            sed ipsa fuga, repellendus officiis labore odit temporibus quisquam necessitatibus? Illo
+            vitae quis reprehenderit sequi quae iste, fuga quasi atque et voluptatibus. Debitis,
+            facere, libero voluptate tempore omnis voluptas corporis fugiat sequi quidem cumque
+            quisquam exercitationem a doloribus.
+            <br />
+            <button @click="visible = false">Close Popover</button>
+          </div>
         </Wowerlay>
       </button>
     </template>

@@ -102,6 +102,23 @@ html {
   color: #c9c9c9;
 }
 
+.vier-sheet {
+  max-width: 100% !important;
+  width: min-content !important;
+  &::after {
+    max-width: 100% !important;
+  }
+}
+
+.object {
+  display: inline-block;
+  background-color: $secondaryColor;
+  color: rgb(255, 255, 255);
+  box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+  padding: 7px;
+}
+
 button,
 select {
   border-radius: 5px;

@@ -50,15 +50,13 @@ const Component = defineComponent({
             target={this.targetEl}
             position={this.position as WowerlayBaseProps['position']}
           >
-            {Array(15)
-              .fill(null)
-              .map((_num, index) => {
-                return (
-                  <div>
-                    <b>Hi How are you? {index}</b>
-                  </div>
-                );
-              })}
+            <div style="max-width: 300px">
+              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rerum quam, qui asperiores,
+              sed ipsa fuga, repellendus officiis labore odit temporibus quisquam necessitatibus?
+              Illo vitae quis reprehenderit sequi quae iste, fuga quasi atque et voluptatibus.
+              Debitis, facere, libero voluptate tempore omnis voluptas corporis fugiat sequi quidem
+              cumque quisquam exercitationem a doloribus.
+            </div>
           </Wowerlay>
         </button>
       </div>
@@ -75,7 +73,13 @@ export const Demo = defineDemo({
         Click To Trigger Popover
 
         <Wowerlay position="left" v-model:visible="visible" :target="target">
-          Hi This is Content
+          <div style="max-width: 300px">
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rerum quam, qui asperiores,
+            sed ipsa fuga, repellendus officiis labore odit temporibus quisquam necessitatibus? Illo
+            vitae quis reprehenderit sequi quae iste, fuga quasi atque et voluptatibus. Debitis,
+            facere, libero voluptate tempore omnis voluptas corporis fugiat sequi quidem cumque
+            quisquam exercitationem a doloribus.
+          </div>
         </Wowerlay>
       </button>
     </template>

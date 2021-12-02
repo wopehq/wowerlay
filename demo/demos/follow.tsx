@@ -28,15 +28,13 @@ const Component = defineComponent({
           visible={this.isOpen}
           target={this.targetEl}
         >
-          {Array(15)
-            .fill(null)
-            .map((_num, index) => {
-              return (
-                <div>
-                  <b>Hi How are you? {index}</b>
-                </div>
-              );
-            })}
+          <div style="max-width: 300px">
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rerum quam, qui asperiores,
+            sed ipsa fuga, repellendus officiis labore odit temporibus quisquam necessitatibus? Illo
+            vitae quis reprehenderit sequi quae iste, fuga quasi atque et voluptatibus. Debitis,
+            facere, libero voluptate tempore omnis voluptas corporis fugiat sequi quidem cumque
+            quisquam exercitationem a doloribus.
+          </div>
         </Wowerlay>
       </button>
     );
@@ -46,14 +44,19 @@ const Component = defineComponent({
 export const Demo = defineDemo({
   name: 'Following Popover',
   component: Component,
-  // prettier-ignore
   template: html`
     <template>
       <button @click="visible = !visible" ref="target">
         Click To Trigger Popover
-        
+
         <Wowerlay v-model:visible="visible" :target="target">
-          Hi This is Content
+          <div style="max-width: 300px">
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rerum quam, qui asperiores,
+            sed ipsa fuga, repellendus officiis labore odit temporibus quisquam necessitatibus? Illo
+            vitae quis reprehenderit sequi quae iste, fuga quasi atque et voluptatibus. Debitis,
+            facere, libero voluptate tempore omnis voluptas corporis fugiat sequi quidem cumque
+            quisquam exercitationem a doloribus.
+          </div>
         </Wowerlay>
       </button>
     </template>
