@@ -8,12 +8,17 @@ export interface WowerlayBaseProps {
   fixed?: boolean;
   target?: HTMLElement;
   tag?: string;
+  centered?: boolean;
 }
 
 export const wowerlayBaseProps = {
   target: {
     required: true,
     type: null as unknown as PropType<WowerlayBaseProps['target']>
+  },
+  centered: {
+    default: false,
+    type: Boolean as PropType<WowerlayBaseProps['centered']>
   },
   fixed: {
     default: false,
