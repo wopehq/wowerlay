@@ -175,6 +175,7 @@ export interface WowerlayBaseProps {
   fixed?: boolean; // if set wowerlay will not update it's position after mount
   target?: HTMLElement; // target element for Wowerlay to follow
   tag?: string; // tagName for Wowerlay container. default: 'div'
+  centered?: boolean; // if given wowerlay will be center itself in current position.
 }
 ```
 

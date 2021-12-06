@@ -1,3 +1,8 @@
+## 0.1.1
+
+- Now Wowerlay will close child Wowerlays on click itself.
+- `centered` prop added, if true wowerlay will be centered.
+
 ## 0.1.0
 
 - `Fixed` prop is added
