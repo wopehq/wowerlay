@@ -83,7 +83,7 @@ You must have `<WowerlayContainer/>` in your `App.vue`. WowerlayContainer is jus
 
 To create an overlay you must at least set a `visibility` handler value and give a target element, template ref values can be given.
 
-Don't worry, anthing goes to `<Wowerlay/>` will be unmounted when visible is `false` but currently I don't recommend you to use it with `<KeepAlive/>` because I haven't test it yet.
+Don't worry, anthing goes to `<Wowerlay/>` will be unmounted when visible is `false` but currently we don't recommend you to use it with `<KeepAlive/>` because we haven't test it yet.
 
 And `<Wowerlay/>` component is jut a `div` with extra features, you can change tag of it with `tag` prop.
 
@@ -138,7 +138,7 @@ And lastly if you don't want to stop [`attribute inheritance`](https://v3.vuejs.
 <template>
   <button ref="targetElement" @click="toggle">
     Hi How Are you?
-    <!-- nice right? but be careful with recursive components :) -->
+
     <Wowerlay
       tag="div"
       :target="targetElement"
@@ -155,27 +155,52 @@ And lastly if you don't want to stop [`attribute inheritance`](https://v3.vuejs.
 
 ## Styling Wowerlay
 
-Styling wowerlay is too simple because `<Wowerlay/>` is just a single wrapper element. You can give any class any style and any attribute to it, that's why I didn't make props like `width`, `height` because you have full control with styles.
+Styling wowerlay is too simple because `<Wowerlay/>` is just a single wrapper element. You can give any class any style and any attribute to it, that's why it doesn't have props like `width`, `height` because you have full control with styles.
 
-`!!! Except necessary ones, please do not break them :)`
-
-By default `<Wowerlay/>` will try to fit in viewport. If you don't want that behavior in future you can use `disableFit: boolean` prop but not implemented yet.
+`!!! Except necessary styles, please do not break them :)`
 
 ```html
-<Wowerlay tag="something" style="width: 300px; height: 300px;"> Content Goes Here </Wowerlay>
+<Wowerlay tag="span" style="width: 300px; height: 300px; display: inline-block">
+  Content Goes Here
+</Wowerlay>
 ```
 
 ## Props
 
 ```ts
-export interface WowerlayBaseProps {
-  position?: 'left' | 'right' | 'top' | 'bottom'; // forced position for Wowerlay. default: bottom
-  verticalGap: number; // vertical gap between Wowerlay and target. default: 0
-  horizontalGap: number; // horizontal gap between Wowerlay and target. default: 0
-  fixed?: boolean; // if set wowerlay will not update it's position after mount
-  target?: HTMLElement; // target element for Wowerlay to follow
-  tag?: string; // tagName for Wowerlay container. default: 'div'
-  centered?: boolean; // if given wowerlay will be center itself in current position.
+interface WowerlayProps {
+  /**
+   * Forced position for Wowerlay.
+   * @default "bottom"
+   */
+  position: 'left' | 'right' | 'top' | 'top-right' | 'bottom' | 'bottom-right';
+  /**
+   * Vertical gap between Wowerlay and target.
+   * @default 0
+   */
+  verticalGap?: number;
+  /**
+   * Horizontal gap betweeen Wowerlay and the target
+   * @default 0
+   */
+  horizontalGap?: number;
+  /**
+   * If given Wowerlay won't update its position after mounted
+   */
+  fixed?: boolean;
+  /**
+   * Target element for Wowerlay to follow
+   */
+  target: HTMLElement;
+  /**
+   * Tag name for Wowerlay wrapper element.
+   * @default "div"
+   */
+  tag?: string;
+  /**
+   * If given Wowerlay will center itself vertical or horizontal depending on its position.
+   */
+  centered?: boolean;
 }
 ```
 

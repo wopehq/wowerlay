@@ -70,20 +70,40 @@ export const WowerlayRenderer = defineComponent({
       let y = targetY;
       let x = targetX;
 
-      if (props.position === 'top') {
+      if (props.position === 'top' || props.position === 'top-right') {
         if (targetY - wowerlayHeight < 0) {
-          targetPosition = 'bottom';
+          targetPosition = props.position === 'top-right' ? 'bottom-right' : 'bottom';
         }
-      } else {
-        if (targetY + targetHeight + wowerlayHeight >= window.innerHeight) {
-          targetPosition = 'top';
-        }
+      } else if (targetY + targetHeight + wowerlayHeight >= window.innerHeight) {
+        targetPosition = props.position === 'bottom-right' ? 'top-right' : 'top';
       }
 
-      if (targetPosition === 'top') {
-        y = targetY - wowerlayHeight - props.verticalGap;
-      } else {
-        y = targetHeight + y + props.verticalGap;
+      const toBottom = () => (y = targetHeight + y + props.verticalGap);
+      const toTop = () => (y = targetY - wowerlayHeight - props.verticalGap);
+      const toRight = () => (x = targetX + targetWidth - wowerlayWidth);
+
+      switch (targetPosition) {
+        case 'bottom': {
+          toBottom();
+          break;
+        }
+
+        case 'bottom-right': {
+          toBottom();
+          toRight();
+          break;
+        }
+
+        case 'top': {
+          toTop();
+          break;
+        }
+
+        case 'top-right': {
+          toTop();
+          toRight();
+          break;
+        }
       }
 
       if (props.centered) {
@@ -113,10 +133,8 @@ export const WowerlayRenderer = defineComponent({
         if (targetX - wowerlayWidth < 0) {
           targetPosition = 'right';
         }
-      } else {
-        if (targetX + targetWidth + wowerlayWidth > window.innerWidth) {
-          targetPosition = 'left';
-        }
+      } else if (targetX + targetWidth + wowerlayWidth > window.innerWidth) {
+        targetPosition = 'left';
       }
 
       if (targetPosition === 'left') {
