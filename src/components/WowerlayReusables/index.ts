@@ -1,7 +1,7 @@
 import { PropType } from 'vue';
 
 export interface WowerlayBaseProps {
-  position?:
+  position:
     | 'left'
     | 'left-start'
     | 'left-end'
@@ -17,9 +17,9 @@ export interface WowerlayBaseProps {
   verticalGap: number;
   horizontalGap: number;
   canLeaveViewport?: boolean;
-  fixed?: boolean;
+  fixed: boolean;
   target?: HTMLElement;
-  tag?: string;
+  tag: string;
 }
 
 const positions: WowerlayBaseProps['position'][] = [
