@@ -22,21 +22,6 @@ export interface WowerlayBaseProps {
   tag: string;
 }
 
-const positions: WowerlayBaseProps['position'][] = [
-  'bottom',
-  'bottom-start',
-  'bottom-end',
-  'top',
-  'top-start',
-  'top-end',
-  'left',
-  'left-start',
-  'left-end',
-  'right',
-  'right-start',
-  'right-end'
-];
-
 export const wowerlayBaseProps = {
   target: {
     required: true,
@@ -48,8 +33,7 @@ export const wowerlayBaseProps = {
   },
   position: {
     default: 'bottom',
-    type: String as PropType<WowerlayBaseProps['position']>,
-    validator: (position: WowerlayBaseProps['position']) => positions.indexOf(position) >= 0
+    type: String as PropType<WowerlayBaseProps['position']>
   },
   verticalGap: {
     default: 0,

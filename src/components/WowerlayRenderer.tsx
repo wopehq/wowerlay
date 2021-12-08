@@ -145,7 +145,9 @@ export const WowerlayRenderer = defineComponent({
       const wowerlayRect = wowerlayElement.value.getBoundingClientRect();
 
       let newPosition = { x: 0, y: 0 };
-      const { checkOutOfScreen, handle, handleOutOfScreen } = positionHandlers[props.position];
+      const { checkOutOfScreen, handle, handleOutOfScreen } =
+        positionHandlers[props.position] || positionHandlers['bottom'];
+
       const isOutOfScreen = checkOutOfScreen({ targetRect, wowerlayRect });
 
       if (isOutOfScreen) {
