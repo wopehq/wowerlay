@@ -22,14 +22,20 @@ export interface WowerlayBaseProps {
   tag?: string;
 }
 
-const positions = [
+const positions: WowerlayBaseProps['position'][] = [
   'bottom',
-  'bottom-right',
+  'bottom-start',
+  'bottom-end',
   'top',
-  'top-right',
+  'top-start',
+  'top-end',
   'left',
-  'right'
-] as WowerlayBaseProps['position'][];
+  'left-start',
+  'left-end',
+  'right',
+  'right-start',
+  'right-end'
+];
 
 export const wowerlayBaseProps = {
   target: {
