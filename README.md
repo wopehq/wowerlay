@@ -1,4 +1,4 @@
-### A Overlay/Popover library for Vue3. (WORK IN PROGRESS)
+### A Overlay/Popover library for Vue3.
 
 <p align="center">
    <img src="md/wowerlay.png">
@@ -8,7 +8,7 @@
 
 ## Demos
 
-You can view current demos [Click](https://wowerlay.pages.dev).
+You can view and test all demos: [Click](https://wowerlay.pages.dev)
 
 ## Intallation
 
@@ -170,37 +170,45 @@ Styling wowerlay is too simple because `<Wowerlay/>` is just a single wrapper el
 ```ts
 interface WowerlayProps {
   /**
-   * Forced position for Wowerlay.
-   * @default "bottom"
+   * If given Wowerlay won't update its position after mounted
    */
-  position: 'left' | 'right' | 'top' | 'top-right' | 'bottom' | 'bottom-right';
-  /**
-   * Vertical gap between Wowerlay and target.
-   * @default 0
-   */
-  verticalGap?: number;
+  fixed: boolean;
   /**
    * Horizontal gap betweeen Wowerlay and the target
    * @default 0
    */
-  horizontalGap?: number;
+  horizontalGap: number;
   /**
-   * If given Wowerlay won't update its position after mounted
+   * Primary position for Wowerlay.
+   * @default "bottom"
    */
-  fixed?: boolean;
-  /**
-   * Target element for Wowerlay to follow
-   */
-  target: HTMLElement;
+  position:
+    | 'left'
+    | 'left-start'
+    | 'left-end'
+    | 'right'
+    | 'right-start'
+    | 'right-end'
+    | 'top'
+    | 'top-start'
+    | 'top-end'
+    | 'bottom'
+    | 'bottom-start'
+    | 'bottom-end';
   /**
    * Tag name for Wowerlay wrapper element.
    * @default "div"
    */
-  tag?: string;
+  tag: string;
   /**
-   * If given Wowerlay will center itself vertical or horizontal depending on its position.
+   * Target element for Wowerlay to follow
    */
-  centered?: boolean;
+  target?: HTMLElement;
+  /**
+   * Vertical gap between Wowerlay and the target.
+   * @default 0
+   */
+  verticalGap: number;
 }
 ```
 
