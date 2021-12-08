@@ -1,14 +1,25 @@
 import { PropType } from 'vue';
 
 export interface WowerlayBaseProps {
-  position?: 'left' | 'right' | 'top' | 'bottom' | 'bottom-right' | 'top-right';
+  position?:
+    | 'left'
+    | 'left-start'
+    | 'left-end'
+    | 'right'
+    | 'right-start'
+    | 'right-end'
+    | 'top'
+    | 'top-start'
+    | 'top-end'
+    | 'bottom'
+    | 'bottom-start'
+    | 'bottom-end';
   verticalGap: number;
   horizontalGap: number;
   canLeaveViewport?: boolean;
   fixed?: boolean;
   target?: HTMLElement;
   tag?: string;
-  centered?: boolean;
 }
 
 const positions = [
@@ -24,10 +35,6 @@ export const wowerlayBaseProps = {
   target: {
     required: true,
     type: null as unknown as PropType<WowerlayBaseProps['target']>
-  },
-  centered: {
-    default: false,
-    type: Boolean as PropType<WowerlayBaseProps['centered']>
   },
   fixed: {
     default: false,

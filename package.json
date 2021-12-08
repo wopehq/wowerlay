@@ -1,6 +1,6 @@
 {
   "name": "wowerlay",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "main": "./dist/wowerlay.umd.js",
   "module": "./dist/wowerlay.es.js",
   "types": "./dist/types/lib.d.ts",
