@@ -50,7 +50,12 @@ export async function refactorTypes() {
   const basePath = join(dist, 'src');
   const targetPath = join(dist, 'types');
 
-  const toBeRemovedTypes = ['consts.d.ts', 'event'];
+  const toBeRemovedTypes = [
+    'consts.d.ts', //
+    'event',
+    join('components', 'WowerlayUtils')
+  ];
+
   if (await fse.pathExists(basePath)) {
     await fse.move(basePath, targetPath);
     for (const directoryOrFileName of toBeRemovedTypes) {

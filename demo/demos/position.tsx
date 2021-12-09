@@ -1,8 +1,6 @@
+import { Wowerlay, WowerlayProps } from '../../src/lib';
 import { defineComponent, ref } from 'vue';
 import { defineDemo, html } from '../helpers';
-
-import { Wowerlay } from '../../src/lib';
-import { WowerlayBaseProps } from '../../src/components/WowerlayReusables';
 
 const Component = defineComponent({
   name: 'PopoverFollow',
@@ -10,7 +8,7 @@ const Component = defineComponent({
     const targetEl = ref<HTMLElement>(null!);
     const isOpen = ref(false);
 
-    const position = ref('');
+    const position = ref('bottom' as WowerlayProps['position']);
 
     const handleVisibleChange = (state: boolean) => (isOpen.value = state);
     const toggleVisible = () => (isOpen.value = !isOpen.value);
@@ -32,23 +30,34 @@ const Component = defineComponent({
         }}
       >
         <select v-model={this.position} placeholder="Select Position">
-          <option value="">Select Position</option>
           <option value="left">Left</option>
+          <option value="left-start">Left Start</option>
+          <option value="left-end">Left End</option>
           <option value="right">Right</option>
+          <option value="right-start">Right Start</option>
+          <option value="right-end">Right End</option>
           <option value="top">Top</option>
+          <option value="top-start">Top Start</option>
+          <option value="top-end">Top End</option>
           <option value="bottom">Bottom</option>
+          <option value="bottom-start">Bottom Start</option>
+          <option value="bottom-end">Bottom End</option>
         </select>
-
         <br />
         <br />
 
+        <div style={{ color: 'white' }}>
+          position: <strong>{this.position}</strong>
+        </div>
+
+        <br />
         <button onClick={this.toggleVisible} ref="targetEl">
           Click to Show Popover
           <Wowerlay
             onUpdate:visible={this.handleVisibleChange}
             visible={this.isOpen}
             target={this.targetEl}
-            position={this.position as WowerlayBaseProps['position']}
+            position={this.position as WowerlayProps['position']}
           >
             <div style="max-width: 300px">
               Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rerum quam, qui asperiores,
