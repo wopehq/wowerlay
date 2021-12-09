@@ -1,3 +1,11 @@
+## 0.3.1
+
+- Fix `verticalGap` and `horizontalGap` props are not working.
+
+### Demo
+
+- `With Gaps` demo is added.
+
 ## 0.3.0
 
 - New positions added.

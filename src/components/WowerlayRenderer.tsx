@@ -1,5 +1,6 @@
 import {
   Direction,
+  Gaps,
   PositionHandler,
   PositionHandlerParameters,
   checkOutOfScreenBottom,
@@ -136,6 +137,7 @@ export const WowerlayRenderer = defineComponent({
       const wowerlayRect = wowerlayElement.value.getBoundingClientRect();
 
       const rect = { targetRect, wowerlayRect };
+      const gaps: Gaps = { verticalGap: props.verticalGap, horizontalGap: props.horizontalGap };
 
       let newPosition = { x: 0, y: 0 };
       const updatePosition = ({ x, y }: typeof newPosition) => {
@@ -146,19 +148,19 @@ export const WowerlayRenderer = defineComponent({
       const { checkOutOfScreen, handle, handleOutOfScreen } =
         positionHandlers[props.position] || positionHandlers['bottom'];
 
-      updatePosition(handle(rect));
+      updatePosition(handle(rect, gaps));
 
       if (handleOutOfScreen) {
         if (checkOutOfScreen) {
           const isOutOfScreen = checkOutOfScreen(rect);
-          if (isOutOfScreen) updatePosition(handleOutOfScreen(rect));
+          if (isOutOfScreen) updatePosition(handleOutOfScreen(rect, gaps));
         } else if (
-          (alignment.value === 'top' && checkOutOfScreenTop(rect)) ||
-          (alignment.value === 'bottom' && checkOutOfScreenBottom(rect)) ||
-          (alignment.value === 'left' && checkOutOfScreenLeft(rect)) ||
-          (alignment.value === 'right' && checkOutOfScreenRight(rect))
+          (alignment.value === 'top' && checkOutOfScreenTop(rect, gaps)) ||
+          (alignment.value === 'bottom' && checkOutOfScreenBottom(rect, gaps)) ||
+          (alignment.value === 'left' && checkOutOfScreenLeft(rect, gaps)) ||
+          (alignment.value === 'right' && checkOutOfScreenRight(rect, gaps))
         ) {
-          updatePosition(handleOutOfScreen(rect));
+          updatePosition(handleOutOfScreen(rect, gaps));
         }
       }
 
@@ -166,7 +168,10 @@ export const WowerlayRenderer = defineComponent({
       posY.value = fixPosition(newPosition.y, Direction.Vertical);
     };
 
-    watch(() => [props.position, props.target], updateOverlayPosition);
+    watch(
+      () => [props.position, props.target, props.verticalGap, props.horizontalGap],
+      updateOverlayPosition
+    );
 
     onRecalculate(() => !props.fixed && updateOverlayPosition());
     onMounted(() => props.target instanceof HTMLElement && updateOverlayPosition());
