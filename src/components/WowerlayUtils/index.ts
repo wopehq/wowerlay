@@ -3,14 +3,18 @@ export interface PositionHandlerParameters {
   targetRect: DOMRect;
 }
 
-export type PositionHandler = (rect: PositionHandlerParameters) => { x: number; y: number };
+export type Gaps = { verticalGap: number; horizontalGap: number };
+export type PositionHandler = (
+  rect: PositionHandlerParameters,
+  gaps: Gaps
+) => { x: number; y: number };
 
 export type PositionHandlerWithDirection = (
   rect: PositionHandlerParameters,
   direction: Direction
 ) => { x: number; y: number };
 
-type OutOfScreenHandler = (rect: PositionHandlerParameters) => boolean;
+type OutOfScreenHandler = (rect: PositionHandlerParameters, gaps: Gaps) => boolean;
 
 export enum Direction {
   Horizontal,
@@ -60,66 +64,74 @@ export const getEnd: PositionHandlerWithDirection = ({ targetRect, wowerlayRect 
   };
 };
 
-export const getRight: PositionHandler = ({ targetRect, wowerlayRect }) => ({
-  x: targetRect.x + targetRect.width,
+export const getRight: PositionHandler = ({ targetRect, wowerlayRect }, { horizontalGap }) => ({
+  x: targetRect.x + targetRect.width + horizontalGap,
   y: getCenter({ targetRect, wowerlayRect }, Direction.Vertical).y
 });
-export const getRightStart: PositionHandler = (rect) => ({
-  x: getRight(rect).x,
+export const getRightStart: PositionHandler = (rect, gaps) => ({
+  x: getRight(rect, gaps).x,
   y: getStart(rect, Direction.Vertical).y
 });
-export const getRightEnd: PositionHandler = (rect) => ({
-  x: getRight(rect).x,
+export const getRightEnd: PositionHandler = (rect, gaps) => ({
+  x: getRight(rect, gaps).x,
   y: getEnd(rect, Direction.Vertical).y
 });
 
-export const getLeft: PositionHandler = ({ targetRect, wowerlayRect }) => ({
-  x: targetRect.x - wowerlayRect.width,
+export const getLeft: PositionHandler = ({ targetRect, wowerlayRect }, { horizontalGap }) => ({
+  x: targetRect.x - wowerlayRect.width - horizontalGap,
   y: getCenter({ targetRect, wowerlayRect }, Direction.Vertical).y
 });
-export const getLeftStart: PositionHandler = (rect) => ({
-  x: getLeft(rect).x,
+export const getLeftStart: PositionHandler = (rect, gaps) => ({
+  x: getLeft(rect, gaps).x,
   y: getStart(rect, Direction.Vertical).y
 });
-export const getLeftEnd: PositionHandler = (rect) => ({
-  x: getLeft(rect).x,
+export const getLeftEnd: PositionHandler = (rect, gaps) => ({
+  x: getLeft(rect, gaps).x,
   y: getEnd(rect, Direction.Vertical).y
 });
 
-export const getTop: PositionHandler = ({ targetRect, wowerlayRect }) => ({
+export const getTop: PositionHandler = ({ targetRect, wowerlayRect }, { verticalGap }) => ({
   x: getCenter({ targetRect, wowerlayRect }, Direction.Horizontal).x,
-  y: targetRect.y - wowerlayRect.height
+  y: targetRect.y - wowerlayRect.height - verticalGap
 });
-export const getTopStart: PositionHandler = (rect) => ({
+export const getTopStart: PositionHandler = (rect, gaps) => ({
   x: getStart(rect, Direction.Horizontal).x,
-  y: getTop(rect).y
+  y: getTop(rect, gaps).y
 });
-export const getTopEnd: PositionHandler = (rect) => ({
-  y: getTop(rect).y,
+export const getTopEnd: PositionHandler = (rect, gaps) => ({
+  y: getTop(rect, gaps).y,
   x: getEnd(rect, Direction.Horizontal).x
 });
 
-export const getBottom: PositionHandler = ({ targetRect, wowerlayRect }) => ({
+export const getBottom: PositionHandler = ({ targetRect, wowerlayRect }, { verticalGap }) => ({
   x: getCenter({ targetRect, wowerlayRect }, Direction.Horizontal).x,
-  y: targetRect.y + targetRect.height
+  y: targetRect.y + targetRect.height + verticalGap
 });
-export const getBottomStart: PositionHandler = (rect) => ({
+export const getBottomStart: PositionHandler = (rect, gaps) => ({
   x: getStart(rect, Direction.Horizontal).x,
-  y: getBottom(rect).y
+  y: getBottom(rect, gaps).y
 });
-export const getBottomEnd: PositionHandler = (rect) => ({
-  y: getBottom(rect).y,
+export const getBottomEnd: PositionHandler = (rect, gaps) => ({
+  y: getBottom(rect, gaps).y,
   x: getEnd(rect, Direction.Horizontal).x
 });
 
-export const checkOutOfScreenTop: OutOfScreenHandler = ({ targetRect, wowerlayRect }) =>
-  targetRect.y - wowerlayRect.height < 0;
+export const checkOutOfScreenTop: OutOfScreenHandler = (
+  { targetRect, wowerlayRect },
+  { verticalGap }
+) => targetRect.y - wowerlayRect.height - verticalGap < 0;
 
-export const checkOutOfScreenBottom: OutOfScreenHandler = ({ targetRect, wowerlayRect }) =>
-  targetRect.y + targetRect.height + wowerlayRect.height > window.innerHeight;
+export const checkOutOfScreenBottom: OutOfScreenHandler = (
+  { targetRect, wowerlayRect },
+  { verticalGap }
+) => targetRect.y + targetRect.height + wowerlayRect.height + verticalGap > window.innerHeight;
 
-export const checkOutOfScreenLeft: OutOfScreenHandler = ({ targetRect, wowerlayRect }) =>
-  targetRect.x - wowerlayRect.width < 0;
+export const checkOutOfScreenLeft: OutOfScreenHandler = (
+  { targetRect, wowerlayRect },
+  { horizontalGap }
+) => targetRect.x - wowerlayRect.width - horizontalGap < 0;
 
-export const checkOutOfScreenRight: OutOfScreenHandler = ({ targetRect, wowerlayRect }) =>
-  targetRect.x + targetRect.width + wowerlayRect.width > window.innerWidth;
+export const checkOutOfScreenRight: OutOfScreenHandler = (
+  { targetRect, wowerlayRect },
+  { horizontalGap }
+) => targetRect.x + targetRect.width + wowerlayRect.width + horizontalGap > window.innerWidth;

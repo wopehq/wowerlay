@@ -119,6 +119,25 @@ html {
   padding: 7px;
 }
 
+input {
+  background-color: lighten($secondaryColor, 5);
+  color: #fff;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  outline: none;
+  padding: 3px;
+
+  &[type='number'] {
+    width: 50px;
+    text-align: center;
+    appearance: none;
+  }
+
+  &:focus {
+    border-color: $accentColor;
+  }
+}
+
 button,
 select {
   border-radius: 5px;
@@ -134,4 +153,15 @@ select {
     background-color: $accentColor;
     color: $secondaryColor;
   }
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type='number'] {
+  -moz-appearance: textfield;
 }
