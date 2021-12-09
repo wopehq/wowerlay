@@ -148,8 +148,9 @@ export const WowerlayRenderer = defineComponent({
 
       updatePosition(handle(rect));
 
-      if (checkOutOfScreen && checkOutOfScreen(rect)) {
-        updatePosition(handleOutOfScreen(rect));
+      if (checkOutOfScreen) {
+        const isOutOfScreen = checkOutOfScreen(rect);
+        if (isOutOfScreen) updatePosition(handleOutOfScreen(rect));
       } else if (
         (alignment.value === 'top' && checkOutOfScreenTop(rect)) ||
         (alignment.value === 'bottom' && checkOutOfScreenBottom(rect)) ||
