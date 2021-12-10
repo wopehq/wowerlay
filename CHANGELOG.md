@@ -1,3 +1,7 @@
+## 0.3.2
+
+- Updated README.md
+
 ## 0.3.1
 
 - Fix `verticalGap` and `horizontalGap` props are not working.
