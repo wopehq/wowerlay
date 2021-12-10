@@ -73,6 +73,7 @@ const Component = defineComponent({
             position={this.position}
             visible={this.visibility}
             target={this.targetEl}
+            noBackground
           >
             <div style="max-width: 300px">
               Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rerum quam, qui asperiores,

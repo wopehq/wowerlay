@@ -20,12 +20,17 @@ export interface WowerlayBaseProps {
   fixed: boolean;
   target?: HTMLElement;
   tag: string;
+  noBackground: boolean;
 }
 
 export const wowerlayBaseProps = {
   target: {
     required: true,
     type: null as unknown as PropType<WowerlayBaseProps['target']>
+  },
+  noBackground: {
+    default: false,
+    type: Boolean as PropType<WowerlayBaseProps['noBackground']>
   },
   fixed: {
     default: false,

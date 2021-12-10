@@ -2,12 +2,12 @@ import './demo.scss';
 import 'highlight.js/styles/atom-one-dark.css';
 import 'bottom-sheet-vue3/css/style.css';
 
-import { WowerlayContainer, createWowerlay } from '../src/lib';
 import { computed, createApp, defineComponent, onMounted, ref, watch } from 'vue';
 
 import { Highlight } from './components/Highlight';
 import { IDemo } from './helpers';
 import { Sheet } from 'bottom-sheet-vue3';
+import { createWowerlay } from '../src/lib';
 import { highlightInit } from './helpers/highlight';
 
 highlightInit();
@@ -86,7 +86,6 @@ const App = defineComponent({
 
     return (
       <>
-        <WowerlayContainer />
         <div class="demo-container">
           <div class="demo-menu">
             {AllDemos()}

@@ -50,38 +50,9 @@ app.use(wowerlay);
 app.mount('#app');
 ```
 
-You must have `<WowerlayContainer/>` in your `App.vue`. WowerlayContainer is just a `div` element with wrapped by `<Teleport/>` so it will automatically teleport itself to end of the `body`. WowerlayContainer will keep overlays inside and is invisible, not targetable by pointers.
+## Using Wowerlay.
 
-### `App.vue`
-
-```html
-<template>
-  <!-- IMPORTANT | DO NOT FORGET THIS -->
-  <WowerlayContainer />
-  <Navbar />
-  <router-view />
-  <!-- don't use multiple times! -->
-  <WowerlayContainer_But_Shouldnt_Be_Used_More_Than_Once />
-</template>
-
-<script setup>
-  import { WowerlayContainer } from 'wowerlay';
-</script>
-
-<!-- FOR NORMAL SCRIPT -->
-<script>
-  import { WowerlayContainer } from 'wowerlay';
-  import { defineComponent } from 'vue';
-
-  export default defineComponent({
-    components: { WowerlayContainer }
-  });
-</script>
-```
-
-## Creating overlay.
-
-To create an overlay you must at least set a `visibility` handler value and give a target element, template ref values can be given.
+To make Wowerlay visible you must set `visibility` to `true` and give a target element, template refs can be given.
 
 Don't worry, anthing goes to `<Wowerlay/>` will be unmounted when visible is `false` but currently we don't recommend you to use it with `<KeepAlive/>` because we haven't test it yet.
 
@@ -103,11 +74,13 @@ And `<Wowerlay/>` component is jut a `div` with extra features, you can change t
   import { Wowerlay } from 'wowerlay';
   import { ref } from 'vue';
 
-  /* if you are using typescript define template ref like this otherwise
+  /*
+   * if you are using typescript define template ref like this otherwise
    * you will get a type error.
-   * const targetElement = ref<HTMLElement | null>(null);
    */
+  const targetElement = ref<HTMLElement>();
   const targetElement = ref(null);
+
   const isVisible = ref(false);
   const toggle = () => (isVisible.value = !isVisible.value);
 </script>
@@ -210,6 +183,11 @@ interface WowerlayProps {
    * @default 0
    */
   verticalGap: number;
+  /**
+   *
+   * Disables clickable background when wowerlay is visible
+   * @default false
+   */
 }
 ```
 

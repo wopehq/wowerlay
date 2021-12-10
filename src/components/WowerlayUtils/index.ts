@@ -1,3 +1,5 @@
+import { scrollbarGap } from '../../consts';
+
 export interface PositionHandlerParameters {
   wowerlayRect: DOMRect;
   targetRect: DOMRect;
@@ -124,7 +126,9 @@ export const checkOutOfScreenTop: OutOfScreenHandler = (
 export const checkOutOfScreenBottom: OutOfScreenHandler = (
   { targetRect, wowerlayRect },
   { verticalGap }
-) => targetRect.y + targetRect.height + wowerlayRect.height + verticalGap > window.innerHeight;
+) =>
+  targetRect.y + targetRect.height + wowerlayRect.height + scrollbarGap + verticalGap >
+  window.innerHeight;
 
 export const checkOutOfScreenLeft: OutOfScreenHandler = (
   { targetRect, wowerlayRect },
@@ -134,4 +138,6 @@ export const checkOutOfScreenLeft: OutOfScreenHandler = (
 export const checkOutOfScreenRight: OutOfScreenHandler = (
   { targetRect, wowerlayRect },
   { horizontalGap }
-) => targetRect.x + targetRect.width + wowerlayRect.width + horizontalGap > window.innerWidth;
+) =>
+  targetRect.x + targetRect.width + wowerlayRect.width + scrollbarGap + horizontalGap >
+  window.innerWidth;

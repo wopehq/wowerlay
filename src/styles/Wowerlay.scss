@@ -21,6 +21,24 @@
   max-height: calc(#{-webkit-fill-available} - #{$gap});
 }
 
+.wowerlay-background {
+  display: block;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  max-width: fill-available;
+  max-width: -webkit-fill-available;
+  height: 100vh;
+  max-height: fill-available;
+  max-height: -webkit-fill-available;
+  z-index: var(--wowerlay-z, 500);
+
+  &.no-background {
+    pointer-events: none;
+  }
+}
+
 .wowerlay-anim-enter {
   animation: kOverlayAnimation 0.25s;
 }

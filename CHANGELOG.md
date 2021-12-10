@@ -1,3 +1,15 @@
+## 0.4.0
+
+- `noBackground` prop is added, if given `Wowerlay` won't have an invisible click blocker background when visible.
+
+- `scrollbarGap` not counted for `checkOutOfScreen` is fixed.
+
+- Readme is updated.
+
+### Breaking Changes
+
+- `WowerlayContainer` component is removed, now `Wowerlay` comes with its own background.
+
 ## 0.3.2
 
 - Updated README.md
