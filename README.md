@@ -188,6 +188,7 @@ interface WowerlayProps {
    * Disables clickable background when wowerlay is visible
    * @default false
    */
+  noBackground: boolean;
 }
 ```
 
