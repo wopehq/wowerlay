@@ -10,9 +10,13 @@
 
 - `WowerlayContainer` component is removed, now `Wowerlay` comes with its own background.
 
+<br>
+
 ## 0.3.2
 
 - Updated README.md
+
+<br>
 
 ## 0.3.1
 
@@ -21,6 +25,8 @@
 ### Demo
 
 - `With Gaps` demo is added.
+
+<br>
 
 ## 0.3.0
 
@@ -38,11 +44,15 @@
 
 - `centered` prop is removed, now `top` | `left` | `right` | `bottom` is centered by default.
 
+<br>
+
 ## 0.1.1
 
 - Now Wowerlay will close child Wowerlays on click itself.
 
 - `centered` prop added, if true wowerlay will be centered.
+
+<br>
 
 ## 0.1.0
 
@@ -55,6 +65,8 @@
 - Reactive `target` prop support is added. Now wowerlay will react when `target` element changes and will follow it.
 
 - Demo page added to Readme
+
+<br>
 
 ## 0.0.1
 
