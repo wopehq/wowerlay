@@ -90,7 +90,7 @@ And `<Wowerlay/>` component is jut a `div` with extra features, you can change t
 ```html
 <template>
   <button ref="targetElement" @click="toggle">Hi How Are you?</button>
-  <!-- tag prop is "div" by default -->
+
   <Wowerlay tag="section" :target="targetElement" v-model:visible="isVisible">
     <div>Hey how you doin?</div>
     <button>Good</button>
@@ -103,9 +103,10 @@ And `<Wowerlay/>` component is jut a `div` with extra features, you can change t
   import { Wowerlay } from 'wowerlay';
   import { ref } from 'vue';
 
-  // if you are using typescript define template ref like this otherwise
-  // you will get a type error.
-  // const targetElement = ref<HTMLElement | null>(null);
+  /* if you are using typescript define template ref like this otherwise
+   * you will get a type error.
+   * const targetElement = ref<HTMLElement | null>(null);
+   */
   const targetElement = ref(null);
   const isVisible = ref(false);
   const toggle = () => (isVisible.value = !isVisible.value);
