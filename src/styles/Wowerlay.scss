@@ -8,7 +8,6 @@
   left: #{$positionX};
   top: #{$positionY};
 
-  z-index: var(--k-z-index, 1500);
   pointer-events: all !important;
   overflow: auto;
 
