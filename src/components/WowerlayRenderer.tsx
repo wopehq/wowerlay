@@ -147,7 +147,7 @@ export const WowerlayRenderer = defineComponent({
         checkOutOfScreen,
         handle,
         handleOutOfScreen //
-      } = positionHandlers[props.position] || positionHandlers['bottom'];
+      } = positionHandlers[props.position] || positionHandlers.bottom;
 
       updatePosition(handle(rect, gaps));
 
