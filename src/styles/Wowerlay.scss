@@ -8,7 +8,6 @@
   left: #{$positionX};
   top: #{$positionY};
 
-  z-index: var(--k-z-index, 1500);
   pointer-events: all !important;
   overflow: auto;
 
@@ -17,8 +16,26 @@
   max-width: calc(#{-webkit-fill-available} - #{$gap});
 
   max-height: calc(100vh - #{$gap});
-  max-height: calc(#{fill-available} - 5px);
+  max-height: calc(#{fill-available} - #{$gap});
   max-height: calc(#{-webkit-fill-available} - #{$gap});
+}
+
+.wowerlay-background {
+  display: block;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  max-width: fill-available;
+  max-width: -webkit-fill-available;
+  height: 100vh;
+  max-height: fill-available;
+  max-height: -webkit-fill-available;
+  z-index: var(--wowerlay-z, 500);
+
+  &.no-background {
+    pointer-events: none;
+  }
 }
 
 .wowerlay-anim-enter {

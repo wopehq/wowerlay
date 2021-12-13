@@ -1,4 +1,6 @@
-### A Overlay/Popover library for Vue3.
+### Overlay/Popover library for Vue 3
+
+<br>
 
 <p align="center">
    <img src="md/wowerlay.png">
@@ -50,42 +52,13 @@ app.use(wowerlay);
 app.mount('#app');
 ```
 
-You must have `<WowerlayContainer/>` in your `App.vue`. WowerlayContainer is just a `div` element with wrapped by `<Teleport/>` so it will automatically teleport itself to end of the `body`. WowerlayContainer will keep overlays inside and is invisible, not targetable by pointers.
+## Using Wowerlay.
 
-### `App.vue`
+To make Wowerlay visible you must set `visibility` to `true` and give a target element, template refs can be given.
 
-```html
-<template>
-  <!-- IMPORTANT | DO NOT FORGET THIS -->
-  <WowerlayContainer />
-  <Navbar />
-  <router-view />
-  <!-- don't use multiple times! -->
-  <WowerlayContainer_But_Shouldnt_Be_Used_More_Than_Once />
-</template>
+Don't worry, anthing goes to `<Wowerlay/>` will be unmounted when visible is `false`.
 
-<script setup>
-  import { WowerlayContainer } from 'wowerlay';
-</script>
-
-<!-- FOR NORMAL SCRIPT -->
-<script>
-  import { WowerlayContainer } from 'wowerlay';
-  import { defineComponent } from 'vue';
-
-  export default defineComponent({
-    components: { WowerlayContainer }
-  });
-</script>
-```
-
-## Creating overlay.
-
-To create an overlay you must at least set a `visibility` handler value and give a target element, template ref values can be given.
-
-Don't worry, anthing goes to `<Wowerlay/>` will be unmounted when visible is `false` but currently we don't recommend you to use it with `<KeepAlive/>` because we haven't test it yet.
-
-And `<Wowerlay/>` component is jut a `div` with extra features, you can change tag of it with `tag` prop.
+And `<Wowerlay/>` component is just a `div` with extra features, you can change the tag of it with `tag` prop.
 
 ```html
 <template>
@@ -103,17 +76,19 @@ And `<Wowerlay/>` component is jut a `div` with extra features, you can change t
   import { Wowerlay } from 'wowerlay';
   import { ref } from 'vue';
 
-  /* if you are using typescript define template ref like this otherwise
+  /*
+   * if you are using typescript define template ref like this otherwise
    * you will get a type error.
-   * const targetElement = ref<HTMLElement | null>(null);
    */
+  const targetElement = ref<HTMLElement>();
   const targetElement = ref(null);
+
   const isVisible = ref(false);
   const toggle = () => (isVisible.value = !isVisible.value);
 </script>
 ```
 
-If you don't prefer `v-model:visible` syntax you can use this one;
+If you don't want to use `v-model:visible` syntax you can use the following one;
 
 ```html
 <template>
@@ -133,7 +108,7 @@ If you don't prefer `v-model:visible` syntax you can use this one;
 ```
 
 And lastly if you don't want to stop [`attribute inheritance`](https://v3.vuejs.org/guide/component-attrs.html#attribute-inheritance) you can use
-`<Wowerlay/>` component inside of target button, it will work as expected because it will be `teleported` to `body` eventually.
+`<Wowerlay/>` component inside of an element, it will work as expected because it will be `teleported` to `body` eventually.
 
 ```html
 <template>
@@ -156,9 +131,9 @@ And lastly if you don't want to stop [`attribute inheritance`](https://v3.vuejs.
 
 ## Styling Wowerlay
 
-Styling wowerlay is too simple because `<Wowerlay/>` is just a single wrapper element. You can give any class any style and any attribute to it, that's why it doesn't have props like `width`, `height` because you have full control with styles.
+Styling wowerlay is too simple because `<Wowerlay/>` is just a single wrapper element. You can give any class any style and any attribute to it, that's why it doesn't have props like `width` and `height`.
 
-`!!! Except necessary styles, please do not break them :)`
+**!!! Except necessary styles, avoid to change them !!!**
 
 ```html
 <Wowerlay tag="span" style="width: 300px; height: 300px; display: inline-block">
@@ -210,12 +185,18 @@ interface WowerlayProps {
    * @default 0
    */
   verticalGap: number;
+  /**
+   *
+   * Disables click blocker background when Wowerlay is visible
+   * @default false
+   */
+  noBackground: boolean;
 }
 ```
 
 ## What about TypeScript?
 
-This package has built-in typescript support for events and props it should work with `.tsx` files. If you check source code of this project you can see we this library in tsx.
+This package has built-in TypeScript support for events and props. It works with `JSX | TSX` and `Render Functions` with type support. Check the source code we wrote the library in `TSX`.
 
 To have types support in vue files we recommend you to use `Volar` plugin. <br>
 [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar) <br>

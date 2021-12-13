@@ -1,15 +1,15 @@
 import { InjectionKey, inject, onBeforeUnmount } from 'vue';
 
-export type Handler<T = any> = (e?: T) => any;
+export type Handler<T = any> = (event: T) => any;
 export interface EventsStore {
   id: symbol;
   handler: Handler;
 }
 export interface WowerlayContext {
-  onRecalculate: (handler: Handler) => void;
-  onWindowClick: (handler: Handler<PointerEvent>) => void;
-  calculateAll: () => void;
-  clickAll: () => void;
+  onRecalculate: (handler: Handler<WheelEvent | Event>) => void;
+  onWindowClick: (handler: Handler<MouseEvent>) => void;
+  calculateAll: (event: WheelEvent | Event) => void;
+  clickAll: (event: PointerEvent) => void;
 }
 
 export const injectionKey: InjectionKey<WowerlayContext> = Symbol();
@@ -25,9 +25,9 @@ export const createEvent = (store: EventsStore[], handler: Handler) => {
   });
 };
 
-export const runEvents = (store: EventsStore[]) => {
+export const runEvents = (store: EventsStore[], e?: any) => {
   for (const event of store) {
-    event.handler();
+    event.handler(e);
   }
 };
 

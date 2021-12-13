@@ -12,7 +12,7 @@ import {
   watch
 } from 'vue';
 import { WowerlayBaseProps, wowerlayBaseProps } from './WowerlayReusables';
-import { cWowerlayAnimEnter, cWowerlayAnimLeave, cWowerlayContainer } from '../consts';
+import { cWowerlayAnimEnter, cWowerlayAnimLeave, cWowerlayBackground } from '../consts';
 
 import { WowerlayRenderer } from './WowerlayRenderer';
 import { useWowerlayContext } from '../event';
@@ -100,18 +100,27 @@ export const Wowerlay = defineComponent({
     };
   },
   render() {
-    const toClass = `.${cWowerlayContainer}`;
-
     return (
-      <Teleport to={toClass}>
-        {/*// Todo: Add user made animation support. */}
-        <Transition enterActiveClass={cWowerlayAnimEnter} leaveActiveClass={cWowerlayAnimLeave}>
-          {this.visible && (
-            <WowerlayRenderer {...this.$props} {...this.$attrs} onClick={this.handleWowerlayClick}>
-              {this.$slots.default?.()}
-            </WowerlayRenderer>
-          )}
-        </Transition>
+      <Teleport to="body">
+        <div
+          class={[
+            cWowerlayBackground,
+            { 'no-background': this.noBackground || !this.visible } //
+          ]}
+        >
+          {/*Todo: Add user made animation support.*/}
+          <Transition enterActiveClass={cWowerlayAnimEnter} leaveActiveClass={cWowerlayAnimLeave}>
+            {this.visible && (
+              <WowerlayRenderer
+                {...this.$props}
+                {...this.$attrs}
+                onClick={this.handleWowerlayClick}
+              >
+                {this.$slots.default?.()}
+              </WowerlayRenderer>
+            )}
+          </Transition>
+        </div>
       </Teleport>
     );
   }

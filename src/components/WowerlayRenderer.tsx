@@ -20,7 +20,7 @@ import {
   getTopEnd,
   getTopStart
 } from './WowerlayUtils';
-import { cWowerlay, sWowerlayX, sWowerlayY } from '../consts';
+import { cWowerlay, sWowerlayX, sWowerlayY, scrollbarGap } from '../consts';
 import { computed, defineComponent, onMounted, ref, watch } from 'vue';
 
 import { WowerlayProps } from './Wowerlay';
@@ -111,11 +111,9 @@ export const WowerlayRenderer = defineComponent({
     const handleClick = (e: MouseEvent) => emit('click', e);
 
     const fixPosition = (pos: number, direction: Direction) => {
-      if (!wowerlayElement.value) return 0;
       if (props.canLeaveViewport) return pos;
 
-      const { width, height } = wowerlayElement.value.getBoundingClientRect();
-      const scrollbarGap = 15;
+      const { width, height } = wowerlayElement.value!.getBoundingClientRect();
 
       switch (direction) {
         case Direction.Horizontal: {
@@ -145,15 +143,17 @@ export const WowerlayRenderer = defineComponent({
         newPosition.y = y;
       };
 
-      const { checkOutOfScreen, handle, handleOutOfScreen } =
-        positionHandlers[props.position] || positionHandlers['bottom'];
+      const {
+        checkOutOfScreen,
+        handle,
+        handleOutOfScreen //
+      } = positionHandlers[props.position] || positionHandlers.bottom;
 
       updatePosition(handle(rect, gaps));
 
       if (handleOutOfScreen) {
         if (checkOutOfScreen) {
-          const isOutOfScreen = checkOutOfScreen(rect);
-          if (isOutOfScreen) updatePosition(handleOutOfScreen(rect, gaps));
+          checkOutOfScreen(rect) && updatePosition(handleOutOfScreen(rect, gaps));
         } else if (
           (alignment.value === 'top' && checkOutOfScreenTop(rect, gaps)) ||
           (alignment.value === 'bottom' && checkOutOfScreenBottom(rect, gaps)) ||
