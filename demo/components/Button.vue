@@ -1,13 +1,12 @@
 <script lang="ts">
-import { defineComponent, watchEffect } from 'vue';
-export default defineComponent({
+export default {
   name: 'Button',
   inheritAttrs: false
-});
+};
 </script>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue';
+import { reactive, ref, watchEffect } from 'vue';
 import { WindowEvents } from 'vue3-window-events';
 
 interface Emits {
