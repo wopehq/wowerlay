@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, watchEffect } from 'vue';
 export default defineComponent({
   name: 'Button',
   inheritAttrs: false
@@ -10,10 +10,14 @@ export default defineComponent({
 import { reactive, ref } from 'vue';
 import { WindowEvents } from 'vue3-window-events';
 
+interface Emits {
+  (e: 'update:el', v?: HTMLElement): void;
+}
 interface Props {
   onlyGradient?: boolean;
 }
 const props = defineProps<Props>();
+const emit = defineEmits<Emits>();
 
 const button = ref<HTMLDivElement>();
 const gradient = ref<HTMLDivElement>();
@@ -22,6 +26,8 @@ const gradientCoords = reactive({
   x: 0,
   y: 0
 });
+
+watchEffect(() => emit('update:el', button.value));
 
 const handleClick = () => {
   if (props.onlyGradient) return;
@@ -39,7 +45,7 @@ const handleClick = () => {
   gradient.value?.animate(
     [
       { transform: `scale(1) translate(-50%, -50%)` },
-      { transform: `scale(8) translate(-50%, -50%)` },
+      { transform: `scale(3) translate(-50%, -50%)` },
       { transform: `scale(1) translate(-50%, -50%)` }
     ],
     { duration: 600, easing: 'ease-out' }
@@ -62,8 +68,6 @@ const handleMouseMove = (e: MouseEvent) => {
     isGradientVisible.value = false;
   }
 };
-
-defineExpose(button);
 </script>
 
 <template>

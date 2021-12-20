@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, unref } from 'vue';
 import { Wowerlay, WowerlayProps } from '../../../src/lib';
+import Button from '../../components/Button.vue';
 
 const targetEl = ref<HTMLElement>();
 const visibility = ref(false);
@@ -43,7 +44,7 @@ onMounted(() => setTimeout(() => (visibility.value = true), 250));
       :horizontalGap="horizontalGap"
       :position="position"
       :visible="visibility"
-      :target="targetEl"
+      :target="unref(targetEl)"
       noBackground
     >
       <div style="max-width: 300px">
@@ -51,7 +52,7 @@ onMounted(() => setTimeout(() => (visibility.value = true), 250));
         ipsa fuga, repellendus officiis labore odit temporibus quisquam necessitatibus? Illo vitae
         quis reprehenderit sequi quae iste.
         <br />
-        <button @click="positionCount++">Update Position</button>
+        <Button @click="positionCount++">Update Position</Button>
       </div>
     </Wowerlay>
   </div>

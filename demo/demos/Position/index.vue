@@ -40,7 +40,7 @@ const toggleVisible = () => (isOpen.value = !isOpen.value);
     </div>
 
     <br />
-    <Button @click="toggleVisible" ref="targetEl">
+    <Button @click="toggleVisible" v-model:el="targetEl">
       Click to Show Popover
       <Wowerlay v-model:visible="isOpen" :target="targetEl" :position="position">
         <div style="max-width: 300px">

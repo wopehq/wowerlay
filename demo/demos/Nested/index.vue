@@ -14,7 +14,7 @@ const secondPopoverVisibility = ref(false);
 </script>
 
 <template>
-  <Button @click="toggleVisible" ref="targetEl">
+  <Button @click="toggleVisible" v-model:el="targetEl">
     Click to Show Popover
     <Wowerlay v-model:visible="isOpen" :target="targetEl">
       <div style="max-width: 300px">
@@ -24,7 +24,7 @@ const secondPopoverVisibility = ref(false);
         libero voluptate tempore omnis voluptas corporis fugiat sequi quidem cumque quisquam
         exercitationem a doloribus.
         <br />
-        <Button @click="secondPopoverVisibility = true" ref="secondTarget">
+        <Button @click="secondPopoverVisibility = true" v-model:el="secondTarget">
           Toggle Second Popover
           <Wowerlay v-model:visible="secondPopoverVisibility" :target="secondTarget">
             <div style="max-width: 300px">

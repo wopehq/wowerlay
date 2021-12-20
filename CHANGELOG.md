@@ -1,3 +1,9 @@
+## 0.4.2
+
+- `(Update)` Demo pages are updated and refactored and package.json is updated.
+
+<br>
+
 ## 0.4.0
 
 - `noBackground` prop is added, if given `Wowerlay` won't have an invisible click blocker background when visible.
