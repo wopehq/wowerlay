@@ -30,6 +30,7 @@
     "@types/fs-extra": "^9.0.13",
     "@types/node": "^16.10.3",
     "@types/prompts": "^2.0.14",
+    "@vitejs/plugin-vue": "^2.0.1",
     "@vitejs/plugin-vue-jsx": "^1.2.0",
     "bottom-sheet-vue3": "^1.0.2",
     "chalk": "^4.1.2",
@@ -44,7 +45,10 @@
     "typescript": "4.5.2",
     "vite": "^2.6.4",
     "vite-plugin-dts": "^0.8.3",
-    "vue": "^3.2.0"
+    "vite-plugin-windicss": "^1.5.4",
+    "vue": "^3.2.0",
+    "vue3-window-events": "^0.0.3",
+    "windicss": "^3.4.0"
   },
   "peerDependencies": {
     "vue": "^3.2.0"

@@ -2,26 +2,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@500&display=swap');
 
 $accentColor: rgb(28, 179, 255);
-$secondaryColor: #1a1a1a;
+$secondaryColor: #0e0e0e;
 
-html {
+html,
+body,
+#app {
+  @apply bg-dark-400;
+}
+
+body,
+button,
+input,
+select {
   font-family: 'Roboto', sans-serif;
-  background-color: rgb(44, 44, 44);
-}
-* {
-  box-sizing: border-box;
-}
-
-::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
-
-  &-thumb {
-    background-color: gray;
-  }
-  &-track {
-    background-color: transparent;
-  }
 }
 
 .wowerlay {
@@ -61,9 +54,9 @@ html {
   padding: 5px;
 
   .demo-show-code-button {
-    position: absolute;
-    white-space: nowrap;
-    left: calc(100% + 10px);
+    position: absolute !important;
+    white-space: nowrap !important;
+    left: calc(100% + 10px) !important;
   }
 
   .demo-menu-item {
@@ -91,15 +84,14 @@ html {
 }
 
 ::-webkit-scrollbar {
-  width: 5px;
+  @apply w-2 h-2;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: gray;
-  border-radius: 10px;
+  @apply rounded-xl bg-true-gray-500;
 }
 
 .hljs-tag {
-  color: #c9c9c9;
+  @apply text-light-900;
 }
 
 .vier-sheet {
@@ -111,26 +103,17 @@ html {
 }
 
 .object {
-  display: inline-block;
+  @apply inline-block text-white rounded p-2;
   background-color: $secondaryColor;
-  color: rgb(255, 255, 255);
   box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.3);
-  border-radius: 5px;
-  padding: 7px;
 }
 
 input {
+  @apply text-white rounded-xl border border-transparent border-solid outline-none p-1;
   background-color: lighten($secondaryColor, 5);
-  color: #fff;
-  border-radius: 10px;
-  border: 1px solid transparent;
-  outline: none;
-  padding: 3px;
 
   &[type='number'] {
-    width: 50px;
-    text-align: center;
-    appearance: none;
+    @apply w-[50px] text-center appearance-none;
   }
 
   &:focus {
@@ -138,16 +121,11 @@ input {
   }
 }
 
-button,
 select {
-  border-radius: 5px;
-  padding: 7px;
+  @apply p-2 rounded text-size-[15px] transition-all duration-250 outline-none border border-solid;
   background-color: $secondaryColor;
-  border: 1px solid $accentColor;
+  border-color: $accentColor;
   color: $accentColor;
-  font-size: 15px;
-  transition: all 0.25s;
-  outline: none;
 
   &:hover {
     background-color: $accentColor;

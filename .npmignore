@@ -13,3 +13,4 @@ test
 demo
 dist-demo
 .github
+tailwind.config.ts

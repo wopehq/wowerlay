@@ -1,5 +1,7 @@
 import DTS from 'vite-plugin-dts';
+import Vue from '@vitejs/plugin-vue';
 import VueJSX from '@vitejs/plugin-vue-jsx';
+import WindiCSS from 'vite-plugin-windicss';
 import { defineConfig } from 'vite';
 import path from 'path';
 
@@ -29,13 +31,16 @@ const productionConfig = defineConfig({
 
 const demoConfig = defineConfig({
   root: path.join(root, 'demo'),
-  plugins: [VueJSX()],
+  plugins: [
+    VueJSX(),
+    Vue(),
+    WindiCSS({
+      config: path.join(root, 'tailwind.config.ts')
+    })
+  ],
   build: {
     emptyOutDir: true,
     outDir: path.join(root, 'dist-demo')
-  },
-  optimizeDeps: {
-    include: ['highlight.js', 'bottom-sheet-vue3']
   }
 });
 

@@ -4,6 +4,7 @@ specifiers:
   '@types/fs-extra': ^9.0.13
   '@types/node': ^16.10.3
   '@types/prompts': ^2.0.14
+  '@vitejs/plugin-vue': ^2.0.1
   '@vitejs/plugin-vue-jsx': ^1.2.0
   bottom-sheet-vue3: ^1.0.2
   chalk: ^4.1.2
@@ -18,12 +19,16 @@ specifiers:
   typescript: 4.5.2
   vite: ^2.6.4
   vite-plugin-dts: ^0.8.3
+  vite-plugin-windicss: ^1.5.4
   vue: ^3.2.0
+  vue3-window-events: ^0.0.3
+  windicss: ^3.4.0
 
 devDependencies:
   '@types/fs-extra': 9.0.13
   '@types/node': 16.11.4
   '@types/prompts': 2.0.14
+  '@vitejs/plugin-vue': 2.0.1_vite@2.6.11+vue@3.2.20
   '@vitejs/plugin-vue-jsx': 1.2.0
   bottom-sheet-vue3: 1.0.2
   chalk: 4.1.2
@@ -38,9 +43,18 @@ devDependencies:
   typescript: 4.5.2
   vite: 2.6.11_sass@1.43.3
   vite-plugin-dts: 0.8.3_vite@2.6.11
+  vite-plugin-windicss: 1.5.4_vite@2.6.11
   vue: 3.2.20
+  vue3-window-events: 0.0.3_vue@3.2.20
+  windicss: 3.4.0
 
 packages:
+
+  /@antfu/utils/0.3.0:
+    resolution: {integrity: sha512-UU8TLr/EoXdg7OjMp0h9oDoIAVr+Z/oW9cpOxQQyrsz6Qzd2ms/1CdWx8fl2OQdFpxGmq5Vc4TwfLHId6nAZjA==}
+    dependencies:
+      '@types/throttle-debounce': 2.1.0
+    dev: true
 
   /@babel/code-frame/7.15.8:
     resolution: {integrity: sha512-2IAnmn8zbvC/jKYhq5Ki9I+DwjlrtMPUCH/CpHvqI4dNnlwHwsxoIhlc8WcYY5LSYknXQtAlFYuHfqAFCvQ4Wg==}
@@ -409,6 +423,10 @@ packages:
       '@types/node': 16.11.4
     dev: true
 
+  /@types/throttle-debounce/2.1.0:
+    resolution: {integrity: sha512-5eQEtSCoESnh2FsiLTxE121IiE60hnMqcb435fShf4bpLRjEu1Eoekht23y6zXS9Ts3l+Szu3TARnTsA0GkOkQ==}
+    dev: true
+
   /@vitejs/plugin-vue-jsx/1.2.0:
     resolution: {integrity: sha512-Y4Er2bn8bHNiUziJizcVT1yQKTq6oOJeBrKkxvjo2yKT/RTSK1ZlkP/qnzchxxuBkx0tYG4Aaxbb9xuVnNNDEA==}
     engines: {node: '>=12.0.0'}
@@ -421,6 +439,17 @@ packages:
       hash-sum: 2.0.0
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /@vitejs/plugin-vue/2.0.1_vite@2.6.11+vue@3.2.20:
+    resolution: {integrity: sha512-wtdMnGVvys9K8tg+DxowU1ytTrdVveXr3LzdhaKakysgGXyrsfaeds2cDywtvujEASjWOwWL/OgWM+qoeM8Plg==}
+    engines: {node: '>=12.0.0'}
+    peerDependencies:
+      vite: ^2.5.10
+      vue: ^3.2.25
+    dependencies:
+      vite: 2.6.11_sass@1.43.3
+      vue: 3.2.20
     dev: true
 
   /@vue/babel-helper-vue-transform-on/1.0.2:
@@ -525,6 +554,30 @@ packages:
 
   /@vue/shared/3.2.20:
     resolution: {integrity: sha512-FbpX+hD5BvXCQerEYO7jtAGHlhAkhTQ4KIV73kmLWNlawWhTiVuQxizgVb0BOkX5oG9cIRZ42EG++d/k/Efp0w==}
+    dev: true
+
+  /@windicss/config/1.5.4:
+    resolution: {integrity: sha512-muRPFulqh7nU3VrsPb5+k6ulNyiw8VGg62zAWRZIBfeCRXZb2gV1Q8a/tPn8X1T/+HTt4f/1bzFiusqMKscmlw==}
+    dependencies:
+      debug: 4.3.3
+      jiti: 1.12.9
+      windicss: 3.4.0
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
+  /@windicss/plugin-utils/1.5.4:
+    resolution: {integrity: sha512-fS4y52OYB9rIzEUolIWIrrHYuaQfcqTaX3ISbFUiNbvNgH97JATjzB2iOnNqWNy6pH3M8RP0TqYQOOCCeanDoA==}
+    dependencies:
+      '@antfu/utils': 0.3.0
+      '@windicss/config': 1.5.4
+      debug: 4.3.3
+      fast-glob: 3.2.7
+      magic-string: 0.25.7
+      micromatch: 4.0.4
+      windicss: 3.4.0
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /acorn-walk/8.2.0:
@@ -708,6 +761,18 @@ packages:
 
   /debug/4.3.2:
     resolution: {integrity: sha512-mOp8wKcvj7XxC78zLgw/ZA+6TSgkoE2C/ienthhRD298T7UNwAg9diBpLRxC0mOezLl4B0xV7M0cCO6P/O0Xhw==}
+    engines: {node: '>=6.0'}
+    peerDependencies:
+      supports-color: '*'
+    peerDependenciesMeta:
+      supports-color:
+        optional: true
+    dependencies:
+      ms: 2.1.2
+    dev: true
+
+  /debug/4.3.3:
+    resolution: {integrity: sha512-/zxw5+vh1Tfv+4Qn7a5nsbcJKPaSvCDhojn6FEl9vupwK2VCSDtEiEtqr8DFtzYFOdz63LBkxec7DYuc2jon6Q==}
     engines: {node: '>=6.0'}
     peerDependencies:
       supports-color: '*'
@@ -1044,6 +1109,11 @@ packages:
     resolution: {integrity: sha1-6PvzdNxVb/iUehDcsFctYz8s+hA=}
     dev: true
 
+  /jiti/1.12.9:
+    resolution: {integrity: sha512-TdcJywkQtcwLxogc4rSMAi479G2eDPzfW0fLySks7TPhgZZ4s/tM6stnzayIh3gS/db3zExWJyUx4cNWrwAmoQ==}
+    hasBin: true
+    dev: true
+
   /js-tokens/4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
     dev: true
@@ -1073,6 +1143,10 @@ packages:
   /kleur/3.0.3:
     resolution: {integrity: sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==}
     engines: {node: '>=6'}
+    dev: true
+
+  /kolorist/1.5.1:
+    resolution: {integrity: sha512-lxpCM3HTvquGxKGzHeknB/sUjuVoUElLlfYnXZT73K8geR9jQbroGlSCFBax9/0mpGoD3kzcMLnOlGQPJJNyqQ==}
     dev: true
 
   /magic-string/0.25.7:
@@ -1383,6 +1457,20 @@ packages:
       vite: 2.6.11_sass@1.43.3
     dev: true
 
+  /vite-plugin-windicss/1.5.4_vite@2.6.11:
+    resolution: {integrity: sha512-bG2IERA9J50MGq1QEbGC/PjrkVIaq2b3LilCeidyIpmFV/4aR14/wGDe83SobF+8coIeJ+23S0uDK/fXX5X0pQ==}
+    peerDependencies:
+      vite: ^2.0.1
+    dependencies:
+      '@windicss/plugin-utils': 1.5.4
+      debug: 4.3.3
+      kolorist: 1.5.1
+      vite: 2.6.11_sass@1.43.3
+      windicss: 3.4.0
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
   /vite/2.6.11_sass@1.43.3:
     resolution: {integrity: sha512-JWnGmiO1IFwou9aUWS4N0kMyHcgTTt1+2f4bJyzgBJLJDyAqGEX3HewE4jgrL6V4d9+mxs+lZ4L8HL2kyVBe7A==}
     engines: {node: '>=12.2.0'}
@@ -1418,12 +1506,26 @@ packages:
       '@vue/shared': 3.2.20
     dev: true
 
+  /vue3-window-events/0.0.3_vue@3.2.20:
+    resolution: {integrity: sha512-yU4SFAto+ZylO6aZdMIyHqaD92NlYxgSx5RIem0NoJA0rdeP4EFqzHWEtzyGPUAA4HLA6RDD+zsoUD+aCvgxFg==}
+    peerDependencies:
+      vue: 3.2.13
+    dependencies:
+      vue: 3.2.20
+    dev: true
+
   /which/2.0.2:
     resolution: {integrity: sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==}
     engines: {node: '>= 8'}
     hasBin: true
     dependencies:
       isexe: 2.0.0
+    dev: true
+
+  /windicss/3.4.0:
+    resolution: {integrity: sha512-X+9Y1/FPxX253Xo4Hk/qfVuvoAxgKx686Z6yHxmBFMH7wRCPdRO42na9k/yEnrW6EqCFJP/GcMIHn3QENaE42g==}
+    engines: {node: '>= 12'}
+    hasBin: true
     dev: true
 
   /yn/3.1.1:
