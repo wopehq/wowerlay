@@ -1,4 +1,5 @@
 import DTS from 'vite-plugin-dts';
+import Icons from 'unplugin-icons/vite';
 import Vue from '@vitejs/plugin-vue';
 import VueJSX from '@vitejs/plugin-vue-jsx';
 import WindiCSS from 'vite-plugin-windicss';
@@ -41,6 +42,9 @@ const demoConfig = defineConfig({
     Vue(),
     WindiCSS({
       config: path.join(root, 'tailwind.config.ts')
+    }),
+    Icons({
+      compiler: 'vue3'
     })
   ],
   build: {

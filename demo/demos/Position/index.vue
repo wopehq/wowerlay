@@ -2,9 +2,27 @@
 import { Wowerlay, WowerlayProps } from '../../../src/lib';
 import { ref } from 'vue';
 import Button from '../../components/Button.vue';
+import Select from '../../components/Select.vue';
 
 const targetEl = ref<HTMLElement>(null!);
 const isOpen = ref(false);
+
+const positions: {
+  [Key in WowerlayProps['position']]: string;
+} = {
+  'bottom-end': 'Bottom End',
+  'bottom-start': 'Bottom Start',
+  bottom: 'Bottom',
+  'left-end': 'Left End',
+  'left-start': 'Left Start',
+  'right-end': 'Right End',
+  'right-start': 'Right Start',
+  'top-end': 'Top End',
+  'top-start': 'Top Start',
+  left: 'Left',
+  right: 'Right',
+  top: 'Top'
+};
 
 const position = ref('bottom' as WowerlayProps['position']);
 
@@ -18,20 +36,8 @@ const toggleVisible = () => (isOpen.value = !isOpen.value);
       margin: '0 auto'
     }"
   >
-    <select v-model="position" placeholder="Select Position">
-      <option value="left">Left</option>
-      <option value="left-start">Left Start</option>
-      <option value="left-end">Left End</option>
-      <option value="right">Right</option>
-      <option value="right-start">Right Start</option>
-      <option value="right-end">Right End</option>
-      <option value="top">Top</option>
-      <option value="top-start">Top Start</option>
-      <option value="top-end">Top End</option>
-      <option value="bottom">Bottom</option>
-      <option value="bottom-start">Bottom Start</option>
-      <option value="bottom-end">Bottom End</option>
-    </select>
+    <Select :data="positions" v-model="position" />
+
     <br />
     <br />
 

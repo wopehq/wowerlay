@@ -10,6 +10,10 @@ body,
   @apply bg-dark-400;
 }
 
+* {
+  scrollbar-width: thin;
+}
+
 body,
 button,
 input,
@@ -118,18 +122,6 @@ input {
 
   &:focus {
     border-color: $accentColor;
-  }
-}
-
-select {
-  @apply p-2 rounded text-size-[15px] transition-all duration-250 outline-none border border-solid;
-  background-color: $secondaryColor;
-  border-color: $accentColor;
-  color: $accentColor;
-
-  &:hover {
-    background-color: $accentColor;
-    color: $secondaryColor;
   }
 }
 

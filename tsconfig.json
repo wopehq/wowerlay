@@ -6,7 +6,7 @@
     "moduleResolution": "node",
     "strict": true,
     "jsx": "preserve",
-    "types": ["vite/client"],
+    "types": ["vite/client", "unplugin-icons/types/vue3"],
     "sourceMap": true,
     "outDir": "dist",
     "declaration": true,
