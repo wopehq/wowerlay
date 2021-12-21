@@ -90,8 +90,6 @@ const handleMouseMove = (e: MouseEvent) => {
 <style lang="scss" scoped>
 $backgroundColor: rgb(28, 179, 255);
 $textColor: #0e0e0e;
-$padding: 8px 13px;
-$radius: 3px;
 
 .button-bg {
   @apply inline-flex
@@ -138,7 +136,7 @@ $radius: 3px;
     background-position: 0px 0px;
 
     &.active {
-      transform: scale(1) translate(-50%, -50%);
+      @apply scale-100;
     }
   }
 

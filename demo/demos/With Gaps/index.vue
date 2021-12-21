@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, onMounted, ref, unref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { Wowerlay, WowerlayProps } from '../../../src/lib';
 import Button from '../../components/Button.vue';
 
@@ -44,7 +44,7 @@ onMounted(() => setTimeout(() => (visibility.value = true), 250));
       :horizontalGap="horizontalGap"
       :position="position"
       :visible="visibility"
-      :target="unref(targetEl)"
+      :target="targetEl"
       noBackground
     >
       <div style="max-width: 300px">

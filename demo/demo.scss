@@ -14,7 +14,7 @@ body,
 button,
 input,
 select {
-  font-family: 'Roboto', sans-serif;
+  @apply font-roboto;
 }
 
 .wowerlay {
