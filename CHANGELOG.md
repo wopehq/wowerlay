@@ -4,6 +4,12 @@
 
 <br>
 
+## 0.4.1
+
+- `(Fix)` Clicking Wowerlay's container causes all Wowerlays to close.
+
+<br>
+
 ## 0.4.0
 
 - `noBackground` prop is added, if given `Wowerlay` won't have an invisible click blocker background when visible.
