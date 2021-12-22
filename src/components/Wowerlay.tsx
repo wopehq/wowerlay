@@ -67,9 +67,15 @@ export const Wowerlay = defineComponent({
     };
 
     parentWowerlay?.onClose(close);
+
     const handleWowerlayClick = (e: MouseEvent) => {
       e.stopPropagation();
       closeChildWowerlays();
+    };
+
+    const handleContainerClick = (e: MouseEvent) => {
+      e.stopPropagation();
+      close();
     };
 
     onWindowClick(close);
@@ -96,7 +102,8 @@ export const Wowerlay = defineComponent({
 
     return {
       canClose,
-      handleWowerlayClick
+      handleWowerlayClick,
+      handleContainerClick
     };
   },
   render() {
@@ -107,6 +114,7 @@ export const Wowerlay = defineComponent({
             cWowerlayBackground,
             { 'no-background': this.noBackground || !this.visible } //
           ]}
+          onClick={this.handleContainerClick}
         >
           {/*Todo: Add user made animation support.*/}
           <Transition enterActiveClass={cWowerlayAnimEnter} leaveActiveClass={cWowerlayAnimLeave}>
