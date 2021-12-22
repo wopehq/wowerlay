@@ -41,7 +41,7 @@ const demoConfig = defineConfig({
     VueJSX(),
     Vue(),
     WindiCSS({
-      config: path.join(root, 'tailwind.config.ts')
+      config: path.join(root, 'windi.config.ts')
     }),
     Icons({
       compiler: 'vue3'
