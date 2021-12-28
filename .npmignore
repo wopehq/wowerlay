@@ -13,4 +13,4 @@ test
 demo
 dist-demo
 .github
-tailwind.config.ts
+windi.config.ts
