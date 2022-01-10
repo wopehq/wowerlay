@@ -22,7 +22,6 @@
     "dev": "cross-env MODE=demo vite",
     "build": "ts-node -T --project tsconfig-build.json scripts/build.ts",
     "build:demo": "cross-env MODE=demo vite build",
-    "release": "ts-node -T --project tsconfig-build.json scripts/release.ts",
     "script:build": "tsc --project tsconfig-build.json && cross-env MODE=production vite build",
     "watch": "cross-env MODE=production vite build --watch"
   },

@@ -17,12 +17,17 @@ const productionConfig = defineConfig({
   build: {
     target: 'es2020',
     lib: {
-      entry: path.resolve(root, 'src', 'lib.tsx'),
+      entry: path.resolve(root, 'src', 'lib.ts'),
       name: 'wowerlay',
       formats: ['es', 'umd']
     },
     rollupOptions: {
-      external: ['vue']
+      external: ['vue'],
+      output: {
+        globals: {
+          vue: 'Vue'
+        }
+      }
     }
   }
 });

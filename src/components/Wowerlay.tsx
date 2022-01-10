@@ -15,7 +15,7 @@ import { WowerlayBaseProps, wowerlayBaseProps } from './WowerlayReusables';
 import { cWowerlayAnimEnter, cWowerlayAnimLeave, cWowerlayBackground } from '../consts';
 
 import { WowerlayRenderer } from './WowerlayRenderer';
-import { useWowerlayContext } from '../event';
+import { useWowerlayContext } from '../plugin';
 
 export interface WowerlayProps extends WowerlayBaseProps {
   visible: boolean;

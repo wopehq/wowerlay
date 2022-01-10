@@ -1,4 +1,4 @@
-import { scrollbarGap } from '../../consts';
+import { scrollbarGap } from '../consts';
 
 export interface PositionHandlerParameters {
   wowerlayRect: DOMRect;
@@ -141,3 +141,9 @@ export const checkOutOfScreenRight: OutOfScreenHandler = (
 ) =>
   targetRect.x + targetRect.width + wowerlayRect.width + scrollbarGap + horizontalGap >
   window.innerWidth;
+
+export const isBrowser = () => typeof window !== 'undefined' && typeof document !== 'undefined';
+
+export const isResizeObserverSupported = () => isBrowser() && 'ResizeObserver' in window;
+
+export const isElement = (el: any): el is HTMLElement => isBrowser() && el instanceof HTMLElement;

@@ -1,13 +1,17 @@
-import { Handler, createEvent, createEventStore, injectionKey, runEvents } from '../event';
+import { Handler, createEvent, createEventStore, runEvents } from '../event';
+import { InjectionKey, Plugin, inject } from 'vue';
 
-import { Plugin } from 'vue';
+import { WowerlayContext } from '../event';
+import { isBrowser } from '../utils';
+
+const WowerlayInjectionKey: InjectionKey<WowerlayContext> = Symbol();
 
 export const createWowerlay = (): Plugin => ({
   install(app) {
     const calculateEvents = createEventStore();
     const clickEvents = createEventStore();
 
-    const onRecalculate = (handler: Handler<WheelEvent | Event>) => {
+    const onRecalculate = (handler: Handler<WheelEvent | Event | undefined>) => {
       createEvent(calculateEvents, handler);
     };
     const onWindowClick = (handler: Handler<PointerEvent>) => createEvent(clickEvents, handler);
@@ -15,7 +19,7 @@ export const createWowerlay = (): Plugin => ({
     const calculateAll = (e: WheelEvent | Event) => runEvents(calculateEvents, e);
     const clickAll = (e: MouseEvent) => runEvents(clickEvents, e);
 
-    if (typeof window !== 'undefined' && 'addEventListener' in window) {
+    if (isBrowser()) {
       const wa = window.addEventListener;
       wa('scroll', calculateAll);
       wa('wheel', calculateAll);
@@ -23,7 +27,7 @@ export const createWowerlay = (): Plugin => ({
       wa('click', clickAll);
     }
 
-    app.provide(injectionKey, {
+    app.provide(WowerlayInjectionKey, {
       calculateAll,
       clickAll,
       onWindowClick,
@@ -31,3 +35,5 @@ export const createWowerlay = (): Plugin => ({
     });
   }
 });
+
+export const useWowerlayContext = () => inject(WowerlayInjectionKey)!;

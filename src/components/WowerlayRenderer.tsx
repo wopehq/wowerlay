@@ -18,13 +18,16 @@ import {
   getRightStart,
   getTop,
   getTopEnd,
-  getTopStart
-} from './WowerlayUtils';
+  getTopStart,
+  isBrowser,
+  isElement,
+  isResizeObserverSupported
+} from '../utils';
 import { cWowerlay, sWowerlayX, sWowerlayY, scrollbarGap } from '../consts';
-import { computed, defineComponent, onMounted, ref, watch } from 'vue';
+import { computed, defineComponent, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 
 import { WowerlayProps } from './Wowerlay';
-import { useWowerlayContext } from '../event';
+import { useWowerlayContext } from '../plugin/index';
 import { wowerlayBaseProps } from './WowerlayReusables';
 
 type Handlers = {
@@ -93,7 +96,7 @@ export const WowerlayRenderer = defineComponent({
   inheritAttrs: false,
   props: wowerlayBaseProps,
   emits: {
-    click: (e: MouseEvent): any => e.isTrusted
+    click: (_e: MouseEvent): any => true
   },
   setup(props, { emit }) {
     const { onRecalculate } = useWowerlayContext();
@@ -111,9 +114,9 @@ export const WowerlayRenderer = defineComponent({
     const handleClick = (e: MouseEvent) => emit('click', e);
 
     const fixPosition = (pos: number, direction: Direction) => {
-      if (props.canLeaveViewport) return pos;
+      if (props.canLeaveViewport || !wowerlayElement.value) return pos;
 
-      const { width, height } = wowerlayElement.value!.getBoundingClientRect();
+      const { width, height } = wowerlayElement.value.getBoundingClientRect();
 
       switch (direction) {
         case Direction.Horizontal: {
@@ -128,8 +131,8 @@ export const WowerlayRenderer = defineComponent({
       }
     };
 
-    const updateOverlayPosition = () => {
-      if (!props.target || !wowerlayElement.value) return;
+    const updateWowerlayPosition = () => {
+      if (!isBrowser() || !props.target || !wowerlayElement.value) return;
 
       const targetRect = props.target.getBoundingClientRect();
       const wowerlayRect = wowerlayElement.value.getBoundingClientRect();
@@ -168,13 +171,42 @@ export const WowerlayRenderer = defineComponent({
       posY.value = fixPosition(newPosition.y, Direction.Vertical);
     };
 
+    let observer: ResizeObserver | undefined;
+    if (isResizeObserverSupported()) {
+      observer = new ResizeObserver(() => {
+        if (props.fixed) return;
+        updateWowerlayPosition();
+      });
+
+      watch(
+        () => props.target,
+        (newEl, oldEl) => {
+          if (isElement(oldEl)) observer?.unobserve(oldEl);
+          if (isElement(newEl)) observer?.observe(newEl);
+        },
+        { immediate: true }
+      );
+    }
+
     watch(
       () => [props.position, props.target, props.verticalGap, props.horizontalGap],
-      updateOverlayPosition
+      updateWowerlayPosition
     );
 
-    onRecalculate(() => !props.fixed && updateOverlayPosition());
-    onMounted(() => props.target instanceof HTMLElement && updateOverlayPosition());
+    onRecalculate(() => {
+      if (props.fixed) return;
+      updateWowerlayPosition();
+    });
+
+    onMounted(() => {
+      if (isElement(props.target)) updateWowerlayPosition();
+      if (wowerlayElement.value) observer?.observe(wowerlayElement.value);
+    });
+
+    onBeforeUnmount(() => {
+      if (!isElement(wowerlayElement.value)) return;
+      observer?.unobserve(wowerlayElement.value);
+    });
 
     return {
       handleClick,
