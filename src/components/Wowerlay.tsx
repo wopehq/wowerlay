@@ -88,9 +88,7 @@ export const Wowerlay = defineComponent({
       () => props.visible,
       (state) => {
         if (state) {
-          setTimeout(() => {
-            canClose.value = true;
-          }, 0);
+          setTimeout(() => (canClose.value = true), 0);
         } else {
           canClose.value = false;
         }
