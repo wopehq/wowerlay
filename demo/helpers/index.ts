@@ -9,7 +9,7 @@ export interface IDemo {
 
 const removeBeginningIndent = (code: string) => {
   // 4 spaces always thanks to prettier
-  return code.replace(/\n    /g, '\n');
+  return code.replace(/\n\s{4}/g, '\n');
 };
 
 export const defineDemo = (demo: IDemo) => {
