@@ -2,6 +2,10 @@
 
 - `(Add)` [ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver) support for supporting browsers.
 
+### Demo
+
+- `(Add)` Dynamic Bounds sample.
+
 <br>
 
 ## 0.4.1
