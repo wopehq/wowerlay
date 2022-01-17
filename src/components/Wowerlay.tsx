@@ -88,12 +88,12 @@ export const Wowerlay = defineComponent({
       () => props.visible,
       (state) => {
         if (state) {
-          requestAnimationFrame(() => {
+          setTimeout(() => {
             canClose.value = true;
-          });
-          return;
+          }, 0);
+        } else {
+          canClose.value = false;
         }
-        canClose.value = false;
       }
     );
 
