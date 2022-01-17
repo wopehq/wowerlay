@@ -216,20 +216,18 @@ export const WowerlayRenderer = defineComponent({
     };
   },
   render() {
-    const Element = this.tag as 'div';
+    const Renderer = this.tag as 'div';
 
     return (
-      this.target && (
-        <Element
-          ref="wowerlayElement"
-          class={cWowerlay}
-          style={this.positionStyle}
-          onClick={this.handleClick}
-          {...this.$attrs}
-        >
-          {this.$slots.default?.()}
-        </Element>
-      )
+      <Renderer
+        ref="wowerlayElement"
+        class={cWowerlay}
+        style={this.positionStyle}
+        onClick={this.handleClick}
+        {...this.$attrs}
+      >
+        {this.$slots.default?.()}
+      </Renderer>
     );
   }
 });
