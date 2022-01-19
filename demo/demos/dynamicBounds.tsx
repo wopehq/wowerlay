@@ -1,6 +1,5 @@
 import { CSSProperties, defineComponent, ref, watch } from 'vue';
 import { defineDemo, html } from '../helpers';
-import { percent, px } from '../helpers/css';
 
 import { Wowerlay } from '../../src/lib';
 
@@ -12,13 +11,13 @@ const searchFruit = (name: string) => {
 };
 
 const sFruitItem: CSSProperties = {
-  width: percent(100),
-  padding: px(5)
+  width: '100%',
+  padding: '5px'
 };
 
 const sFruitInput: CSSProperties = {
-  padding: px(5),
-  marginBottom: px(5)
+  padding: '5px',
+  marginBottom: '5px'
 };
 
 const Component = defineComponent({

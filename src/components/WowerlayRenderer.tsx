@@ -27,7 +27,6 @@ import { cWowerlay, sWowerlayX, sWowerlayY, scrollbarGap } from '../consts';
 import { computed, defineComponent, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 
 import { WowerlayProps } from './Wowerlay';
-import { px } from '../../demo/helpers/css';
 import { useWowerlayContext } from '../plugin/index';
 import { wowerlayBaseProps } from './WowerlayReusables';
 
@@ -108,8 +107,8 @@ export const WowerlayRenderer = defineComponent({
 
     const alignment = computed(() => props.position.split('-')[0] as Alignment);
     const positionStyle = computed<Record<string, string>>(() => ({
-      [sWowerlayX]: px(posX.value),
-      [sWowerlayY]: px(posY.value)
+      [sWowerlayX]: `${posX.value}px`,
+      [sWowerlayY]: `${posY.value}px`
     }));
 
     const handleClick = (e: MouseEvent) => emit('click', e);
