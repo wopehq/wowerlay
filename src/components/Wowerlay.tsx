@@ -3,6 +3,7 @@ import {
   PropType,
   Teleport,
   Transition,
+  computed,
   defineComponent,
   inject,
   onBeforeUnmount,
@@ -15,7 +16,8 @@ import { WowerlayBaseProps, wowerlayBaseProps } from './WowerlayReusables';
 import { cWowerlayAnimEnter, cWowerlayAnimLeave, cWowerlayBackground } from '../consts';
 
 import { WowerlayRenderer } from './WowerlayRenderer';
-import { useWowerlayContext } from '../event';
+import { isElement } from '../utils';
+import { useWowerlayContext } from '../plugin';
 
 export interface WowerlayProps extends WowerlayBaseProps {
   visible: boolean;
@@ -51,6 +53,7 @@ export const Wowerlay = defineComponent({
 
     const childrenWowerlayHooks = reactive([]) as Function[];
     const canClose = ref(false);
+    const isVisible = computed(() => isElement(props.target) && props.visible);
 
     const closeChildWowerlays = () => {
       childrenWowerlayHooks.forEach((v) => v());
@@ -85,12 +88,10 @@ export const Wowerlay = defineComponent({
       () => props.visible,
       (state) => {
         if (state) {
-          requestAnimationFrame(() => {
-            canClose.value = true;
-          });
-          return;
+          setTimeout(() => (canClose.value = true), 0);
+        } else {
+          canClose.value = false;
         }
-        canClose.value = false;
       }
     );
 
@@ -102,6 +103,7 @@ export const Wowerlay = defineComponent({
 
     return {
       canClose,
+      isVisible,
       handleWowerlayClick,
       handleContainerClick
     };
@@ -112,13 +114,13 @@ export const Wowerlay = defineComponent({
         <div
           class={[
             cWowerlayBackground,
-            { 'no-background': this.noBackground || !this.visible } //
+            { 'no-background': this.noBackground || !this.isVisible } //
           ]}
           onClick={this.handleContainerClick}
         >
           {/*Todo: Add user made animation support.*/}
           <Transition enterActiveClass={cWowerlayAnimEnter} leaveActiveClass={cWowerlayAnimLeave}>
-            {this.visible && (
+            {this.isVisible && (
               <WowerlayRenderer
                 {...this.$props}
                 {...this.$attrs}

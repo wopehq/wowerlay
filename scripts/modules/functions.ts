@@ -1,10 +1,10 @@
-import chalk, { BackgroundColor, ForegroundColor } from 'chalk';
-import execa, { Options } from 'execa';
-
+import chalk, { type BackgroundColor, type ForegroundColor } from 'chalk';
+import execa, { type Options as ExecaOptions } from 'execa';
 import fse from 'fs-extra';
+
 import { join } from 'path';
 
-export function execute(command: string, commandArguments: string[], options?: Options) {
+export function execute(command: string, commandArguments: string[], options?: ExecaOptions) {
   return execa(command, commandArguments, {
     stdio: 'inherit',
     ...options
@@ -29,22 +29,6 @@ export function sleep(ms: number): Promise<void> {
   });
 }
 
-export function indent(msg: string) {
-  const indentValue = '   ';
-  return indentValue + msg;
-}
-
-export async function readGitignore() {
-  const root = process.cwd();
-  return await fse.readFile(join(root, '.gitignore'), 'utf8');
-}
-
-export async function writeNewPackageJson(newPKG: typeof import('../../package.json')) {
-  const root = process.cwd();
-  const stringifiedPackageJSON = JSON.stringify(newPKG, undefined, 2);
-  return await fse.writeFile(join(root, 'package.json'), stringifiedPackageJSON);
-}
-
 export async function refactorTypes() {
   const dist = join(process.cwd(), 'dist');
   const basePath = join(dist, 'src');
@@ -53,7 +37,7 @@ export async function refactorTypes() {
   const toBeRemovedTypes = [
     'consts.d.ts', //
     'event',
-    join('components', 'WowerlayUtils')
+    'utils'
   ];
 
   if (await fse.pathExists(basePath)) {
@@ -65,11 +49,4 @@ export async function refactorTypes() {
     return;
   }
   throw new Error('types folder does not exist');
-}
-
-export async function getCurrentBranchName() {
-  const { stdout: branchName } = await execute('git', ['rev-parse', '--abbrev-ref', 'HEAD'], {
-    stdio: 'pipe'
-  });
-  return branchName.trim();
 }

@@ -1,3 +1,13 @@
+## 0.4.2
+
+- `(Add)` [ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver) support for supporting browsers.
+
+### Demo
+
+- `(Add)` Dynamic Bounds sample.
+
+<br>
+
 ## 0.4.1
 
 - `(Fix)` Clicking Wowerlay's container causes all Wowerlays to close.
