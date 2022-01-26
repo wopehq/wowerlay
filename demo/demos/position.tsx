@@ -1,5 +1,5 @@
-import { Wowerlay, WowerlayProps } from '../../src/lib';
 import { defineComponent, ref } from 'vue';
+import { Wowerlay, WowerlayProps } from '../../src/lib';
 import { defineDemo, html } from '../helpers';
 
 const Component = defineComponent({
@@ -10,15 +10,19 @@ const Component = defineComponent({
 
     const position = ref('bottom' as WowerlayProps['position']);
 
-    const handleVisibleChange = (state: boolean) => (isOpen.value = state);
-    const toggleVisible = () => (isOpen.value = !isOpen.value);
+    const handleVisibleChange = (state: boolean) => {
+      isOpen.value = state;
+    };
+    const toggleVisible = () => {
+      isOpen.value = !isOpen.value;
+    };
 
     return {
       isOpen,
       targetEl,
       handleVisibleChange,
       toggleVisible,
-      position
+      position,
     };
   },
   render() {
@@ -26,7 +30,7 @@ const Component = defineComponent({
       <div
         style={{
           display: 'inline-block',
-          margin: '0 auto'
+          margin: '0 auto',
         }}
       >
         <select v-model={this.position} placeholder="Select Position">
@@ -51,7 +55,7 @@ const Component = defineComponent({
         </div>
 
         <br />
-        <button onClick={this.toggleVisible} ref="targetEl">
+        <button type="button" onClick={this.toggleVisible} ref="targetEl">
           Click to Show Popover
           <Wowerlay
             onUpdate:visible={this.handleVisibleChange}
@@ -70,7 +74,7 @@ const Component = defineComponent({
         </button>
       </div>
     );
-  }
+  },
 });
 
 export const Demo = defineDemo({
@@ -100,5 +104,5 @@ export const Demo = defineDemo({
       const visible = ref(false);
       const target = ref();
     </script>
-  `
+  `,
 });

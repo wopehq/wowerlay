@@ -13,11 +13,15 @@ const Component = defineComponent({
     const secondTarget = ref<HTMLButtonElement>();
 
     const targetEl = computed(() =>
-      isLeftButtonActive.value ? firstTarget.value : secondTarget.value
+      isLeftButtonActive.value ? firstTarget.value : secondTarget.value,
     );
 
-    const toggleVisible = () => (isOpen.value = !isOpen.value);
-    const toggleTargetElement = () => (isLeftButtonActive.value = !isLeftButtonActive.value);
+    const toggleVisible = () => {
+      isOpen.value = !isOpen.value;
+    };
+    const toggleTargetElement = () => {
+      isLeftButtonActive.value = !isLeftButtonActive.value;
+    };
 
     return {
       isOpen,
@@ -26,7 +30,7 @@ const Component = defineComponent({
       firstTarget,
       secondTarget,
       isLeftButtonActive,
-      toggleTargetElement
+      toggleTargetElement,
     };
   },
   render() {
@@ -38,7 +42,7 @@ const Component = defineComponent({
             margin: '0 auto',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
           }}
         >
           <div class="object" ref="firstTarget">
@@ -49,10 +53,12 @@ const Component = defineComponent({
           </div>
         </div>
         <br />
-        <button onClick={this.toggleVisible}>
+        <button type="button" onClick={this.toggleVisible}>
           Click to Show Popover
           <Wowerlay
-            onUpdate:visible={(visibility) => (this.isOpen = visibility)}
+            onUpdate:visible={(visibility) => {
+              this.isOpen = visibility;
+            }}
             visible={this.isOpen}
             target={this.targetEl}
           >
@@ -63,13 +69,15 @@ const Component = defineComponent({
               fugit tenetur soluta labore dicta? Vitae fuga officiis, incidunt laboriosam blanditiis
               reprehenderit voluptatem assumenda impedit aliquid fugiat.
               <br />
-              <button onClick={this.toggleTargetElement}>Toggle Target</button>
+              <button type="button" onClick={this.toggleTargetElement}>
+                Toggle Target
+              </button>
             </div>
           </Wowerlay>
         </button>
       </>
     );
-  }
+  },
 });
 
 export const Demo = defineDemo({
@@ -100,5 +108,5 @@ export const Demo = defineDemo({
 
       const wowerlayTarget = computed(() => firstTarget.value || secondTarget.value);
     </script>
-  `
+  `,
 });

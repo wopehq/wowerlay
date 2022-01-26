@@ -31,6 +31,8 @@ const config = {
     'jsx-a11y/click-events-have-key-events': 'off',
     'react/no-unknown-property': 'off',
     'react/no-string-refs': 'off',
+    'react/no-this-in-sfc': 'off',
+    'react/style-prop-object': 'off',
   },
   overrides: [
     {

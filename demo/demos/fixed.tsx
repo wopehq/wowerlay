@@ -9,19 +9,23 @@ const Component = defineComponent({
     const targetEl = ref<HTMLElement>();
     const isOpen = ref(false);
 
-    const handleVisibleChange = (state: boolean) => (isOpen.value = state);
-    const toggleVisible = () => (isOpen.value = !isOpen.value);
+    const handleVisibleChange = (state: boolean) => {
+      isOpen.value = state;
+    };
+    const toggleVisible = () => {
+      isOpen.value = !isOpen.value;
+    };
 
     return {
       isOpen,
       targetEl,
       handleVisibleChange,
-      toggleVisible
+      toggleVisible,
     };
   },
   render() {
     return (
-      <button onClick={this.toggleVisible} ref="targetEl">
+      <button type="button" onClick={this.toggleVisible} ref="targetEl">
         Click to Show Popover
         <Wowerlay
           fixed
@@ -39,7 +43,7 @@ const Component = defineComponent({
         </Wowerlay>
       </button>
     );
-  }
+  },
 });
 
 export const Demo = defineDemo({
@@ -69,5 +73,5 @@ export const Demo = defineDemo({
       const visible = ref(false);
       const target = ref();
     </script>
-  `
+  `,
 });

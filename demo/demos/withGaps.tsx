@@ -9,8 +9,12 @@ const Component = defineComponent({
     const isOpen = ref(false);
     const visibility = ref(false);
 
-    const handleVisibleChange = (state: boolean) => (isOpen.value = state);
-    const toggleVisible = () => (isOpen.value = !isOpen.value);
+    const handleVisibleChange = (state: boolean) => {
+      isOpen.value = state;
+    };
+    const toggleVisible = () => {
+      isOpen.value = !isOpen.value;
+    };
 
     const verticalGap = ref(0);
     const horizontalGap = ref(0);
@@ -22,12 +26,16 @@ const Component = defineComponent({
       'bottom-end',
       'left-start',
       'left',
-      'left-end'
+      'left-end',
     ];
 
     const position = computed(() => positions[positionCount.value % positions.length]);
 
-    onMounted(() => setTimeout(() => (visibility.value = true), 250));
+    onMounted(() =>
+      setTimeout(() => {
+        visibility.value = true;
+      }, 250),
+    );
 
     return {
       isOpen,
@@ -38,7 +46,7 @@ const Component = defineComponent({
       positionCount,
       verticalGap,
       horizontalGap,
-      visibility
+      visibility,
     };
   },
   render() {
@@ -47,7 +55,7 @@ const Component = defineComponent({
       width: '100%',
       flexFlow: 'row nowrap',
       justifyContent: 'space-between',
-      gap: '10px'
+      gap: '10px',
     };
 
     return (
@@ -80,13 +88,20 @@ const Component = defineComponent({
               sed ipsa fuga, repellendus officiis labore odit temporibus quisquam necessitatibus?
               Illo vitae quis reprehenderit sequi quae iste.
               <br />
-              <button onClick={() => this.positionCount++}>Update Position</button>
+              <button
+                type="button"
+                onClick={() => {
+                  this.positionCount += 1;
+                }}
+              >
+                Update Position
+              </button>
             </div>
           </Wowerlay>
         </div>
       </>
     );
-  }
+  },
 });
 
 export const Demo = defineDemo({
@@ -116,5 +131,5 @@ export const Demo = defineDemo({
       const visible = ref(false);
       const target = ref();
     </script>
-  `
+  `,
 });
