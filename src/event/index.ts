@@ -1,5 +1,6 @@
 import { onBeforeUnmount } from 'vue';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Handler<T = any> = (event: T) => any;
 export interface EventsStore {
   id: symbol;
@@ -13,7 +14,7 @@ export interface WowerlayContext {
 }
 
 export const createEvent = (store: EventsStore[], handler: Handler) => {
-  const id = Symbol();
+  const id = Symbol('id');
   store.push({ id, handler });
   onBeforeUnmount(() => {
     const eventIndex = store.findIndex((e) => e.id === id);
@@ -23,7 +24,7 @@ export const createEvent = (store: EventsStore[], handler: Handler) => {
   });
 };
 
-export const runEvents = (store: EventsStore[], e?: any) => {
+export const runEvents = (store: EventsStore[], e?: unknown) => {
   for (const event of store) {
     event.handler(e);
   }

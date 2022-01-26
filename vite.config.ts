@@ -11,25 +11,25 @@ const productionConfig = defineConfig({
   plugins: [
     VueJSX(),
     DTS({
-      outputDir: 'dist'
-    })
+      outputDir: 'dist',
+    }),
   ],
   build: {
     target: 'es2020',
     lib: {
       entry: path.resolve(root, 'src', 'lib.ts'),
       name: 'wowerlay',
-      formats: ['es', 'umd']
+      formats: ['es', 'umd'],
     },
     rollupOptions: {
       external: ['vue'],
       output: {
         globals: {
-          vue: 'Vue'
-        }
-      }
-    }
-  }
+          vue: 'Vue',
+        },
+      },
+    },
+  },
 });
 
 const demoConfig = defineConfig({
@@ -37,11 +37,11 @@ const demoConfig = defineConfig({
   plugins: [VueJSX()],
   build: {
     emptyOutDir: true,
-    outDir: path.join(root, 'dist-demo')
+    outDir: path.join(root, 'dist-demo'),
   },
   optimizeDeps: {
-    include: ['highlight.js', 'bottom-sheet-vue3']
-  }
+    include: ['highlight.js', 'bottom-sheet-vue3'],
+  },
 });
 
 export default mode === 'demo' ? demoConfig : productionConfig;

@@ -1,10 +1,9 @@
-import { Handler, createEvent, createEventStore, runEvents } from '../event';
 import { InjectionKey, Plugin, inject } from 'vue';
+import { Handler, createEvent, createEventStore, runEvents, WowerlayContext } from '../event';
 
-import { WowerlayContext } from '../event';
 import { isBrowser } from '../utils';
 
-const WowerlayInjectionKey: InjectionKey<WowerlayContext> = Symbol();
+const WowerlayInjectionKey: InjectionKey<WowerlayContext> = Symbol('key');
 
 export const createWowerlay = (): Plugin => ({
   install(app) {
@@ -31,9 +30,9 @@ export const createWowerlay = (): Plugin => ({
       calculateAll,
       clickAll,
       onWindowClick,
-      onRecalculate
+      onRecalculate,
     });
-  }
+  },
 });
 
 export const useWowerlayContext = () => inject(WowerlayInjectionKey)!;

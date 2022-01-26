@@ -10,7 +10,7 @@ import {
   provide,
   reactive,
   ref,
-  watch
+  watch,
 } from 'vue';
 import { WowerlayBaseProps, wowerlayBaseProps } from './WowerlayReusables';
 import { cWowerlayAnimEnter, cWowerlayAnimLeave, cWowerlayBackground } from '../consts';
@@ -26,32 +26,32 @@ export interface WowerlayProps extends WowerlayBaseProps {
 const Props = {
   visible: {
     required: true,
-    type: Boolean as PropType<WowerlayProps['visible']>
-  } as const
+    type: Boolean as PropType<WowerlayProps['visible']>,
+  } as const,
 };
 const Emits = {
-  'update:visible': (value: boolean): any => typeof value === 'boolean'
+  'update:visible': (() => true) as unknown as (value: boolean) => void,
 } as const;
 
 interface ParentWowerlayContext {
   onClose: (hook: () => void) => void;
 }
 
-const ParentWowerlayContextInjectionKey: InjectionKey<ParentWowerlayContext> = Symbol();
+const ParentWowerlayContextInjectionKey: InjectionKey<ParentWowerlayContext> = Symbol('key');
 
 export const Wowerlay = defineComponent({
   name: 'Wowerlay',
   inheritAttrs: false,
   props: {
     ...wowerlayBaseProps,
-    ...Props
+    ...Props,
   },
   emits: Emits,
   setup(props, { emit }) {
     const { onWindowClick } = useWowerlayContext();
     const parentWowerlay = inject(ParentWowerlayContextInjectionKey, null);
 
-    const childrenWowerlayHooks = reactive([]) as Function[];
+    const childrenWowerlayHooks = reactive([]) as (() => void)[];
     const canClose = ref(false);
     const isVisible = computed(() => isElement(props.target) && props.visible);
 
@@ -88,24 +88,26 @@ export const Wowerlay = defineComponent({
       () => props.visible,
       (state) => {
         if (state) {
-          setTimeout(() => (canClose.value = true), 0);
+          setTimeout(() => {
+            canClose.value = true;
+          }, 0);
         } else {
           canClose.value = false;
         }
-      }
+      },
     );
 
     provide(ParentWowerlayContextInjectionKey, {
       onClose(hook) {
         childrenWowerlayHooks.push(hook);
-      }
+      },
     });
 
     return {
       canClose,
       isVisible,
       handleWowerlayClick,
-      handleContainerClick
+      handleContainerClick,
     };
   },
   render() {
@@ -114,11 +116,12 @@ export const Wowerlay = defineComponent({
         <div
           class={[
             cWowerlayBackground,
-            { 'no-background': this.noBackground || !this.isVisible } //
+            { 'no-background': this.noBackground || !this.isVisible }, //
           ]}
           onClick={this.handleContainerClick}
+          role="tooltip"
         >
-          {/*Todo: Add user made animation support.*/}
+          {/* Todo: Add user made animation support. */}
           <Transition enterActiveClass={cWowerlayAnimEnter} leaveActiveClass={cWowerlayAnimLeave}>
             {this.isVisible && (
               <WowerlayRenderer
@@ -133,5 +136,5 @@ export const Wowerlay = defineComponent({
         </div>
       </Teleport>
     );
-  }
+  },
 });

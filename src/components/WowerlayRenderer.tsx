@@ -1,3 +1,4 @@
+import { computed, defineComponent, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import {
   Direction,
   Gaps,
@@ -21,12 +22,11 @@ import {
   getTopStart,
   isBrowser,
   isElement,
-  isResizeObserverSupported
+  isResizeObserverSupported,
 } from '../utils';
 import { cWowerlay, sWowerlayX, sWowerlayY, scrollbarGap } from '../consts';
-import { computed, defineComponent, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 
-import { WowerlayProps } from './Wowerlay';
+import type { WowerlayProps } from './Wowerlay';
 import { useWowerlayContext } from '../plugin/index';
 import { wowerlayBaseProps } from './WowerlayReusables';
 
@@ -43,52 +43,52 @@ type Alignment = 'top' | 'right' | 'bottom' | 'left';
 const positionHandlers: Handlers = {
   top: {
     handle: getTop,
-    handleOutOfScreen: getBottom
+    handleOutOfScreen: getBottom,
   },
   'top-start': {
     handle: getTopStart,
-    handleOutOfScreen: getBottomStart
+    handleOutOfScreen: getBottomStart,
   },
   'top-end': {
     handle: getTopEnd,
-    handleOutOfScreen: getBottomEnd
+    handleOutOfScreen: getBottomEnd,
   },
   right: {
     handle: getRight,
-    handleOutOfScreen: getLeft
+    handleOutOfScreen: getLeft,
   },
   'right-start': {
     handle: getRightStart,
-    handleOutOfScreen: getLeftStart
+    handleOutOfScreen: getLeftStart,
   },
   'right-end': {
     handle: getRightEnd,
-    handleOutOfScreen: getLeftEnd
+    handleOutOfScreen: getLeftEnd,
   },
   bottom: {
     handle: getBottom,
-    handleOutOfScreen: getTop
+    handleOutOfScreen: getTop,
   },
   'bottom-start': {
     handle: getBottomStart,
-    handleOutOfScreen: getTopStart
+    handleOutOfScreen: getTopStart,
   },
   'bottom-end': {
     handle: getBottomEnd,
-    handleOutOfScreen: getTopEnd
+    handleOutOfScreen: getTopEnd,
   },
   left: {
     handle: getLeft,
-    handleOutOfScreen: getRight
+    handleOutOfScreen: getRight,
   },
   'left-start': {
     handle: getLeftStart,
-    handleOutOfScreen: getRightStart
+    handleOutOfScreen: getRightStart,
   },
   'left-end': {
     handle: getLeftEnd,
-    handleOutOfScreen: getRightEnd
-  }
+    handleOutOfScreen: getRightEnd,
+  },
 };
 
 export const WowerlayRenderer = defineComponent({
@@ -96,7 +96,7 @@ export const WowerlayRenderer = defineComponent({
   inheritAttrs: false,
   props: wowerlayBaseProps,
   emits: {
-    click: (_e: MouseEvent): any => true
+    click: (() => true) as unknown as (e: MouseEvent) => void,
   },
   setup(props, { emit }) {
     const { onRecalculate } = useWowerlayContext();
@@ -108,7 +108,7 @@ export const WowerlayRenderer = defineComponent({
     const alignment = computed(() => props.position.split('-')[0] as Alignment);
     const positionStyle = computed<Record<string, string>>(() => ({
       [sWowerlayX]: `${posX.value}px`,
-      [sWowerlayY]: `${posY.value}px`
+      [sWowerlayY]: `${posY.value}px`,
     }));
 
     const handleClick = (e: MouseEvent) => emit('click', e);
@@ -118,17 +118,13 @@ export const WowerlayRenderer = defineComponent({
 
       const { width, height } = wowerlayElement.value.getBoundingClientRect();
 
-      switch (direction) {
-        case Direction.Horizontal: {
-          const limitX = window.innerWidth - width - scrollbarGap;
-          return Math.max(0, Math.min(limitX, pos));
-        }
-
-        case Direction.Vertical: {
-          const limitY = window.innerHeight - height - scrollbarGap;
-          return Math.max(0, Math.min(limitY, pos));
-        }
+      if (direction === Direction.Horizontal) {
+        const limitX = window.innerWidth - width - scrollbarGap;
+        return Math.max(0, Math.min(limitX, pos));
       }
+
+      const limitY = window.innerHeight - height - scrollbarGap;
+      return Math.max(0, Math.min(limitY, pos));
     };
 
     const updateWowerlayPosition = () => {
@@ -140,7 +136,7 @@ export const WowerlayRenderer = defineComponent({
       const rect = { targetRect, wowerlayRect };
       const gaps: Gaps = { verticalGap: props.verticalGap, horizontalGap: props.horizontalGap };
 
-      let newPosition = { x: 0, y: 0 };
+      const newPosition = { x: 0, y: 0 };
       const updatePosition = ({ x, y }: typeof newPosition) => {
         newPosition.x = x;
         newPosition.y = y;
@@ -149,14 +145,16 @@ export const WowerlayRenderer = defineComponent({
       const {
         checkOutOfScreen,
         handle,
-        handleOutOfScreen //
+        handleOutOfScreen, //
       } = positionHandlers[props.position] || positionHandlers.bottom;
 
       updatePosition(handle(rect, gaps));
 
       if (handleOutOfScreen) {
         if (checkOutOfScreen) {
-          checkOutOfScreen(rect) && updatePosition(handleOutOfScreen(rect, gaps));
+          if (checkOutOfScreen(rect)) {
+            updatePosition(handleOutOfScreen(rect, gaps));
+          }
         } else if (
           (alignment.value === 'top' && checkOutOfScreenTop(rect, gaps)) ||
           (alignment.value === 'bottom' && checkOutOfScreenBottom(rect, gaps)) ||
@@ -184,13 +182,13 @@ export const WowerlayRenderer = defineComponent({
           if (isElement(oldEl)) observer?.unobserve(oldEl);
           if (isElement(newEl)) observer?.observe(newEl);
         },
-        { immediate: true }
+        { immediate: true },
       );
     }
 
     watch(
       () => [props.position, props.target, props.verticalGap, props.horizontalGap],
-      updateWowerlayPosition
+      updateWowerlayPosition,
     );
 
     onRecalculate(() => {
@@ -211,7 +209,7 @@ export const WowerlayRenderer = defineComponent({
     return {
       handleClick,
       wowerlayElement,
-      positionStyle
+      positionStyle,
     };
   },
   render() {
@@ -228,5 +226,5 @@ export const WowerlayRenderer = defineComponent({
         {this.$slots.default?.()}
       </Renderer>
     );
-  }
+  },
 });
