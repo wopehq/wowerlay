@@ -2,6 +2,7 @@ import { DefineComponent, markRaw } from 'vue';
 
 export interface IDemo {
   name: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   component: DefineComponent<any, any, any, any, any, any, any, any, any>;
   template?: string;
   script?: string;
@@ -12,7 +13,9 @@ const removeBeginningIndent = (code: string) => {
   return code.replace(/\n\s{4}/g, '\n');
 };
 
-export const defineDemo = (demo: IDemo) => {
+export const defineDemo = (_demo: IDemo) => {
+  const demo = { ..._demo };
+
   demo.component = markRaw(demo.component);
 
   if (demo.script) demo.script = removeBeginningIndent(demo.script);

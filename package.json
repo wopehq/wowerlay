@@ -18,6 +18,10 @@
     "popover"
   ],
   "license": "MIT",
+  "files": [
+    "/dist",
+    "README.md"
+  ],
   "scripts": {
     "dev": "cross-env MODE=demo vite",
     "build": "ts-node -T --project tsconfig-build.json scripts/build.ts",
@@ -33,10 +37,13 @@
     "bottom-sheet-vue3": "^1.0.2",
     "chalk": "^4.1.2",
     "cross-env": "^7.0.3",
+    "eslint": "8.7.0",
+    "eslint-config-airbnb-typescript-prettier": "5.0.0",
     "execa": "^5.1.1",
     "fast-glob": "^3.2.7",
     "fs-extra": "^10.0.0",
     "highlight.js": "^11.3.1",
+    "prettier": "2.5.1",
     "prompts": "^2.4.2",
     "sass": "^1.42.1",
     "ts-node": "^10.2.1",

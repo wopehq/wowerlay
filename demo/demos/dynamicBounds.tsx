@@ -12,12 +12,12 @@ const searchFruit = (name: string) => {
 
 const sFruitItem: CSSProperties = {
   width: '100%',
-  padding: '5px'
+  padding: '5px',
 };
 
 const sFruitInput: CSSProperties = {
   padding: '5px',
-  marginBottom: '5px'
+  marginBottom: '5px',
 };
 
 const Component = defineComponent({
@@ -28,15 +28,19 @@ const Component = defineComponent({
     const fruitQuery = ref('');
     const input = ref<HTMLElement>();
 
-    const handleVisibleChange = (state: boolean) => (isOpen.value = state);
-    const toggleVisible = () => (isOpen.value = !isOpen.value);
+    const handleVisibleChange = (state: boolean) => {
+      isOpen.value = state;
+    };
+    const toggleVisible = () => {
+      isOpen.value = !isOpen.value;
+    };
 
     watch(
       isOpen,
       () => {
         input.value?.focus();
       },
-      { flush: 'post' }
+      { flush: 'post' },
     );
 
     return {
@@ -45,7 +49,7 @@ const Component = defineComponent({
       fruitQuery,
       input,
       handleVisibleChange,
-      toggleVisible
+      toggleVisible,
     };
   },
   render() {
@@ -56,6 +60,7 @@ const Component = defineComponent({
           <a
             target="_blank"
             href="https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver#browser_compatibility"
+            rel="noreferrer"
           >
             ResizeObserver
           </a>
@@ -64,7 +69,7 @@ const Component = defineComponent({
         <br />
         <br />
 
-        <button onClick={this.toggleVisible} ref="targetEl">
+        <button type="button" onClick={this.toggleVisible} ref="targetEl">
           Click to Show Popover
           <Wowerlay
             onUpdate:visible={this.handleVisibleChange}
@@ -88,7 +93,7 @@ const Component = defineComponent({
         </button>
       </>
     );
-  }
+  },
 });
 
 export const Demo = defineDemo({
@@ -118,5 +123,5 @@ export const Demo = defineDemo({
       const visible = ref(false);
       const target = ref();
     </script>
-  `
+  `,
 });

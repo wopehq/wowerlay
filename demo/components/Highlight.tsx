@@ -7,7 +7,7 @@ const style: CSSProperties = {
   textAlign: 'left',
   color: 'rgb(235, 235, 235)',
   fontFamily: `'Source Code Pro', monospace`,
-  margin: '0 10px'
+  margin: '0 10px',
 };
 
 export const Highlight = defineComponent({
@@ -15,12 +15,12 @@ export const Highlight = defineComponent({
   props: {
     code: {
       type: String,
-      required: true
+      required: true,
     },
     language: {
       type: String as PropType<'html' | 'javascript'>,
-      required: true
-    }
+      required: true,
+    },
   },
   setup(props) {
     const code = shallowRef('');
@@ -36,6 +36,6 @@ export const Highlight = defineComponent({
     return { code };
   },
   render() {
-    return this.code && <div style={style} innerHTML={this.code}></div>;
-  }
+    return this.code && <div style={style} innerHTML={this.code} />;
+  },
 });

@@ -1,7 +1,6 @@
-import { execute, refactorTypes, sleep } from './modules/functions';
-
 import fse from 'fs-extra';
 import { join } from 'path';
+import { execute, refactorTypes, sleep } from './modules/functions';
 
 async function main() {
   const root = process.cwd();
