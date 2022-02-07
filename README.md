@@ -191,6 +191,12 @@ interface WowerlayProps {
    * @default false
    */
   noBackground: boolean;
+  /**
+   * Disable or set custom transition for Wowerlay
+   * @set {false} to disable transition
+   * @set {string} to use your own transition name (enter-to, enter-from, enter-active class animation name)
+   */
+  transition: string | boolean;
 }
 ```
 

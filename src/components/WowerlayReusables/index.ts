@@ -21,6 +21,7 @@ export interface WowerlayBaseProps {
   target?: HTMLElement;
   tag: string;
   noBackground: boolean;
+  transition: boolean | string;
 }
 
 export const wowerlayBaseProps = {
@@ -55,5 +56,9 @@ export const wowerlayBaseProps = {
   tag: {
     default: 'div',
     type: String as PropType<WowerlayBaseProps['tag']>,
+  },
+  transition: {
+    default: true,
+    type: [Boolean, String] as PropType<WowerlayBaseProps['transition']>,
   },
 } as const;

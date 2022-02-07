@@ -111,6 +111,26 @@ export const Wowerlay = defineComponent({
     };
   },
   render() {
+    let willBeRendered: false | JSX.Element = false;
+
+    const Renderer = this.isVisible && (
+      <WowerlayRenderer {...this.$props} {...this.$attrs} onClick={this.handleWowerlayClick}>
+        {this.$slots.default?.()}
+      </WowerlayRenderer>
+    );
+
+    if (this.$props.transition === false) {
+      willBeRendered = Renderer;
+    } else if (typeof this.$props.transition === 'string') {
+      willBeRendered = <Transition name={this.$props.transition}>{Renderer}</Transition>;
+    } else {
+      willBeRendered = (
+        <Transition enterActiveClass={cWowerlayAnimEnter} leaveActiveClass={cWowerlayAnimLeave}>
+          {Renderer}
+        </Transition>
+      );
+    }
+
     return (
       <Teleport to="body">
         <div
@@ -121,18 +141,7 @@ export const Wowerlay = defineComponent({
           onClick={this.handleContainerClick}
           role="tooltip"
         >
-          {/* Todo: Add user made animation support. */}
-          <Transition enterActiveClass={cWowerlayAnimEnter} leaveActiveClass={cWowerlayAnimLeave}>
-            {this.isVisible && (
-              <WowerlayRenderer
-                {...this.$props}
-                {...this.$attrs}
-                onClick={this.handleWowerlayClick}
-              >
-                {this.$slots.default?.()}
-              </WowerlayRenderer>
-            )}
-          </Transition>
+          {willBeRendered}
         </div>
       </Teleport>
     );
