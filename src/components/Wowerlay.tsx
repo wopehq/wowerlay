@@ -119,10 +119,10 @@ export const Wowerlay = defineComponent({
       </WowerlayRenderer>
     );
 
-    if (this.$props.transition === false) {
+    if (this.transition === false) {
       willBeRendered = Renderer;
-    } else if (typeof this.$props.transition === 'string') {
-      willBeRendered = <Transition name={this.$props.transition}>{Renderer}</Transition>;
+    } else if (typeof this.transition === 'string') {
+      willBeRendered = <Transition name={this.transition}>{Renderer}</Transition>;
     } else {
       willBeRendered = (
         <Transition enterActiveClass={cWowerlayAnimEnter} leaveActiveClass={cWowerlayAnimLeave}>
