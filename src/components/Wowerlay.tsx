@@ -111,9 +111,9 @@ export const Wowerlay = defineComponent({
     };
   },
   render() {
-    let willBeRendered: false | JSX.Element = false;
+    let willBeRendered: null | JSX.Element = null;
 
-    const Renderer = this.isVisible && (
+    const Renderer = !this.isVisible ? null : (
       <WowerlayRenderer {...this.$props} {...this.$attrs} onClick={this.handleWowerlayClick}>
         {this.$slots.default?.()}
       </WowerlayRenderer>
