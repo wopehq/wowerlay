@@ -1,3 +1,13 @@
+## 0.4.3
+
+- `(Add)` Custom transition support.
+### Demo
+
+- `(Add)` noTransition sample.
+- `(Add)` customTransition sample.
+
+<br>
+
 ## 0.4.2
 
 - `(Add)` [ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver) support for supporting browsers.
