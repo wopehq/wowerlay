@@ -2,7 +2,7 @@
    <img src="md/wowerlay.png">
 </p>
 
-Wowerlay is a popover/overlay library for Vue 3 applications. It isn't an alternative for [Popper](https://popper.js.org/).
+Wowerlay is a popover library for Vue 3 applications. It isn't an alternative for [Popper](https://popper.js.org/).
 
 [![wowerlay](https://img.shields.io/npm/v/wowerlay)](https://npmjs.com/package/wowerlay)
 
