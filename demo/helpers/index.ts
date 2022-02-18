@@ -6,6 +6,7 @@ export interface IDemo {
   component: DefineComponent<any, any, any, any, any, any, any, any, any>;
   template?: string;
   script?: string;
+  order: number;
 }
 
 const removeBeginningIndent = (code: string) => {
@@ -17,9 +18,8 @@ export const defineDemo = (_demo: IDemo) => {
   const demo = { ..._demo };
 
   demo.component = markRaw(demo.component);
-
-  if (demo.script) demo.script = removeBeginningIndent(demo.script);
-  if (demo.template) demo.template = removeBeginningIndent(demo.template);
+  demo.script &&= removeBeginningIndent(demo.script);
+  demo.template &&= removeBeginningIndent(demo.template);
 
   return demo;
 };

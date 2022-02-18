@@ -83,19 +83,23 @@ const Component = defineComponent({
 export const Demo = defineDemo({
   name: 'Changeable Target',
   component: Component,
+  order: 6,
+  /* prettier-ignore */
   template: html`
     <template>
       <div class="object" ref="firstTarget">Target 1</div>
       <div class="object" ref="secondTarget">Target 2</div>
 
-      <Wowerlay :visible="true" :target="wowerlayTarget">
-        <div style="max-width: 300px">
+      <Wowerlay 
+        style="max-width: 300px"
+        :visible="true"
+        :target="wowerlayTarget"
+      >
           Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rerum quam, qui asperiores, sed
           ipsa fuga, repellendus officiis labore odit temporibus quisquam necessitatibus? Illo vitae
           quis reprehenderit sequi quae iste, fuga quasi atque et voluptatibus. Debitis, facere,
           libero voluptate tempore omnis voluptas corporis fugiat sequi quidem cumque quisquam
           exercitationem a doloribus.
-        </div>
       </Wowerlay>
     </template>
   `,

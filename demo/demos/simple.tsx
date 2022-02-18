@@ -4,7 +4,7 @@ import { defineDemo, html } from '../helpers';
 import { Wowerlay } from '../../src/lib';
 
 const Component = defineComponent({
-  name: 'PopoverFollow',
+  name: 'Simple',
   setup() {
     const targetEl = ref<HTMLElement>();
     const isOpen = ref(false);
@@ -28,7 +28,6 @@ const Component = defineComponent({
       <button type="button" onClick={this.toggleVisible} ref="targetEl">
         Click to Show Popover
         <Wowerlay
-          fixed
           onUpdate:visible={this.handleVisibleChange}
           visible={this.isOpen}
           target={this.targetEl}
@@ -47,18 +46,17 @@ const Component = defineComponent({
 });
 
 export const Demo = defineDemo({
-  name: 'Fixed',
+  name: 'Simple',
   component: Component,
-  order: 2,
+  order: 0,
   /* prettier-ignore */
   template: html`
     <template>
       <button @click="visible = !visible" ref="target">
         Click To Trigger Popover
 
-        <Wowerlay 
-          style="max-width: 300px"
-          fixed
+        <Wowerlay
+          style="max-width: 300px" 
           v-model:visible="visible"
           :target="target"
         >
