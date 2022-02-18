@@ -1,16 +1,14 @@
-### Overlay/Popover library for Vue 3
-
-<br>
-
 <p align="center">
    <img src="md/wowerlay.png">
 </p>
 
+Wowerlay is a popover library for Vue 3 applications. It isn't an alternative for [Popper](https://popper.js.org/).
+
 [![wowerlay](https://img.shields.io/npm/v/wowerlay)](https://npmjs.com/package/wowerlay)
 
-## Demos
+## Demos/Examples
 
-You can view and test all demos: [Click](https://wowerlay.pages.dev)
+You can see all examples [Here](https://wowerlay.pages.dev).
 
 ## Intallation
 
@@ -34,44 +32,46 @@ yarn add wowerlay
 
 ## Usage
 
-First you have to register the plugin and import `style` file.
+First you need to register the plugin and import `stylesheet`.
 
-### `main.(js|ts)`
+### `main.js | main.ts`
 
 ```ts
-// import style file!
 import 'wowerlay/style.css';
 
-import { createWowerlay } from 'wowerlay';
 import { createApp } from 'vue';
+import { createWowerlay } from 'wowerlay';
+
 import App from './App.vue';
 
-const wowerlay = createWowerlay();
 const app = createApp(App);
+const wowerlay = createWowerlay();
+
 app.use(wowerlay);
 app.mount('#app');
 ```
 
 ## Using Wowerlay.
 
-To make Wowerlay visible you must set `visibility` to `true` and give a target element, template refs can be given.
+To make Wowerlay visible you must set `visibility` to `true` and give a target element, template refs can be given. 
 
-Don't worry, anthing goes to `<Wowerlay/>` will be unmounted when visible is `false`.
-
-And `<Wowerlay/>` component is just a `div` with extra features, you can change the tag of it with `tag` prop.
+Anthing goes to `<Wowerlay/>` will be unmounted when `visibility` is `false` and  you can change tag of `<Wowerlay/>` wrapper with `tag` prop.
 
 ```html
 <template>
   <button ref="targetElement" @click="toggle">Hi How Are you?</button>
 
-  <Wowerlay tag="section" :target="targetElement" v-model:visible="isVisible">
+  <Wowerlay 
+    tag="section"
+    :target="targetElement"
+    v-model:visible="isVisible"
+  >
     <div>Hey how you doin?</div>
     <button>Good</button>
     <button>Bad</button>
   </Wowerlay>
 </template>
 
-<!-- Typescript is optional -->
 <script setup lang="ts">
   import { Wowerlay } from 'wowerlay';
   import { ref } from 'vue';
@@ -81,6 +81,7 @@ And `<Wowerlay/>` component is just a `div` with extra features, you can change 
    * you will get a type error.
    */
   const targetElement = ref<HTMLElement>();
+  /* For JS */
   const targetElement = ref(null);
 
   const isVisible = ref(false);
@@ -88,7 +89,7 @@ And `<Wowerlay/>` component is just a `div` with extra features, you can change 
 </script>
 ```
 
-If you don't want to use `v-model:visible` syntax you can use the following one;
+If you don't want to use `v-model:visible` syntax you can use the following one:
 
 ```html
 <template>
@@ -107,8 +108,8 @@ If you don't want to use `v-model:visible` syntax you can use the following one;
 </template>
 ```
 
-And lastly if you don't want to stop [`attribute inheritance`](https://v3.vuejs.org/guide/component-attrs.html#attribute-inheritance) you can use
-`<Wowerlay/>` component inside of an element, it will work as expected because it will be `teleported` to `body` eventually.
+If you don't want to prevent [`attribute inheritance`](https://v3.vuejs.org/guide/component-attrs.html#attribute-inheritance) you can use
+`<Wowerlay/>` component inside of an element, it will work as expected because it'll be `teleported` to `body` eventually.
 
 ```html
 <template>
@@ -131,9 +132,9 @@ And lastly if you don't want to stop [`attribute inheritance`](https://v3.vuejs.
 
 ## Styling Wowerlay
 
-Styling wowerlay is too simple because `<Wowerlay/>` is just a single wrapper element. You can give any class any style and any attribute to it, that's why it doesn't have props like `width` and `height`.
+Styling wowerlay is simple. `<Wowerlay/>` is just a single wrapper element.
 
-**!!! Except necessary styles, avoid to change them !!!**
+**!! You shouldn't change necessary styles !!**
 
 ```html
 <Wowerlay tag="span" style="width: 300px; height: 300px; display: inline-block">
@@ -145,15 +146,6 @@ Styling wowerlay is too simple because `<Wowerlay/>` is just a single wrapper el
 
 ```ts
 interface WowerlayProps {
-  /**
-   * If given Wowerlay won't update its position after mounted
-   */
-  fixed: boolean;
-  /**
-   * Horizontal gap betweeen Wowerlay and the target
-   * @default 0
-   */
-  horizontalGap: number;
   /**
    * Primary position for Wowerlay.
    * @default "bottom"
@@ -171,30 +163,50 @@ interface WowerlayProps {
     | 'bottom'
     | 'bottom-start'
     | 'bottom-end';
+
+  /**
+   * Target element for Wowerlay to follow
+   */
+  target: HTMLElement;
+
+  /**
+   * If given, Wowerlay will be able to leave screen.
+   */
+  canLeaveViewport?: number;
+
+  /**
+   * If given Wowerlay won't update its position after mounted
+   */
+  fixed?: boolean;
+
   /**
    * Tag name for Wowerlay wrapper element.
    * @default "div"
    */
-  tag: string;
+  tag?: string;
+
   /**
-   * Target element for Wowerlay to follow
+   * Horizontal gap betweeen Wowerlay and the target
+   * @default 0
    */
-  target?: HTMLElement;
+  horizontalGap?: number;
+
   /**
    * Vertical gap between Wowerlay and the target.
    * @default 0
    */
   verticalGap: number;
+
   /**
-   *
    * Disables click blocker background when Wowerlay is visible
    * @default false
    */
   noBackground: boolean;
+
   /**
    * Disable or set custom transition for Wowerlay
-   * @set {false} to disable transition
-   * @set {string} to use your own transition name (enter-to, enter-from, enter-active class animation name)
+   * @set false to disable transition
+   * @set string to use your own transition name.
    */
   transition: string | boolean;
 }
@@ -202,8 +214,8 @@ interface WowerlayProps {
 
 ## What about TypeScript?
 
-This package has built-in TypeScript support for events and props. It works with `JSX | TSX` and `Render Functions` with type support. Check the source code we wrote the library in `TSX`.
+This package has built-in TypeScript support for events and props. It works with `JSX | TSX` and `Render Functions` with type support.
 
-To have types support in vue files we recommend you to use `Volar` plugin. <br>
+To have types support in vue files we recommend you to use `Volar`. <br>
 [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar) <br>
 [TypeScript Vue Plugin](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.vscode-typescript-vue-plugin)
