@@ -107,19 +107,25 @@ const Component = defineComponent({
 export const Demo = defineDemo({
   name: 'With Gaps',
   component: Component,
+  order: 5,
+  /* prettier-ignore */
   template: html`
     <template>
       <button @click="visible = !visible" ref="target">
         Click To Trigger Popover
 
-        <Wowerlay :horizontalGap="5" :verticalGap="10" v-model:visible="visible" :target="target">
-          <div style="max-width: 300px">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rerum quam, qui asperiores,
-            sed ipsa fuga, repellendus officiis labore odit temporibus quisquam necessitatibus? Illo
-            vitae quis reprehenderit sequi quae iste, fuga quasi atque et voluptatibus. Debitis,
-            facere, libero voluptate tempore omnis voluptas corporis fugiat sequi quidem cumque
-            quisquam exercitationem a doloribus.
-          </div>
+        <Wowerlay
+          style="max-width: 300px" 
+          :horizontalGap="5"
+          :verticalGap="10"
+          v-model:visible="visible"
+          :target="target"
+        >
+          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rerum quam, qui asperiores,
+          sed ipsa fuga, repellendus officiis labore odit temporibus quisquam necessitatibus? Illo
+          vitae quis reprehenderit sequi quae iste, fuga quasi atque et voluptatibus. Debitis,
+          facere, libero voluptate tempore omnis voluptas corporis fugiat sequi quidem cumque
+          quisquam exercitationem a doloribus.
         </Wowerlay>
       </button>
     </template>

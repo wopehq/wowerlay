@@ -13,7 +13,9 @@ import { highlightInit } from './helpers/highlight';
 highlightInit();
 
 const demosGlob = import.meta.globEager('./demos/**/*') as Record<string, { Demo: IDemo }>;
-const demos = Object.values(demosGlob).map(($export) => $export.Demo);
+const demos = Object.values(demosGlob)
+  .map(($export) => $export.Demo)
+  .sort((a, b) => a.order - b.order);
 
 const centerScreen = () => {
   const { scrollWidth, scrollHeight } = document.documentElement;
