@@ -1,99 +1,81 @@
+## 0.5.0
+  - **Updated** readme and samples.
+  - **Added** `static-position` prop.
+
+#### Demos/Samples
+  - **Refactored** all demos and directory structure.
+  - **Reordered** demos from simple to complicated.
+
+#### Breaking Changes
+  - **Renamed** `fixed` prop as `static`.
+
+<br>
+
 ## 0.4.3
+- **Added** Custom transition support.
 
-- `(Add)` Custom transition support.
-### Demo
-
-- `(Add)` noTransition sample.
-- `(Add)` customTransition sample.
+#### Demos/Samples
+- **Added** `No Transition` sample.
+- **Added** `Custom Transition` sample.
 
 <br>
 
 ## 0.4.2
+- **Added** [ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver) support for supporting browsers.
 
-- `(Add)` [ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver) support for supporting browsers.
-
-### Demo
-
-- `(Add)` Dynamic Bounds sample.
+#### Demos/Samples
+- **Added** `Dynamic Bounds` sample.
 
 <br>
 
 ## 0.4.1
-
-- `(Fix)` Clicking Wowerlay's container causes all Wowerlays to close.
+- **Fix** clicking container of Wowerlay is causing other Wowerlays to close.
 
 <br>
 
 ## 0.4.0
+- **Added** `noBackground` prop. 
+- **Fixed** scrollbar width/height isn't counting for screen bounds check.
+- **Updated** readme.
 
-- `noBackground` prop is added, if given `Wowerlay` won't have an invisible click blocker background when visible.
-
-- `scrollbarGap` not counted for `checkOutOfScreen` is fixed.
-
-- Readme is updated.
-
-### Breaking Changes
-
-- `WowerlayContainer` component is removed, now `Wowerlay` comes with its own background.
+#### Breaking Changes
+- **Removed** `WowerlayContainer` component.
 
 <br>
 
 ## 0.3.2
-
-- Updated README.md
+- **Updated** README.md
 
 <br>
 
 ## 0.3.1
+- **Fixed** `verticalGap` and `horizontalGap` props are not working.
 
-- Fix `verticalGap` and `horizontalGap` props are not working.
-
-### Demo
-
-- `With Gaps` demo is added.
+#### Demo
+- **Added** `With Gaps` demo.
 
 <br>
 
 ## 0.3.0
+- **Added** new positions.
 
-- New positions added.
-  - `top-start`
-  - `top-end`
-  - `bottom-start`
-  - `bottom-end`
-  - `left-start`
-  - `left-end`
-  - `right-start`
-  - `right-end`
-
-### Breaking Changes
-
-- `centered` prop is removed, now `top` | `left` | `right` | `bottom` is centered by default.
+#### Breaking Changes
+- **Removed** `centered` prop.
 
 <br>
 
 ## 0.1.1
-
-- Now Wowerlay will close child Wowerlays on click itself.
-
-- `centered` prop added, if true wowerlay will be centered.
+- **Fixed** clicking Wowerlay is not hiding child Wowerlay components.
+- **Added** `centered` prop.
 
 <br>
 
 ## 0.1.0
-
-- `Fixed` prop is added
-
-- `vertical-gap` and `horizontal-gap` props added. With these props spacing between Wowerlay and target element can be configurable.
-
-- 'position' prop is added. If set `bottom | right | left | top` Wowerlay will try to be mounted to given direction, if can't it will try opposite side.
-
-- Reactive `target` prop support is added. Now wowerlay will react when `target` element changes and will follow it.
-
-- Demo page added to Readme
+- **Added** `fixed`, `verticalGap`, `horizontalGap`, `position` props.
+- **Added** watching `target` prop for changes.
+- **Added** online demo page.
 
 <br>
 
 ## 0.0.1
-
 - First Ready to use build.

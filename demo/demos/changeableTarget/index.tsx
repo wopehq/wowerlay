@@ -1,12 +1,14 @@
 import { computed, defineComponent, ref } from 'vue';
-import { defineDemo, html } from '../helpers';
 
-import { Wowerlay } from '../../src/lib';
+import { defineDemo, html } from '../../helpers';
+import { Wowerlay } from '../../../src/lib';
+import useDemoState from '../../helpers/useDemoState';
 
 const Component = defineComponent({
   name: 'PopoverChangeTarget',
   setup() {
-    const isOpen = ref(false);
+    const { handleVisibleChange, isOpen, toggleVisible } = useDemoState();
+
     const isLeftButtonActive = ref(false);
 
     const firstTarget = ref<HTMLButtonElement>();
@@ -16,9 +18,6 @@ const Component = defineComponent({
       isLeftButtonActive.value ? firstTarget.value : secondTarget.value,
     );
 
-    const toggleVisible = () => {
-      isOpen.value = !isOpen.value;
-    };
     const toggleTargetElement = () => {
       isLeftButtonActive.value = !isLeftButtonActive.value;
     };
@@ -31,6 +30,7 @@ const Component = defineComponent({
       secondTarget,
       isLeftButtonActive,
       toggleTargetElement,
+      handleVisibleChange,
     };
   },
   render() {
@@ -56,9 +56,7 @@ const Component = defineComponent({
         <button type="button" onClick={this.toggleVisible}>
           Click to Show Popover
           <Wowerlay
-            onUpdate:visible={(visibility) => {
-              this.isOpen = visibility;
-            }}
+            onUpdate:visible={this.handleVisibleChange}
             visible={this.isOpen}
             target={this.targetEl}
           >
@@ -80,10 +78,9 @@ const Component = defineComponent({
   },
 });
 
-export const Demo = defineDemo({
+export default defineDemo({
   name: 'Changeable Target',
   component: Component,
-  order: 6,
   /* prettier-ignore */
   template: html`
     <template>

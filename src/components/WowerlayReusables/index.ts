@@ -16,9 +16,10 @@ export interface WowerlayBaseProps {
     | 'bottom-end';
   verticalGap: number;
   horizontalGap: number;
-  canLeaveViewport?: boolean;
-  fixed: boolean;
-  target?: HTMLElement;
+  canLeaveViewport: boolean;
+  static: boolean;
+  staticPosition: boolean;
+  target: HTMLElement;
   tag: string;
   noBackground: boolean;
   transition: boolean | string;
@@ -26,16 +27,19 @@ export interface WowerlayBaseProps {
 
 export const wowerlayBaseProps = {
   target: {
-    required: true,
     type: null as unknown as PropType<WowerlayBaseProps['target']>,
   },
   noBackground: {
     default: false,
     type: Boolean as PropType<WowerlayBaseProps['noBackground']>,
   },
-  fixed: {
+  static: {
     default: false,
-    type: Boolean as PropType<WowerlayBaseProps['fixed']>,
+    type: Boolean as PropType<WowerlayBaseProps['static']>,
+  },
+  staticPosition: {
+    default: false,
+    type: Boolean as PropType<WowerlayBaseProps['staticPosition']>,
   },
   position: {
     default: 'bottom',

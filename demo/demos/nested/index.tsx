@@ -1,29 +1,17 @@
 import { defineComponent, ref } from 'vue';
-import { defineDemo, html } from '../helpers';
 
-import { Wowerlay } from '../../src/lib';
+import { defineDemo, html } from '../../helpers';
+import { Wowerlay } from '../../../src/lib';
+import useDemoState from '../../helpers/useDemoState';
 
 const Component = defineComponent({
   name: 'PopoverFollow',
   setup() {
-    const targetEl = ref<HTMLElement>();
-    const isOpen = ref(false);
-
-    const handleVisibleChange = (state: boolean) => {
-      isOpen.value = state;
-    };
-    const toggleVisible = () => {
-      isOpen.value = !isOpen.value;
-    };
-
     const secondTarget = ref<HTMLElement>();
     const secondPopoverVisibility = ref(false);
 
     return {
-      isOpen,
-      targetEl,
-      handleVisibleChange,
-      toggleVisible,
+      ...useDemoState(),
       secondPopoverVisibility,
       secondTarget,
     };
@@ -75,10 +63,9 @@ const Component = defineComponent({
   },
 });
 
-export const Demo = defineDemo({
+export default defineDemo({
   name: 'Nested',
   component: Component,
-  order: 7,
   /* prettier-ignore */
   template: html`
     <template>
