@@ -1,20 +1,13 @@
 import { CSSProperties, computed, defineComponent, onMounted, ref } from 'vue';
-import { Wowerlay, WowerlayProps } from '../../src/lib';
-import { defineDemo, html } from '../helpers';
+
+import { defineDemo, html } from '../../helpers';
+import { Wowerlay, WowerlayProps } from '../../../src/lib';
+import useDemoState from '../../helpers/useDemoState';
 
 const Component = defineComponent({
   name: 'PopoverFollow',
   setup() {
-    const targetEl = ref<HTMLElement>();
-    const isOpen = ref(false);
-    const visibility = ref(false);
-
-    const handleVisibleChange = (state: boolean) => {
-      isOpen.value = state;
-    };
-    const toggleVisible = () => {
-      isOpen.value = !isOpen.value;
-    };
+    const { handleVisibleChange, isOpen, targetEl, toggleVisible } = useDemoState();
 
     const verticalGap = ref(0);
     const horizontalGap = ref(0);
@@ -33,7 +26,7 @@ const Component = defineComponent({
 
     onMounted(() =>
       setTimeout(() => {
-        visibility.value = true;
+        isOpen.value = true;
       }, 250),
     );
 
@@ -46,7 +39,6 @@ const Component = defineComponent({
       positionCount,
       verticalGap,
       horizontalGap,
-      visibility,
     };
   },
   render() {
@@ -79,7 +71,7 @@ const Component = defineComponent({
             verticalGap={this.verticalGap}
             horizontalGap={this.horizontalGap}
             position={this.position}
-            visible={this.visibility}
+            visible={this.isOpen}
             target={this.targetEl}
             noBackground
           >
@@ -104,10 +96,9 @@ const Component = defineComponent({
   },
 });
 
-export const Demo = defineDemo({
+export default defineDemo({
   name: 'With Gaps',
   component: Component,
-  order: 5,
   /* prettier-ignore */
   template: html`
     <template>

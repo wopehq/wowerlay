@@ -1,27 +1,12 @@
-import { defineComponent, ref } from 'vue';
-import { defineDemo, html } from '../helpers';
+import { defineComponent } from 'vue';
 
-import { Wowerlay } from '../../src/lib';
+import { defineDemo, html } from '../../helpers';
+import { Wowerlay } from '../../../src/lib';
+import useDemoState from '../../helpers/useDemoState';
 
 const Component = defineComponent({
-  setup() {
-    const targetEl = ref<HTMLElement>();
-    const isOpen = ref(false);
-
-    const handleVisibleChange = (state: boolean) => {
-      isOpen.value = state;
-    };
-    const toggleVisible = () => {
-      isOpen.value = !isOpen.value;
-    };
-
-    return {
-      isOpen,
-      targetEl,
-      handleVisibleChange,
-      toggleVisible,
-    };
-  },
+  name: 'Simple',
+  setup: () => useDemoState(),
   render() {
     return (
       <button type="button" onClick={this.toggleVisible} ref="targetEl">
@@ -30,7 +15,6 @@ const Component = defineComponent({
           onUpdate:visible={this.handleVisibleChange}
           visible={this.isOpen}
           target={this.targetEl}
-          transition={false}
         >
           <div style="max-width: 300px">
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rerum quam, qui asperiores,
@@ -45,10 +29,9 @@ const Component = defineComponent({
   },
 });
 
-export const Demo = defineDemo({
-  name: 'No Transition',
+export default defineDemo({
+  name: 'Simple',
   component: Component,
-  order: 8,
   /* prettier-ignore */
   template: html`
     <template>
@@ -56,16 +39,15 @@ export const Demo = defineDemo({
         Click To Trigger Popover
 
         <Wowerlay
-          style="max-width: 300px"
-          :transition="false"
+          style="max-width: 300px" 
           v-model:visible="visible"
           :target="target"
         >
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rerum quam, qui asperiores,
-          sed ipsa fuga, repellendus officiis labore odit temporibus quisquam necessitatibus? Illo
-          vitae quis reprehenderit sequi quae iste, fuga quasi atque et voluptatibus. Debitis,
-          facere, libero voluptate tempore omnis voluptas corporis fugiat sequi quidem cumque
-          quisquam exercitationem a doloribus.
+          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rerum quam, qui asperiores, sed
+          ipsa fuga, repellendus officiis labore odit temporibus quisquam necessitatibus? Illo vitae
+          quis reprehenderit sequi quae iste, fuga quasi atque et voluptatibus. Debitis, facere,
+          libero voluptate tempore omnis voluptas corporis fugiat sequi quidem cumque quisquam
+          exercitationem a doloribus.
         </Wowerlay>
       </button>
     </template>

@@ -3,19 +3,14 @@ import 'highlight.js/styles/atom-one-dark.css';
 import 'bottom-sheet-vue3/css/style.css';
 
 import { computed, createApp, defineComponent, onMounted, ref, watch } from 'vue';
-
 import { Sheet } from 'bottom-sheet-vue3';
+
 import { Highlight } from './components/Highlight';
-import { IDemo } from './helpers';
 import { createWowerlay } from '../src/lib';
 import { highlightInit } from './helpers/highlight';
+import demos from './demos';
 
 highlightInit();
-
-const demosGlob = import.meta.globEager('./demos/**/*') as Record<string, { Demo: IDemo }>;
-const demos = Object.values(demosGlob)
-  .map(($export) => $export.Demo)
-  .sort((a, b) => a.order - b.order);
 
 const centerScreen = () => {
   const { scrollWidth, scrollHeight } = document.documentElement;
@@ -58,48 +53,47 @@ const App = defineComponent({
   render() {
     const Demo = this.DemoComponent;
 
-    const AllDemos = () =>
-      demos.map((demo, index) => (
-        <div
-          role="listitem"
-          onClick={() => {
-            this.activeDemoIndex = index;
-          }}
-          class={['demo-menu-item', { active: this.isActive(index) }]}
-        >
-          {demo.name}
-        </div>
-      ));
+    const AllDemos = demos.map((demo, index) => (
+      <div
+        role="listitem"
+        onClick={() => {
+          this.activeDemoIndex = index;
+          if (this.activeDemoIndex === index) {
+            centerScreen();
+          }
+        }}
+        class={['demo-menu-item', { active: this.isActive(index) }]}
+      >
+        {demo.name}
+      </div>
+    ));
 
-    const Modal = () =>
-      this.isWithCodeSamples && (
-        // @ts-expect-error v-model:visible
-        <Sheet
-          sliderIconColor="rgb(15, 15, 15)"
-          containerColor="rgba(55,55,55, .6)"
-          sheetColor="rgb(28, 28, 28)"
-          v-model:visible={this.isCodeSampleVisible}
-        >
-          {this.activeDemo.template && (
-            <Highlight language="html" code={this.activeDemo.template} />
-          )}
-          {this.activeDemo.script /* */ && (
-            <Highlight language="html" code={this.activeDemo.script} />
-          )}
-        </Sheet>
-      );
+    const Modal = this.isWithCodeSamples && (
+      // @ts-expect-error v-model:visible
+      <Sheet
+        sliderIconColor="rgb(15, 15, 15)"
+        containerColor="rgba(55,55,55, .6)"
+        sheetColor="rgb(28, 28, 28)"
+        v-model:visible={this.isCodeSampleVisible}
+      >
+        {this.activeDemo.template && <Highlight language="html" code={this.activeDemo.template} />}
+        {this.activeDemo.script && ( //
+          <Highlight language="html" code={this.activeDemo.script} />
+        )}
+      </Sheet>
+    );
 
     return (
       <div class="demo-container">
         <div class="demo-menu">
-          {AllDemos()}
+          {AllDemos}
           {this.isWithCodeSamples && (
             <button
               type="button"
+              class="demo-show-code-button"
               onClick={() => {
                 this.isCodeSampleVisible = true;
               }}
-              class="demo-show-code-button"
             >
               Show Code
             </button>
@@ -107,7 +101,7 @@ const App = defineComponent({
         </div>
         <div class="demo-content">
           <Demo />
-          {Modal()}
+          {Modal}
         </div>
       </div>
     );

@@ -6,7 +6,6 @@ export interface IDemo {
   component: DefineComponent<any, any, any, any, any, any, any, any, any>;
   template?: string;
   script?: string;
-  order: number;
 }
 
 const removeBeginningIndent = (code: string) => {
