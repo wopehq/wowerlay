@@ -150,7 +150,7 @@ export const WowerlayRenderer = defineComponent({
 
       updatePosition(handle(rect, gaps));
 
-      if (handleOutOfScreen) {
+      if (handleOutOfScreen && !props.staticPosition) {
         if (checkOutOfScreen) {
           if (checkOutOfScreen(rect)) {
             updatePosition(handleOutOfScreen(rect, gaps));
@@ -172,7 +172,7 @@ export const WowerlayRenderer = defineComponent({
     let observer: ResizeObserver | undefined;
     if (isResizeObserverSupported()) {
       observer = new ResizeObserver(() => {
-        if (props.fixed) return;
+        if (props.static) return;
         updateWowerlayPosition();
       });
 
@@ -192,7 +192,7 @@ export const WowerlayRenderer = defineComponent({
     );
 
     onRecalculate(() => {
-      if (props.fixed) return;
+      if (props.static) return;
       updateWowerlayPosition();
     });
 
