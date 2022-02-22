@@ -5,7 +5,7 @@ import { Wowerlay } from '../../../src/lib';
 import useDemoState from '../../helpers/useDemoState';
 
 const Component = defineComponent({
-  name: 'PopoverFollow',
+  name: 'Nested',
   setup() {
     const secondTarget = ref<HTMLElement>();
     const secondPopoverVisibility = ref(false);

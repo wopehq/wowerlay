@@ -5,7 +5,7 @@ import { Wowerlay, WowerlayProps } from '../../../src/lib';
 import useDemoState from '../../helpers/useDemoState';
 
 const Component = defineComponent({
-  name: 'PopoverFollow',
+  name: 'WithGaps',
   setup() {
     const { handleVisibleChange, isOpen, targetEl, toggleVisible } = useDemoState();
 

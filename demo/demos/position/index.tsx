@@ -5,7 +5,7 @@ import { defineDemo, html } from '../../helpers';
 import useDemoState from '../../helpers/useDemoState';
 
 const Component = defineComponent({
-  name: 'PopoverFollow',
+  name: 'Position',
   setup() {
     const position = ref('bottom' as WowerlayProps['position']);
 

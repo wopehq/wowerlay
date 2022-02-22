@@ -5,7 +5,7 @@ import { Wowerlay } from '../../../src/lib';
 import useDemoState from '../../helpers/useDemoState';
 
 const Component = defineComponent({
-  name: 'PopoverChangeTarget',
+  name: 'ChangeableTarget',
   setup() {
     const { handleVisibleChange, isOpen, toggleVisible } = useDemoState();
 

@@ -22,7 +22,7 @@ const sFruitInput: CSSProperties = {
 };
 
 const Component = defineComponent({
-  name: 'PopoverFollow',
+  name: 'DynamicBounds',
   setup() {
     const { targetEl, isOpen, handleVisibleChange, toggleVisible } = useDemoState();
 

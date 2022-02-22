@@ -5,6 +5,7 @@ import { Wowerlay } from '../../../src/lib';
 import useDemoState from '../../helpers/useDemoState';
 
 const Component = defineComponent({
+  name: 'NoTransition',
   setup: () => useDemoState(),
   render() {
     return (
