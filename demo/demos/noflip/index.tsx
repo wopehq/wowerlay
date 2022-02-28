@@ -12,7 +12,7 @@ const Component = defineComponent({
       <button type="button" onClick={this.toggleVisible} ref="targetEl">
         Click to Show Popover
         <Wowerlay
-          noflip
+          noFlip
           onUpdate:visible={this.handleVisibleChange}
           visible={this.isOpen}
           target={this.targetEl}
@@ -40,8 +40,8 @@ export default defineDemo({
         Click To Trigger Popover
 
         <Wowerlay 
+          noFlip
           style="max-width: 300px"
-          staticPosition
           v-model:visible="visible"
           :target="target"
         >

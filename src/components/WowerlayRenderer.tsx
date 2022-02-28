@@ -150,7 +150,7 @@ export const WowerlayRenderer = defineComponent({
 
       updatePosition(handle(rect, gaps));
 
-      if (handleOutOfScreen && !props.noflip) {
+      if (handleOutOfScreen && !props.noFlip) {
         if (checkOutOfScreen) {
           if (checkOutOfScreen(rect)) {
             updatePosition(handleOutOfScreen(rect, gaps));

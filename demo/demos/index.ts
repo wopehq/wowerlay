@@ -8,13 +8,13 @@ import changeableTarget from './changeableTarget';
 import nested from './nested';
 import noTransition from './noTransition';
 import customTransition from './customTransition';
-import noflip from './noflip';
+import noFlip from './noFlip';
 
 export default [
   simple,
   position,
   fixed,
-  noflip,
+  noFlip,
   dynamicBounds,
   canLeaveViewport,
   withGaps,

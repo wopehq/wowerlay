@@ -182,7 +182,7 @@ interface WowerlayProps {
   /**
    * If given Wowerlay will not flip to stay in view.
    */
-  noflip?: number;
+  noFlip?: boolean;
 
   /**
    * Tag name for Wowerlay wrapper element.
