@@ -5,14 +5,14 @@ import { Wowerlay } from '../../../src/lib';
 import useDemoState from '../../helpers/useDemoState';
 
 const Component = defineComponent({
-  name: 'Static Position',
+  name: 'Noflip',
   setup: () => useDemoState(),
   render() {
     return (
       <button type="button" onClick={this.toggleVisible} ref="targetEl">
         Click to Show Popover
         <Wowerlay
-          staticPosition
+          noflip
           onUpdate:visible={this.handleVisibleChange}
           visible={this.isOpen}
           target={this.targetEl}
@@ -31,7 +31,7 @@ const Component = defineComponent({
 });
 
 export default defineDemo({
-  name: 'Static Position',
+  name: 'Noflip',
   component: Component,
   /* prettier-ignore */
   template: html`

@@ -1,13 +1,10 @@
 ## 0.5.0
-  - **Updated** readme and samples.
-  - **Added** `static-position` prop.
+  - **Updated** readme.
+  - **Added** `noflip` prop.
 
 #### Demos/Samples
   - **Refactored** all demos and directory structure.
   - **Reordered** demos from simple to complicated.
-
-#### Breaking Changes
-  - **Renamed** `fixed` prop as `static`.
 
 <br>
 

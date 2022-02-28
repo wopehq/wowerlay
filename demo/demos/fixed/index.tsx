@@ -12,7 +12,7 @@ const Component = defineComponent({
       <button type="button" onClick={this.toggleVisible} ref="targetEl">
         Click to Show Popover
         <Wowerlay
-          static
+          fixed
           onUpdate:visible={this.handleVisibleChange}
           visible={this.isOpen}
           target={this.targetEl}
@@ -31,7 +31,7 @@ const Component = defineComponent({
 });
 
 export default defineDemo({
-  name: 'Static',
+  name: 'Fixed',
   component: Component,
   /* prettier-ignore */
   template: html`

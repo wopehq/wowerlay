@@ -177,13 +177,12 @@ interface WowerlayProps {
   /**
    * If given Wowerlay won't update its position after mounted
    */
-  static?: boolean;
+  fixed?: boolean;
 
   /**
-   * If given Wowerlay will not change its position to stay in sight.
-   * But will be inside of screen bounds if you don't set `canLeaveViewport` to true.
+   * If given Wowerlay will not flip to stay in view.
    */
-  staticPosition?: number;
+  noflip?: number;
 
   /**
    * Tag name for Wowerlay wrapper element.
