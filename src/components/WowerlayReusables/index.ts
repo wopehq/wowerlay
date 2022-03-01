@@ -16,9 +16,10 @@ export interface WowerlayBaseProps {
     | 'bottom-end';
   verticalGap: number;
   horizontalGap: number;
-  canLeaveViewport?: boolean;
+  canLeaveViewport: boolean;
   fixed: boolean;
-  target?: HTMLElement;
+  noFlip: boolean;
+  target: HTMLElement;
   tag: string;
   noBackground: boolean;
   transition: boolean | string;
@@ -26,8 +27,7 @@ export interface WowerlayBaseProps {
 
 export const wowerlayBaseProps = {
   target: {
-    required: true,
-    type: null as unknown as PropType<WowerlayBaseProps['target']>,
+    type: Object as PropType<WowerlayBaseProps['target']>,
   },
   noBackground: {
     default: false,
@@ -36,6 +36,10 @@ export const wowerlayBaseProps = {
   fixed: {
     default: false,
     type: Boolean as PropType<WowerlayBaseProps['fixed']>,
+  },
+  noFlip: {
+    default: false,
+    type: Boolean as PropType<WowerlayBaseProps['noFlip']>,
   },
   position: {
     default: 'bottom',

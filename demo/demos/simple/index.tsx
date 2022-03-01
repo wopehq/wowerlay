@@ -1,54 +1,39 @@
-import { defineComponent, ref } from 'vue';
-import { defineDemo, html } from '../helpers';
+import { defineComponent } from 'vue';
 
-import { Wowerlay } from '../../src/lib';
+import { defineDemo, html } from '../../helpers';
+import { Wowerlay } from '../../../src/lib';
+import useDemoState from '../../helpers/useDemoState';
 
 const Component = defineComponent({
-  name: 'CanLeaveViewport',
-  setup() {
-    const targetEl = ref<HTMLElement>();
-    const isOpen = ref(false);
-
-    const handleVisibleChange = (state: boolean) => {
-      isOpen.value = state;
-    };
-    const toggleVisible = () => {
-      isOpen.value = !isOpen.value;
-    };
-
-    return {
-      isOpen,
-      targetEl,
-      handleVisibleChange,
-      toggleVisible,
-    };
-  },
+  name: 'Simple',
+  setup: () => useDemoState(),
   render() {
     return (
       <button type="button" onClick={this.toggleVisible} ref="targetEl">
         Click to Show Popover
         <Wowerlay
-          canLeaveViewport
+          // eslint-disable-next-line no-console
+          onUpdate:el={console.log}
           onUpdate:visible={this.handleVisibleChange}
           visible={this.isOpen}
           target={this.targetEl}
-          style="max-width: 300px"
         >
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rerum quam, qui asperiores, sed
-          ipsa fuga, repellendus officiis labore odit temporibus quisquam necessitatibus? Illo vitae
-          quis reprehenderit sequi quae iste, fuga quasi atque et voluptatibus. Debitis, facere,
-          libero voluptate tempore omnis voluptas corporis fugiat sequi quidem cumque quisquam
-          exercitationem a doloribus.
+          <div style="max-width: 300px">
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rerum quam, qui asperiores,
+            sed ipsa fuga, repellendus officiis labore odit temporibus quisquam necessitatibus? Illo
+            vitae quis reprehenderit sequi quae iste, fuga quasi atque et voluptatibus. Debitis,
+            facere, libero voluptate tempore omnis voluptas corporis fugiat sequi quidem cumque
+            quisquam exercitationem a doloribus.
+          </div>
         </Wowerlay>
       </button>
     );
   },
 });
 
-export const Demo = defineDemo({
-  name: 'Can Leave Viewport',
+export default defineDemo({
+  name: 'Simple',
   component: Component,
-  order: 4,
   /* prettier-ignore */
   template: html`
     <template>
@@ -56,7 +41,6 @@ export const Demo = defineDemo({
         Click To Trigger Popover
 
         <Wowerlay
-          canLeaveViewport
           style="max-width: 300px" 
           v-model:visible="visible"
           :target="target"

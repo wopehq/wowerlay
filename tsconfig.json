@@ -16,7 +16,8 @@
     "noUnusedParameters": true,
     "strictFunctionTypes": true,
     "alwaysStrict": false,
-    "noImplicitReturns": true
+    "noImplicitReturns": true,
+    "forceConsistentCasingInFileNames": true
   },
   "include": [
     "src/**/*.ts",

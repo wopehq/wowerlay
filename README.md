@@ -142,6 +142,22 @@ Styling wowerlay is simple. `<Wowerlay/>` is just a single wrapper element.
 </Wowerlay>
 ```
 
+## Emits
+```ts
+interface WowerlayEmits {
+  /**
+   * Fires when wowerlay wants to change it's visibility state.
+   */
+  'update:visible': (visibility: Boolean) => void;
+  
+  /**
+   * Fires when Wowerlay element changes, this can be used to do some DOM stuff to Wowerlay popover element.
+   * Can be used as v-model:el
+   */
+  'update:el': (element: HTMLElement | null) => void;
+}
+```
+
 ## Props
 
 ```ts
@@ -178,6 +194,11 @@ interface WowerlayProps {
    * If given Wowerlay won't update its position after mounted
    */
   fixed?: boolean;
+
+  /**
+   * If given Wowerlay will not flip to stay in view.
+   */
+  noFlip?: boolean;
 
   /**
    * Tag name for Wowerlay wrapper element.

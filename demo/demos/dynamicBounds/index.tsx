@@ -1,7 +1,8 @@
 import { CSSProperties, defineComponent, ref, watch } from 'vue';
-import { defineDemo, html } from '../helpers';
 
-import { Wowerlay } from '../../src/lib';
+import { defineDemo, html } from '../../helpers';
+import { Wowerlay } from '../../../src/lib';
+import useDemoState from '../../helpers/useDemoState';
 
 const fruits = ['Banana', 'Apple', 'Strawberry', 'Orange', 'Peach', 'Pear', 'Apricot'];
 const searchFruit = (name: string) => {
@@ -21,19 +22,12 @@ const sFruitInput: CSSProperties = {
 };
 
 const Component = defineComponent({
-  name: 'PopoverFollow',
+  name: 'DynamicBounds',
   setup() {
-    const targetEl = ref<HTMLElement>();
-    const isOpen = ref(false);
+    const { targetEl, isOpen, handleVisibleChange, toggleVisible } = useDemoState();
+
     const fruitQuery = ref('');
     const input = ref<HTMLElement>();
-
-    const handleVisibleChange = (state: boolean) => {
-      isOpen.value = state;
-    };
-    const toggleVisible = () => {
-      isOpen.value = !isOpen.value;
-    };
 
     watch(
       isOpen,
@@ -96,10 +90,9 @@ const Component = defineComponent({
   },
 });
 
-export const Demo = defineDemo({
+export default defineDemo({
   name: 'Dynamic Bounds',
   component: Component,
-  order: 3,
   /* prettier-ignore */
   template: html`
     <template>

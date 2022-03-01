@@ -23,16 +23,6 @@ export interface WowerlayProps extends WowerlayBaseProps {
   visible: boolean;
 }
 
-const Props = {
-  visible: {
-    required: true,
-    type: Boolean as PropType<WowerlayProps['visible']>,
-  } as const,
-};
-const Emits = {
-  'update:visible': (() => true) as unknown as (value: boolean) => void,
-} as const;
-
 interface ParentWowerlayContext {
   onClose: (hook: () => void) => void;
 }
@@ -44,9 +34,15 @@ export const Wowerlay = defineComponent({
   inheritAttrs: false,
   props: {
     ...wowerlayBaseProps,
-    ...Props,
+    visible: {
+      required: true,
+      type: Boolean as PropType<WowerlayProps['visible']>,
+    },
   },
-  emits: Emits,
+  emits: {
+    'update:visible': null! as (value: boolean) => void,
+    'update:el': null! as (value: HTMLElement | null) => void,
+  },
   setup(props, { emit }) {
     const { onWindowClick } = useWowerlayContext();
     const parentWowerlay = inject(ParentWowerlayContextInjectionKey, null);
@@ -114,7 +110,12 @@ export const Wowerlay = defineComponent({
     let willBeRendered: null | JSX.Element = null;
 
     const Renderer = !this.isVisible ? null : (
-      <WowerlayRenderer {...this.$props} {...this.$attrs} onClick={this.handleWowerlayClick}>
+      <WowerlayRenderer
+        onUpdate:el={(el) => this.$emit('update:el', el)}
+        {...this.$props}
+        {...this.$attrs}
+        onClick={this.handleWowerlayClick}
+      >
         {this.$slots.default?.()}
       </WowerlayRenderer>
     );

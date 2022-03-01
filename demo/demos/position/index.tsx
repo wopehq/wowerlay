@@ -1,27 +1,16 @@
 import { defineComponent, ref } from 'vue';
-import { Wowerlay, WowerlayProps } from '../../src/lib';
-import { defineDemo, html } from '../helpers';
+
+import { Wowerlay, WowerlayProps } from '../../../src/lib';
+import { defineDemo, html } from '../../helpers';
+import useDemoState from '../../helpers/useDemoState';
 
 const Component = defineComponent({
-  name: 'PopoverFollow',
+  name: 'Position',
   setup() {
-    const targetEl = ref<HTMLElement>(null!);
-    const isOpen = ref(false);
-
     const position = ref('bottom' as WowerlayProps['position']);
 
-    const handleVisibleChange = (state: boolean) => {
-      isOpen.value = state;
-    };
-    const toggleVisible = () => {
-      isOpen.value = !isOpen.value;
-    };
-
     return {
-      isOpen,
-      targetEl,
-      handleVisibleChange,
-      toggleVisible,
+      ...useDemoState(),
       position,
     };
   },
@@ -61,7 +50,7 @@ const Component = defineComponent({
             onUpdate:visible={this.handleVisibleChange}
             visible={this.isOpen}
             target={this.targetEl}
-            position={this.position as WowerlayProps['position']}
+            position={this.position}
           >
             <div style="max-width: 300px">
               Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rerum quam, qui asperiores,
@@ -77,10 +66,9 @@ const Component = defineComponent({
   },
 });
 
-export const Demo = defineDemo({
+export default defineDemo({
   name: 'Position',
   component: Component,
-  order: 1,
   /* prettier-ignore */
   template: html`
     <template>

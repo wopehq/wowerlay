@@ -1,34 +1,18 @@
-import { defineComponent, ref } from 'vue';
-import { defineDemo, html } from '../helpers';
+import { defineComponent } from 'vue';
 
-import { Wowerlay } from '../../src/lib';
+import { defineDemo, html } from '../../helpers';
+import { Wowerlay } from '../../../src/lib';
+import useDemoState from '../../helpers/useDemoState';
 
 const Component = defineComponent({
-  name: 'PopoverFollow',
-  setup() {
-    const targetEl = ref<HTMLElement>();
-    const isOpen = ref(false);
-
-    const handleVisibleChange = (state: boolean) => {
-      isOpen.value = state;
-    };
-    const toggleVisible = () => {
-      isOpen.value = !isOpen.value;
-    };
-
-    return {
-      isOpen,
-      targetEl,
-      handleVisibleChange,
-      toggleVisible,
-    };
-  },
+  name: 'Noflip',
+  setup: () => useDemoState(),
   render() {
     return (
       <button type="button" onClick={this.toggleVisible} ref="targetEl">
         Click to Show Popover
         <Wowerlay
-          fixed
+          noFlip
           onUpdate:visible={this.handleVisibleChange}
           visible={this.isOpen}
           target={this.targetEl}
@@ -46,10 +30,9 @@ const Component = defineComponent({
   },
 });
 
-export const Demo = defineDemo({
-  name: 'Fixed',
+export default defineDemo({
+  name: 'Noflip',
   component: Component,
-  order: 2,
   /* prettier-ignore */
   template: html`
     <template>
@@ -57,8 +40,8 @@ export const Demo = defineDemo({
         Click To Trigger Popover
 
         <Wowerlay 
+          noFlip
           style="max-width: 300px"
-          fixed
           v-model:visible="visible"
           :target="target"
         >
