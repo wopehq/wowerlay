@@ -12,6 +12,8 @@ const Component = defineComponent({
       <button type="button" onClick={this.toggleVisible} ref="targetEl">
         Click to Show Popover
         <Wowerlay
+          // eslint-disable-next-line no-console
+          onUpdate:el={console.log}
           onUpdate:visible={this.handleVisibleChange}
           visible={this.isOpen}
           target={this.targetEl}

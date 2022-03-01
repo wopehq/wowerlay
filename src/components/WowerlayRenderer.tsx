@@ -1,4 +1,12 @@
-import { computed, defineComponent, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import {
+  ComponentPublicInstance,
+  computed,
+  defineComponent,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  watch,
+} from 'vue';
 import {
   Direction,
   Gaps,
@@ -96,12 +104,14 @@ export const WowerlayRenderer = defineComponent({
   inheritAttrs: false,
   props: wowerlayBaseProps,
   emits: {
-    click: (() => true) as unknown as (e: MouseEvent) => void,
+    click: null! as (e: MouseEvent) => void,
+    'update:el': null! as (value: HTMLElement | null) => void,
   },
   setup(props, { emit }) {
     const { onRecalculate } = useWowerlayContext();
 
-    const wowerlayElement = ref<HTMLElement>();
+    const wowerlayElement = ref<HTMLElement | null>(null);
+
     const posY = ref(0);
     const posX = ref(0);
 
@@ -186,6 +196,16 @@ export const WowerlayRenderer = defineComponent({
       );
     }
 
+    const handleRef = (el: Element | ComponentPublicInstance | null) => {
+      if (el === null || el instanceof HTMLElement) {
+        if (el !== wowerlayElement.value) emit('update:el', el);
+        wowerlayElement.value = el;
+      } //
+      else {
+        emit('update:el', null);
+      }
+    };
+
     watch(
       () => [props.position, props.target, props.verticalGap, props.horizontalGap],
       updateWowerlayPosition,
@@ -208,6 +228,7 @@ export const WowerlayRenderer = defineComponent({
 
     return {
       handleClick,
+      handleRef,
       wowerlayElement,
       positionStyle,
     };
@@ -217,7 +238,7 @@ export const WowerlayRenderer = defineComponent({
 
     return (
       <Renderer
-        ref="wowerlayElement"
+        ref={this.handleRef}
         class={cWowerlay}
         style={this.positionStyle}
         onClick={this.handleClick}

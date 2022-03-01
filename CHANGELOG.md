@@ -1,6 +1,7 @@
 ## 0.5.0
   - **Updated** readme.
-  - **Added** `noflip` prop.
+  - **Added** `noFlip` prop.
+  - **Added** `update:el` emit.
 
 #### Demos/Samples
   - **Refactored** all demos and directory structure.
