@@ -6,6 +6,7 @@ import {
   onMounted,
   ref,
   watch,
+  watchEffect,
 } from 'vue';
 import {
   Direction,
@@ -37,6 +38,7 @@ import { cWowerlay, sWowerlayX, sWowerlayY, scrollbarGap } from '../consts';
 import type { WowerlayProps } from './Wowerlay';
 import { useWowerlayContext } from '../plugin/index';
 import { wowerlayBaseProps } from './WowerlayReusables';
+import { Nullable } from '../types';
 
 type Handlers = {
   [Key in WowerlayProps['position']]: {
@@ -110,15 +112,21 @@ export const WowerlayRenderer = defineComponent({
   setup(props, { emit }) {
     const { onRecalculate } = useWowerlayContext();
 
-    const wowerlayElement = ref<HTMLElement | null>(null);
+    const wowerlayElement = ref<Nullable<HTMLElement>>(null);
 
     const posY = ref(0);
     const posX = ref(0);
+    const syncedWidth = ref<Nullable<number>>(null);
+    const syncedHeight = ref<Nullable<number>>(null);
 
     const alignment = computed(() => props.position.split('-')[0] as Alignment);
     const positionStyle = computed<Record<string, string>>(() => ({
       [sWowerlayX]: `${posX.value}px`,
       [sWowerlayY]: `${posY.value}px`,
+    }));
+    const syncedBoundsStyle = computed<Record<string, Nullable<string>>>(() => ({
+      width: syncedWidth.value ? `${syncedWidth.value}px` : null,
+      height: syncedHeight.value ? `${syncedHeight.value}px` : null,
     }));
 
     const handleClick = (e: MouseEvent) => emit('click', e);
@@ -175,6 +183,9 @@ export const WowerlayRenderer = defineComponent({
         }
       }
 
+      if (props.syncWidth) syncedWidth.value = targetRect.width;
+      if (props.syncHeight) syncedHeight.value = targetRect.height;
+
       posX.value = fixPosition(newPosition.x, Direction.Horizontal);
       posY.value = fixPosition(newPosition.y, Direction.Vertical);
     };
@@ -207,9 +218,22 @@ export const WowerlayRenderer = defineComponent({
     };
 
     watch(
-      () => [props.position, props.target, props.verticalGap, props.horizontalGap],
+      () => [
+        props.position,
+        props.target,
+        props.verticalGap,
+        props.horizontalGap,
+        props.syncWidth,
+        props.syncHeight,
+        props.canLeaveViewport,
+      ],
       updateWowerlayPosition,
     );
+
+    watchEffect(() => {
+      if (!props.syncWidth) syncedWidth.value = null;
+      if (!props.syncHeight) syncedHeight.value = null;
+    });
 
     onRecalculate(() => {
       if (props.fixed) return;
@@ -231,6 +255,7 @@ export const WowerlayRenderer = defineComponent({
       handleRef,
       wowerlayElement,
       positionStyle,
+      syncedBoundsStyle,
     };
   },
   render() {
@@ -240,7 +265,7 @@ export const WowerlayRenderer = defineComponent({
       <Renderer
         ref={this.handleRef}
         class={cWowerlay}
-        style={this.positionStyle}
+        style={[this.positionStyle, this.syncedBoundsStyle]}
         onClick={this.handleClick}
         {...this.$attrs}
       >

@@ -18,6 +18,7 @@ import { cWowerlayAnimEnter, cWowerlayAnimLeave, cWowerlayBackground } from '../
 import { WowerlayRenderer } from './WowerlayRenderer';
 import { isElement } from '../utils';
 import { useWowerlayContext } from '../plugin';
+import { Nullable } from '../types';
 
 export interface WowerlayProps extends WowerlayBaseProps {
   visible: boolean;
@@ -107,14 +108,14 @@ export const Wowerlay = defineComponent({
     };
   },
   render() {
-    let willBeRendered: null | JSX.Element = null;
+    let willBeRendered: Nullable<JSX.Element> = null;
 
     const Renderer = !this.isVisible ? null : (
       <WowerlayRenderer
         onUpdate:el={(el) => this.$emit('update:el', el)}
+        onClick={this.handleWowerlayClick}
         {...this.$props}
         {...this.$attrs}
-        onClick={this.handleWowerlayClick}
       >
         {this.$slots.default?.()}
       </WowerlayRenderer>

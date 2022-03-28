@@ -23,6 +23,8 @@ export interface WowerlayBaseProps {
   tag: string;
   noBackground: boolean;
   transition: boolean | string;
+  syncWidth: boolean;
+  syncHeight: boolean;
 }
 
 export const wowerlayBaseProps = {
@@ -36,6 +38,14 @@ export const wowerlayBaseProps = {
   fixed: {
     default: false,
     type: Boolean as PropType<WowerlayBaseProps['fixed']>,
+  },
+  syncWidth: {
+    default: false,
+    type: Boolean as PropType<WowerlayBaseProps['syncWidth']>,
+  },
+  syncHeight: {
+    default: false,
+    type: Boolean as PropType<WowerlayBaseProps['syncHeight']>,
   },
   noFlip: {
     default: false,
