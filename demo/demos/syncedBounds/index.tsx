@@ -5,7 +5,7 @@ import { Wowerlay } from '../../../src/lib';
 import useDemoState from '../../helpers/useDemoState';
 
 const Component = defineComponent({
-  name: 'DynamicBounds',
+  name: 'SyncedBounds',
   setup() {
     const { targetEl, isOpen, handleVisibleChange, toggleVisible } = useDemoState();
 
