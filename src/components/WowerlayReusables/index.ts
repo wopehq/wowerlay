@@ -29,7 +29,7 @@ export interface WowerlayBaseProps {
 
 export const wowerlayBaseProps = {
   target: {
-    type: Object as PropType<WowerlayBaseProps['target']>,
+    type: Object as PropType<WowerlayBaseProps['target'] | null>,
   },
   noBackground: {
     default: false,
