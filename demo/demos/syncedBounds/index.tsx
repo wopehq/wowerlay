@@ -160,7 +160,6 @@ export default defineDemo({
         Click To Trigger Popover
 
         <Wowerlay
-          fixed
           style="max-width: 300px"
           v-model:visible="visible"
           :target="target"
