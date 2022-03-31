@@ -11,6 +11,13 @@ const Seperator = () => (
   />
 );
 
+const animationOptions: KeyframeAnimationOptions = {
+  direction: 'alternate-reverse',
+  duration: 2000,
+  iterations: Infinity,
+  easing: 'ease',
+};
+
 const Component = defineComponent({
   name: 'SyncedBounds',
   setup() {
@@ -27,13 +34,6 @@ const Component = defineComponent({
 
     onMounted(() => {
       if (!firstEl.value || !secondEl.value || !thirdEl.value) return;
-
-      const animationOptions: KeyframeAnimationOptions = {
-        direction: 'alternate-reverse',
-        duration: 1000,
-        iterations: Infinity,
-        easing: 'ease-in-out',
-      };
 
       firstEl.value.animate(
         [
@@ -177,7 +177,6 @@ export default defineDemo({
   script: html`
     <script setup>
       import { ref } from 'vue';
-
       const visible = ref(false);
       const target = ref();
     </script>
