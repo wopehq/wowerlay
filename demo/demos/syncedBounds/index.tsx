@@ -1,7 +1,8 @@
-import { computed, defineComponent, onMounted, ref } from 'vue';
+import { CSSProperties, defineComponent, ref } from 'vue';
 
 import { defineDemo, html } from '../../helpers';
 import { Wowerlay } from '../../../src/lib';
+import useDemoState from '../../helpers/useDemoState';
 
 const Seperator = () => (
   <div
@@ -11,68 +12,31 @@ const Seperator = () => (
   />
 );
 
-const animationOptions: KeyframeAnimationOptions = {
-  direction: 'alternate-reverse',
-  duration: 2000,
-  iterations: Infinity,
-  easing: 'ease',
+const bigButtonStyle: CSSProperties = {
+  width: '400px',
+  height: '60px',
+};
+
+const baseButtonStyle: CSSProperties = {
+  width: '260px',
+  height: '40px',
+  transition: 'all .3s',
 };
 
 const Component = defineComponent({
   name: 'SyncedBounds',
   setup() {
-    const firstEl = ref<HTMLButtonElement | null>(null);
-    const secondEl = ref<HTMLButtonElement | null>(null);
-    const thirdEl = ref<HTMLButtonElement | null>(null);
+    const { targetEl } = useDemoState();
 
     const syncWidth = ref(true);
     const syncHeight = ref(false);
-
-    const positions = ['bottom', 'right'] as const;
-    const positionIndex = ref(0);
-    const position = computed(() => positions[positionIndex.value % positions.length]);
-
-    onMounted(() => {
-      if (!firstEl.value || !secondEl.value || !thirdEl.value) return;
-
-      firstEl.value.animate(
-        [
-          {
-            width: `${thirdEl.value.offsetWidth}px`,
-            height: `${thirdEl.value.offsetHeight * 2}px`,
-          },
-          {
-            width: `${thirdEl.value.offsetWidth * 2}px`,
-            height: `${thirdEl.value.offsetHeight}px`,
-          },
-        ],
-        animationOptions,
-      );
-
-      secondEl.value.animate(
-        [
-          { height: `${firstEl.value.offsetHeight}px` },
-          { height: `${firstEl.value.offsetHeight * 2}px` },
-        ],
-        animationOptions,
-      );
-
-      thirdEl.value.animate(
-        [
-          { width: `${thirdEl.value.offsetWidth}px` },
-          { width: `${thirdEl.value.offsetWidth * 2}px` },
-        ],
-        animationOptions,
-      );
-    });
+    const isBig = ref(false);
 
     return {
-      firstEl,
-      secondEl,
-      thirdEl,
+      targetEl,
       syncWidth,
       syncHeight,
-      position,
+      isBig,
     };
   },
   render() {
@@ -93,55 +57,39 @@ const Component = defineComponent({
         <Seperator />
         <Seperator />
 
-        <button type="button" ref="firstEl">
-          Synced by Width and Height
-          <Wowerlay
-            visible
-            noBackground
-            canLeaveViewport
-            noFlip
-            position="top"
-            target={this.firstEl}
-            syncWidth
-            syncHeight
-          >
-            <div style="max-width: 300px">
-              This Wowerlay is synced to width and height of target element.
-            </div>
-          </Wowerlay>
-        </button>
-
-        <Seperator />
-
-        <button type="button" ref="secondEl">
-          Synced by Height
-          <Wowerlay
-            visible
-            noBackground
-            canLeaveViewport
-            noFlip
-            position="right-end"
-            target={this.secondEl}
-            syncHeight
-          >
-            <div style="max-width: 300px">This Wowerlay is synced to height of target element.</div>
-          </Wowerlay>
-        </button>
-
-        <Seperator />
-
-        <button type="button" ref="thirdEl">
-          Synced by Width
+        <button
+          onClick={() => {
+            this.isBig = !this.isBig;
+          }}
+          style={[
+            baseButtonStyle, //
+            this.isBig ? bigButtonStyle : {},
+          ]}
+          type="button"
+          ref="targetEl"
+        >
+          Click to resize
           <Wowerlay
             visible
             noBackground
             canLeaveViewport
             noFlip
             position="bottom"
-            target={this.thirdEl}
+            target={this.targetEl}
             syncWidth
           >
-            <div style="max-width: 300px">This Wowerlay is synced to width of target element.</div>
+            This Wowerlay is synced to width of target element.
+          </Wowerlay>
+          <Wowerlay
+            visible
+            noBackground
+            canLeaveViewport
+            noFlip
+            position="right"
+            target={this.targetEl}
+            syncHeight
+          >
+            This Wowerlay is synced to height of target element.
           </Wowerlay>
         </button>
       </>
@@ -159,7 +107,6 @@ export default defineDemo({
         Click To Trigger Popover
 
         <Wowerlay
-          style="max-width: 300px"
           v-model:visible="visible"
           :target="target"
           syncWidth
