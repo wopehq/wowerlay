@@ -2,7 +2,6 @@ import { computed, defineComponent, onMounted, ref } from 'vue';
 
 import { defineDemo, html } from '../../helpers';
 import { Wowerlay } from '../../../src/lib';
-import { Nullable } from '../../../src/types';
 
 const Seperator = () => (
   <div
@@ -15,9 +14,9 @@ const Seperator = () => (
 const Component = defineComponent({
   name: 'SyncedBounds',
   setup() {
-    const firstEl = ref<Nullable<HTMLButtonElement>>(null);
-    const secondEl = ref<Nullable<HTMLButtonElement>>(null);
-    const thirdEl = ref<Nullable<HTMLButtonElement>>(null);
+    const firstEl = ref<HTMLButtonElement | null>(null);
+    const secondEl = ref<HTMLButtonElement | null>(null);
+    const thirdEl = ref<HTMLButtonElement | null>(null);
 
     const syncWidth = ref(true);
     const syncHeight = ref(false);

@@ -38,7 +38,6 @@ import { cWowerlay, sWowerlayX, sWowerlayY, scrollbarGap } from '../consts';
 import type { WowerlayProps } from './Wowerlay';
 import { useWowerlayContext } from '../plugin/index';
 import { wowerlayBaseProps } from './WowerlayReusables';
-import { Nullable } from '../types';
 
 type Handlers = {
   [Key in WowerlayProps['position']]: {
@@ -112,19 +111,19 @@ export const WowerlayRenderer = defineComponent({
   setup(props, { emit }) {
     const { onRecalculate } = useWowerlayContext();
 
-    const wowerlayElement = ref<Nullable<HTMLElement>>(null);
+    const wowerlayElement = ref<HTMLElement | null>(null);
 
     const posY = ref(0);
     const posX = ref(0);
-    const syncedWidth = ref<Nullable<number>>(null);
-    const syncedHeight = ref<Nullable<number>>(null);
+    const syncedWidth = ref<number | null>(null);
+    const syncedHeight = ref<number | null>(null);
 
     const alignment = computed(() => props.position.split('-')[0] as Alignment);
     const positionStyle = computed<Record<string, string>>(() => ({
       [sWowerlayX]: `${posX.value}px`,
       [sWowerlayY]: `${posY.value}px`,
     }));
-    const syncedBoundsStyle = computed<Record<string, Nullable<string>>>(() => ({
+    const syncedBoundsStyle = computed<Record<string, string | null>>(() => ({
       width: syncedWidth.value ? `${syncedWidth.value}px` : null,
       height: syncedHeight.value ? `${syncedHeight.value}px` : null,
     }));
