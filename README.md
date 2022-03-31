@@ -246,7 +246,7 @@ interface WowerlayProps {
    * @set true to enable.
    * @default false
    */
-  syncHeight?: string | boolean;
+  syncHeight?: boolean;
 }
 ```
 
