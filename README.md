@@ -166,7 +166,7 @@ interface WowerlayProps {
    * Primary position for Wowerlay.
    * @default "bottom"
    */
-  position:
+  position?:
     | 'left'
     | 'left-start'
     | 'left-end'
@@ -187,16 +187,19 @@ interface WowerlayProps {
 
   /**
    * If given, Wowerlay will be able to leave screen.
+   * @default false
    */
-  canLeaveViewport?: number;
+  canLeaveViewport?: boolean;
 
   /**
    * If given Wowerlay won't update its position after mounted
+   * @default false
    */
   fixed?: boolean;
 
   /**
    * If given Wowerlay will not flip to stay in view.
+   * @default false
    */
   noFlip?: boolean;
 
@@ -216,20 +219,34 @@ interface WowerlayProps {
    * Vertical gap between Wowerlay and the target.
    * @default 0
    */
-  verticalGap: number;
+  verticalGap?: number;
 
   /**
    * Disables click blocker background when Wowerlay is visible
    * @default false
    */
-  noBackground: boolean;
+  noBackground?: boolean;
 
   /**
    * Disable or set custom transition for Wowerlay
    * @set false to disable transition
    * @set string to use your own transition name.
    */
-  transition: string | boolean;
+  transition?: string | boolean;
+
+  /**
+   * If enabled Wowerlay will sync its width same as target's width.
+   * @set true to enable.
+   * @default false
+   */
+  syncWidth?: boolean;
+
+  /**
+   * If enabled Wowerlay will sync its width same as target's width.
+   * @set true to enable.
+   * @default false
+   */
+  syncHeight?: boolean;
 }
 ```
 

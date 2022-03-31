@@ -9,6 +9,7 @@ import nested from './nested';
 import noTransition from './noTransition';
 import customTransition from './customTransition';
 import noFlip from './noFlip';
+import syncedBounds from './syncedBounds';
 
 export default [
   simple,
@@ -16,6 +17,7 @@ export default [
   fixed,
   noFlip,
   dynamicBounds,
+  syncedBounds,
   canLeaveViewport,
   withGaps,
   changeableTarget,
