@@ -152,17 +152,14 @@ export const isElement = (el: unknown): el is HTMLElement =>
 /**
   Will climb from given element to root element and return all of them
 */
-export const getAncestors = (element: HTMLElement): HTMLElement[] => {
-  const ancestors: HTMLElement[] = [];
-  let parent: HTMLElement = element;
+export function getAncestors(element: HTMLElement): ParentNode[] {
+  const ancestors: ParentNode[] = [];
+  let parent: ParentNode | null = element.parentNode;
 
-  for (;;) {
+  while (parent != null) {
     ancestors.push(parent);
-
-    if (parent.parentElement == null) break;
-
-    parent = parent.parentElement;
+    parent = parent.parentNode;
   }
 
   return ancestors;
-};
+}

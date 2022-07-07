@@ -243,17 +243,15 @@ export const WowerlayRenderer = defineComponent({
       if (wowerlayElement.value) observer?.observe(wowerlayElement.value);
 
       window.addEventListener('resize', positionUpdaterEventHandler);
-      window.addEventListener('scroll', positionUpdaterEventHandler, { passive: true });
     });
 
     onBeforeUnmount(() => {
       if (!isElement(wowerlayElement.value)) return;
       observer?.unobserve(wowerlayElement.value);
       window.removeEventListener('resize', positionUpdaterEventHandler);
-      window.removeEventListener('scroll', positionUpdaterEventHandler);
     });
 
-    const ancestors = shallowRef<HTMLElement[]>([]);
+    const ancestors = shallowRef<ParentNode[]>([]);
 
     watch(
       () => props.target,
