@@ -32,40 +32,29 @@ yarn add wowerlay
 
 ## Usage
 
-First you need to register the plugin and import `stylesheet`.
+First you need to import the `stylesheet`.
 
-### `main.js | main.ts`
+### `main.js`
 
 ```ts
 import 'wowerlay/style.css';
-
 import { createApp } from 'vue';
-import { createWowerlay } from 'wowerlay';
-
 import App from './App.vue';
 
-const app = createApp(App);
-const wowerlay = createWowerlay();
-
-app.use(wowerlay);
-app.mount('#app');
+createApp(App).mount('#app');
 ```
 
 ## Using Wowerlay.
 
-To make Wowerlay visible you must set `visibility` to `true` and give a target element, template refs can be given. 
+To make Wowerlay visible you must set `visibility` to `true` and give a target element, template refs can be given.
 
-Anthing goes to `<Wowerlay/>` will be unmounted when `visibility` is `false` and  you can change tag of `<Wowerlay/>` wrapper with `tag` prop.
+Anything goes to `<Wowerlay/>` will be unmounted when `visibility` is `false` and you can change tag of `<Wowerlay/>` wrapper with `tag` prop.
 
 ```html
 <template>
   <button ref="targetElement" @click="toggle">Hi How Are you?</button>
 
-  <Wowerlay 
-    tag="section"
-    :target="targetElement"
-    v-model:visible="isVisible"
-  >
+  <Wowerlay tag="section" :target="targetElement" v-model:visible="isVisible">
     <div>Hey how you doin?</div>
     <button>Good</button>
     <button>Bad</button>
@@ -143,13 +132,14 @@ Styling wowerlay is simple. `<Wowerlay/>` is just a single wrapper element.
 ```
 
 ## Emits
+
 ```ts
 interface WowerlayEmits {
   /**
    * Fires when wowerlay wants to change it's visibility state.
    */
   'update:visible': (visibility: Boolean) => void;
-  
+
   /**
    * Fires when Wowerlay element changes, this can be used to do some DOM stuff to Wowerlay popover element.
    * Can be used as v-model:el

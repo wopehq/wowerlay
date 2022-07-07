@@ -1,5 +1,15 @@
-## 0.5.2
-## 0.5.1
+## 0.6.0
+
+- **Updated** Now each Wowerlay instance will climb from target element to root element and attach a `scroll` event for better auto replacement.
+- **Updated** Now each Wowerlay instance adds a click event to Window, it used to be single click event for all instances.
+
+#### Breaking Changes
+
+- **Deprecated** `createWowerlay`, now each Wowerlay component instance are independent, altough we still provide an empty function not to break projects.
+
+<br>
+
+## 0.5.1 / 0.5.2
 
 - **Added** `syncWidth` and `syncHeight` props.
 

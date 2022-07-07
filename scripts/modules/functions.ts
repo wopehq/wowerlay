@@ -41,7 +41,6 @@ export async function refactorTypes() {
 
   const toBeRemovedTypes = [
     'consts.d.ts', //
-    'event',
     'utils',
   ];
 

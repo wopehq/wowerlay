@@ -146,4 +146,20 @@ export const isBrowser = () => typeof window !== 'undefined' && typeof document 
 
 export const isResizeObserverSupported = () => isBrowser() && 'ResizeObserver' in window;
 
-export const isElement = (el: any): el is HTMLElement => isBrowser() && el instanceof HTMLElement;
+export const isElement = (el: unknown): el is HTMLElement =>
+  isBrowser() && el instanceof HTMLElement;
+
+/**
+  Will climb from given element to root element and return all of them
+*/
+export function getAncestors(element: HTMLElement): ParentNode[] {
+  const ancestors: ParentNode[] = [];
+  let parent: ParentNode | null = element.parentNode;
+
+  while (parent != null) {
+    ancestors.push(parent);
+    parent = parent.parentNode;
+  }
+
+  return ancestors;
+}

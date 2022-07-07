@@ -5,6 +5,7 @@ import {
   onBeforeUnmount,
   onMounted,
   ref,
+  shallowRef,
   watch,
   watchEffect,
 } from 'vue';
@@ -32,11 +33,11 @@ import {
   isBrowser,
   isElement,
   isResizeObserverSupported,
+  getAncestors,
 } from '../utils';
 import { cWowerlay, sWowerlayX, sWowerlayY, scrollbarGap } from '../consts';
 
 import type { WowerlayProps } from './Wowerlay';
-import { useWowerlayContext } from '../plugin/index';
 import { wowerlayBaseProps } from './WowerlayReusables';
 
 type Handlers = {
@@ -109,8 +110,6 @@ export const WowerlayRenderer = defineComponent({
     'update:el': null! as (value: HTMLElement | null) => void,
   },
   setup(props, { emit }) {
-    const { onRecalculate } = useWowerlayContext();
-
     const wowerlayElement = ref<HTMLElement | null>(null);
 
     const posY = ref(0);
@@ -145,7 +144,7 @@ export const WowerlayRenderer = defineComponent({
     };
 
     const updateWowerlayPosition = () => {
-      if (!isBrowser() || !props.target || !wowerlayElement.value) return;
+      if (!isBrowser() || !isElement(props.target) || !isElement(wowerlayElement.value)) return;
 
       const targetRect = props.target.getBoundingClientRect();
       const wowerlayRect = wowerlayElement.value.getBoundingClientRect();
@@ -234,20 +233,43 @@ export const WowerlayRenderer = defineComponent({
       if (!props.syncHeight) syncedHeight.value = null;
     });
 
-    onRecalculate(() => {
+    const positionUpdaterEventHandler = () => {
       if (props.fixed) return;
       updateWowerlayPosition();
-    });
+    };
 
     onMounted(() => {
       if (isElement(props.target)) updateWowerlayPosition();
       if (wowerlayElement.value) observer?.observe(wowerlayElement.value);
+
+      window.addEventListener('resize', positionUpdaterEventHandler);
     });
 
     onBeforeUnmount(() => {
       if (!isElement(wowerlayElement.value)) return;
       observer?.unobserve(wowerlayElement.value);
+      window.removeEventListener('resize', positionUpdaterEventHandler);
     });
+
+    const ancestors = shallowRef<ParentNode[]>([]);
+
+    watch(
+      () => props.target,
+      (newTarget) => {
+        for (const ancestor of ancestors.value) {
+          ancestor.removeEventListener('scroll', positionUpdaterEventHandler);
+        }
+
+        if (isElement(newTarget)) {
+          const newAncestors = getAncestors(newTarget);
+          for (const ancestor of newAncestors) {
+            ancestor.addEventListener('scroll', positionUpdaterEventHandler, { passive: true });
+          }
+          ancestors.value = newAncestors;
+        }
+      },
+      { immediate: true },
+    );
 
     return {
       handleClick,

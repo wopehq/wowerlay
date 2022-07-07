@@ -11,13 +11,13 @@ import {
   reactive,
   ref,
   watch,
+  onMounted,
 } from 'vue';
 import { WowerlayBaseProps, wowerlayBaseProps } from './WowerlayReusables';
 import { cWowerlayAnimEnter, cWowerlayAnimLeave, cWowerlayBackground } from '../consts';
 
 import { WowerlayRenderer } from './WowerlayRenderer';
 import { isElement } from '../utils';
-import { useWowerlayContext } from '../plugin';
 
 export interface WowerlayProps extends WowerlayBaseProps {
   visible: boolean;
@@ -44,7 +44,6 @@ export const Wowerlay = defineComponent({
     'update:el': null! as (value: HTMLElement | null) => void,
   },
   setup(props, { emit }) {
-    const { onWindowClick } = useWowerlayContext();
     const parentWowerlay = inject(ParentWowerlayContextInjectionKey, null);
 
     const childrenWowerlayHooks = reactive([]) as (() => void)[];
@@ -77,7 +76,6 @@ export const Wowerlay = defineComponent({
       close();
     };
 
-    onWindowClick(close);
     onBeforeUnmount(close);
 
     watch(
@@ -97,6 +95,14 @@ export const Wowerlay = defineComponent({
       onClose(hook) {
         childrenWowerlayHooks.push(hook);
       },
+    });
+
+    onMounted(() => {
+      window.addEventListener('click', close);
+    });
+
+    onBeforeUnmount(() => {
+      window.removeEventListener('click', close);
     });
 
     return {
