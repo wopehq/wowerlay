@@ -1,23 +1,27 @@
+import type { InjectionKey, PropType } from 'vue';
 import {
-  InjectionKey,
-  PropType,
   Teleport,
   Transition,
   computed,
   defineComponent,
   inject,
   onBeforeUnmount,
+  onMounted,
   provide,
   reactive,
   ref,
+  shallowRef,
   watch,
-  onMounted,
 } from 'vue';
-import { WowerlayBaseProps, wowerlayBaseProps } from './WowerlayReusables';
 import { cWowerlayAnimEnter, cWowerlayAnimLeave, cWowerlayBackground } from '../consts';
 
+import type { WowerlayTemplateRef } from './WowerlayRenderer';
+import type { WowerlayBaseProps } from './WowerlayReusables';
 import { WowerlayRenderer } from './WowerlayRenderer';
 import { isElement } from '../utils';
+import { wowerlayBaseProps } from './WowerlayReusables';
+
+export type { WowerlayTemplateRef } from './WowerlayRenderer';
 
 export interface WowerlayProps extends WowerlayBaseProps {
   visible: boolean;
@@ -43,8 +47,15 @@ export const Wowerlay = defineComponent({
     'update:visible': null! as (value: boolean) => void,
     'update:el': null! as (value: HTMLElement | null) => void,
   },
-  setup(props, { emit }) {
+  setup(props, { emit, expose }) {
     const parentWowerlay = inject(ParentWowerlayContextInjectionKey, null);
+    const wowerlayInstance = shallowRef<WowerlayTemplateRef>();
+
+    expose({
+      update() {
+        wowerlayInstance.value?.update();
+      },
+    } as WowerlayTemplateRef);
 
     const childrenWowerlayHooks = reactive([]) as (() => void)[];
     const canClose = ref(false);
@@ -110,6 +121,7 @@ export const Wowerlay = defineComponent({
       isVisible,
       handleWowerlayClick,
       handleContainerClick,
+      wowerlayInstance,
     };
   },
   render() {
@@ -119,6 +131,7 @@ export const Wowerlay = defineComponent({
       <WowerlayRenderer
         onUpdate:el={(el) => this.$emit('update:el', el)}
         onClick={this.handleWowerlayClick}
+        ref="wowerlayInstance"
         {...this.$props}
         {...this.$attrs}
       >
