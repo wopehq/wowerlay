@@ -131,6 +131,26 @@ Styling wowerlay is simple. `<Wowerlay/>` is just a single wrapper element.
 </Wowerlay>
 ```
 
+## Updating Position Dynamically
+
+You can use TemplateRef to update position dynamically, this will ignore fixed prop.
+
+```html
+<Wowerlay ref="wowerlayInstance">
+  Content Goes Here
+</Wowerlay>
+
+<script setup lang="ts">
+import { WowerlayTemplateRef } from 'wowerlay'
+
+const wowerlayInstance = ref<WowerlayTemplateRef>();
+
+function updateSomeTime() {
+  wowerlayInstance.value?.update();
+}
+</script>
+```
+
 ## Emits
 
 ```ts

@@ -1,5 +1,4 @@
 import {
-  ComponentPublicInstance,
   computed,
   defineComponent,
   onBeforeUnmount,
@@ -9,6 +8,7 @@ import {
   watch,
   watchEffect,
 } from 'vue';
+import type { ComponentPublicInstance } from 'vue';
 import {
   Direction,
   Gaps,
@@ -18,6 +18,7 @@ import {
   checkOutOfScreenLeft,
   checkOutOfScreenRight,
   checkOutOfScreenTop,
+  getAncestors,
   getBottom,
   getBottomEnd,
   getBottomStart,
@@ -33,12 +34,15 @@ import {
   isBrowser,
   isElement,
   isResizeObserverSupported,
-  getAncestors,
 } from '../utils';
+import type { WowerlayProps } from './Wowerlay';
 import { cWowerlay, sWowerlayX, sWowerlayY, scrollbarGap } from '../consts';
 
-import type { WowerlayProps } from './Wowerlay';
 import { wowerlayBaseProps } from './WowerlayReusables';
+
+export type WowerlayTemplateRef = {
+  update(): void;
+};
 
 type Handlers = {
   [Key in WowerlayProps['position']]: {
@@ -109,7 +113,7 @@ export const WowerlayRenderer = defineComponent({
     click: null! as (e: MouseEvent) => void,
     'update:el': null! as (value: HTMLElement | null) => void,
   },
-  setup(props, { emit }) {
+  setup(props, { emit, expose }) {
     const wowerlayElement = ref<HTMLElement | null>(null);
 
     const posY = ref(0);
@@ -270,6 +274,10 @@ export const WowerlayRenderer = defineComponent({
       },
       { immediate: true },
     );
+
+    expose({
+      update: updateWowerlayPosition,
+    } as WowerlayTemplateRef);
 
     return {
       handleClick,

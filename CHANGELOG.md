@@ -1,3 +1,10 @@
+## 0.6.1
+
+- **Added** custom expose (template ref).
+- **Updated** readme.
+
+<br>
+
 ## 0.6.0
 
 - **Updated** Now each Wowerlay instance will climb from target element to root element and attach a `scroll` event for better auto replacement.
