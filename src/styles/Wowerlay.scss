@@ -7,8 +7,6 @@
   display: inline-block;
   left: #{$positionX};
   top: #{$positionY};
-
-  pointer-events: all !important;
   overflow: auto;
 
   max-width: calc(100vw - #{$gap});
@@ -32,10 +30,6 @@
   max-height: fill-available;
   max-height: -webkit-fill-available;
   z-index: var(--wowerlay-z, 500);
-
-  &.no-background {
-    pointer-events: none;
-  }
 }
 
 .wowerlay-anim-enter {

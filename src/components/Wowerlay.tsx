@@ -186,10 +186,7 @@ export const Wowerlay = defineComponent({
           if (this.backgroundVisible) {
             return (
               <div
-                class={[
-                  cWowerlayBackground,
-                  { 'no-background': this.noBackground || !this.tooltipIsVisible }, //
-                ]}
+                class={cWowerlayBackground}
                 onClick={this.handleContainerClick}
                 role="dialog"
                 {...backgroundAttrsClone}
