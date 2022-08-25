@@ -3,7 +3,7 @@
   $positionX: var(--wowerlay-x, 0px);
   $positionY: var(--wowerlay-y, 0px);
 
-  position: absolute;
+  position: fixed;
   display: inline-block;
   left: #{$positionX};
   top: #{$positionY};

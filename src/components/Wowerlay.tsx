@@ -58,8 +58,8 @@ export const Wowerlay = defineComponent({
     } as WowerlayTemplateRef);
 
     const childrenWowerlayHooks = reactive([]) as (() => void)[];
-    const canClose = ref(false);
-    const isVisible = computed(() => isElement(props.target) && props.visible);
+    const tooltipIsClosable = ref(false);
+    const tooltipIsVisible = computed(() => isElement(props.target) && props.visible);
 
     const closeChildWowerlays = () => {
       childrenWowerlayHooks.forEach((v) => v());
@@ -68,7 +68,7 @@ export const Wowerlay = defineComponent({
     const close = () => {
       if (!props.visible) return;
 
-      if (canClose.value) {
+      if (tooltipIsClosable.value) {
         closeChildWowerlays();
         childrenWowerlayHooks.length = 0;
         emit('update:visible', false);
@@ -89,19 +89,6 @@ export const Wowerlay = defineComponent({
 
     onBeforeUnmount(close);
 
-    watch(
-      () => props.visible,
-      (state) => {
-        if (state) {
-          setTimeout(() => {
-            canClose.value = true;
-          }, 0);
-        } else {
-          canClose.value = false;
-        }
-      },
-    );
-
     provide(ParentWowerlayContextInjectionKey, {
       onClose(hook) {
         childrenWowerlayHooks.push(hook);
@@ -116,18 +103,45 @@ export const Wowerlay = defineComponent({
       window.removeEventListener('click', close);
     });
 
+    const backgroundVisible = ref(props.visible);
+
+    watch(
+      () => props.visible,
+      (state) => {
+        if (state) {
+          setTimeout(() => {
+            tooltipIsClosable.value = true;
+          }, 0);
+
+          backgroundVisible.value = true;
+        } else {
+          tooltipIsClosable.value = false;
+          if (props.transition === false) {
+            setTimeout(() => {
+              backgroundVisible.value = false;
+            });
+          }
+        }
+      },
+    );
+
+    const handleContentTransitionEnd = () =>
+      setTimeout(() => {
+        backgroundVisible.value = false;
+      });
+
     return {
-      canClose,
-      isVisible,
+      tooltipIsClosable,
+      tooltipIsVisible,
       handleWowerlayClick,
       handleContainerClick,
       wowerlayInstance,
+      handleContentTransitionEnd,
+      backgroundVisible,
     };
   },
   render() {
-    let willBeRendered: JSX.Element | null = null;
-
-    const Renderer = !this.isVisible ? null : (
+    const popover = this.tooltipIsVisible ? (
       <WowerlayRenderer
         onUpdate:el={(el) => this.$emit('update:el', el)}
         onClick={this.handleWowerlayClick}
@@ -137,32 +151,56 @@ export const Wowerlay = defineComponent({
       >
         {this.$slots.default?.()}
       </WowerlayRenderer>
+    ) : null;
+
+    let popoverWithTransition: JSX.Element | null = (
+      <Transition
+        appear
+        enterActiveClass={cWowerlayAnimEnter}
+        leaveActiveClass={cWowerlayAnimLeave}
+        onAfterLeave={this.handleContentTransitionEnd}
+      >
+        {popover}
+      </Transition>
     );
 
     if (this.transition === false) {
-      willBeRendered = Renderer;
+      popoverWithTransition = popover;
     } else if (typeof this.transition === 'string') {
-      willBeRendered = <Transition name={this.transition}>{Renderer}</Transition>;
-    } else {
-      willBeRendered = (
-        <Transition enterActiveClass={cWowerlayAnimEnter} leaveActiveClass={cWowerlayAnimLeave}>
-          {Renderer}
+      popoverWithTransition = (
+        <Transition appear onAfterLeave={this.handleContentTransitionEnd} name={this.transition}>
+          {popover}
         </Transition>
       );
     }
 
+    const backgroundAttrsClone = Object.assign(Object.create(null), this.backgroundAttrs);
+    delete backgroundAttrsClone.key;
+    delete backgroundAttrsClone.ref;
+
     return (
       <Teleport to="body">
-        <div
-          class={[
-            cWowerlayBackground,
-            { 'no-background': this.noBackground || !this.isVisible }, //
-          ]}
-          onClick={this.handleContainerClick}
-          role="tooltip"
-        >
-          {willBeRendered}
-        </div>
+        {(() => {
+          if (this.noBackground) return popoverWithTransition;
+
+          if (this.backgroundVisible) {
+            return (
+              <div
+                class={[
+                  cWowerlayBackground,
+                  { 'no-background': this.noBackground || !this.tooltipIsVisible }, //
+                ]}
+                onClick={this.handleContainerClick}
+                role="dialog"
+                {...backgroundAttrsClone}
+              >
+                {popoverWithTransition}
+              </div>
+            );
+          }
+
+          return null;
+        })()}
       </Teleport>
     );
   },

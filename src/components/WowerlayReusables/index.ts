@@ -25,11 +25,18 @@ export interface WowerlayBaseProps {
   transition: boolean | string;
   syncWidth: boolean;
   syncHeight: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  backgroundAttrs: Record<string | number, any>;
 }
 
 export const wowerlayBaseProps = {
   target: {
     type: Object as PropType<WowerlayBaseProps['target'] | null>,
+  },
+  backgroundAttrs: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    type: Object as PropType<WowerlayBaseProps['backgroundAttrs']>,
+    default: () => ({}),
   },
   noBackground: {
     default: false,
