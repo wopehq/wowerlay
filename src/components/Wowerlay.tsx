@@ -153,7 +153,7 @@ export const Wowerlay = defineComponent({
       </WowerlayRenderer>
     ) : null;
 
-    let popoverWithTransition: JSX.Element | null = (
+    let wowerlayContentToRender: JSX.Element | null = (
       <Transition
         appear
         enterActiveClass={cWowerlayAnimEnter}
@@ -164,10 +164,11 @@ export const Wowerlay = defineComponent({
       </Transition>
     );
 
+    // We need it to be exactly `false` otherwise we use default transition.
     if (this.transition === false) {
-      popoverWithTransition = popover;
+      wowerlayContentToRender = popover;
     } else if (typeof this.transition === 'string') {
-      popoverWithTransition = (
+      wowerlayContentToRender = (
         <Transition appear onAfterLeave={this.handleContentTransitionEnd} name={this.transition}>
           {popover}
         </Transition>
@@ -180,7 +181,7 @@ export const Wowerlay = defineComponent({
     return (
       <Teleport to="body">
         {(() => {
-          if (this.noBackground) return popoverWithTransition;
+          if (this.noBackground) return wowerlayContentToRender;
 
           if (this.backgroundVisible) {
             return (
@@ -190,7 +191,7 @@ export const Wowerlay = defineComponent({
                 role="dialog"
                 {...backgroundAttrsClone}
               >
-                {popoverWithTransition}
+                {wowerlayContentToRender}
               </div>
             );
           }
