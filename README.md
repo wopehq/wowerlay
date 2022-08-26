@@ -262,7 +262,7 @@ interface WowerlayProps {
    * Any given attribute (except key) is passed to Wowerlay`s wrapper background element.
    * @default {}
    */
-  backgroundAttrs?: backgroundAttrs: {
+  backgroundAttrs?: {
     key?: undefined | null;
     ref?: ((element: HTMLDivElement) => void) | Ref<HTMLElement | null | undefined>;
     [key: string]: any;
