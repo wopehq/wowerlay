@@ -176,7 +176,6 @@ export const Wowerlay = defineComponent({
 
     const backgroundAttrsClone = Object.assign(Object.create(null), this.backgroundAttrs);
     delete backgroundAttrsClone.key;
-    delete backgroundAttrsClone.ref;
 
     return (
       <Teleport to="body">

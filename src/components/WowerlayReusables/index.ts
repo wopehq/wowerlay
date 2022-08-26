@@ -1,4 +1,4 @@
-import { PropType } from 'vue';
+import { PropType, Ref } from 'vue';
 
 export interface WowerlayBaseProps {
   position:
@@ -25,8 +25,12 @@ export interface WowerlayBaseProps {
   transition: boolean | string;
   syncWidth: boolean;
   syncHeight: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  backgroundAttrs: Record<string | number, any>;
+  backgroundAttrs: {
+    ref?: ((element: HTMLDivElement) => void) | Ref<HTMLElement | null | undefined>;
+    key?: undefined | null;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    [key: string]: any;
+  };
 }
 
 export const wowerlayBaseProps = {
