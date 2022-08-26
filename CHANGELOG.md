@@ -1,7 +1,7 @@
 ## 0.7.0
 
 - **Added** `backgroundAttrs` prop, with this you can pass any attribute to Wowerlay's background element.
-  > If you give `key`, it won't be injected to the element, it can cause issues. Give key Wowerlay instead.
+  > `key` attribute is black listed, wont be injected. If we didn't prevent it, it would create conflicts in Wowerlay state. If you want to pass a `key`, pass it to Wowerlay instead.
 - **Updated** readme.
 
 #### Behavior Changes
