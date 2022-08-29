@@ -232,7 +232,7 @@ interface WowerlayProps {
   verticalGap?: number;
 
   /**
-   * Disables click blocker background when Wowerlay is visible
+   * Removes click blocker background when Wowerlay is visible
    * @default false
    */
   noBackground?: boolean;
@@ -257,6 +257,16 @@ interface WowerlayProps {
    * @default false
    */
   syncHeight?: boolean;
+
+  /**
+   * Any given attribute (except key) is passed to Wowerlay`s wrapper background element.
+   * @default {}
+   */
+  backgroundAttrs?: {
+    key?: undefined | null;
+    ref?: ((element: HTMLDivElement) => void) | Ref<HTMLElement | null | undefined>;
+    [key: string]: any;
+  };
 }
 ```
 

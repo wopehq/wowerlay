@@ -1,3 +1,18 @@
+## 0.7.0
+
+- **Added** `backgroundAttrs` prop, with this you can pass any attribute to Wowerlay's background element.
+  > `key` attribute is black listed, wont be injected. If we didn't prevent it, it would create conflicts in Wowerlay state. If you want to pass a `key`, pass it to Wowerlay instead.
+- **Updated** readme.
+
+#### Behavior Changes
+  - Now Wowerlay do not leave a `div.wowerlay-background` when it isn't visible.
+  - Now if `noBackground` prop is given, instead of adding `.no-background` to background element, Wowerlay mounts to body without a background element.
+
+#### Breaking Changes
+  - **Removed** createWowerlay function `(it's deprecated in 0.6.0)`.
+
+<br>
+
 ## 0.6.1
 
 - **Added** custom expose (template ref).

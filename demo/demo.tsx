@@ -6,7 +6,6 @@ import { computed, createApp, defineComponent, onMounted, ref, watch } from 'vue
 import { Sheet } from 'bottom-sheet-vue3';
 
 import { Highlight } from './components/Highlight';
-import { createWowerlay } from '../src/lib';
 import { highlightInit } from './helpers/highlight';
 import demos from './demos';
 
@@ -109,6 +108,4 @@ const App = defineComponent({
 });
 
 const app = createApp(App);
-const wowerlay = createWowerlay();
-app.use(wowerlay);
 app.mount('#app');

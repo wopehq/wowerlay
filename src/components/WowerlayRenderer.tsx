@@ -296,6 +296,7 @@ export const WowerlayRenderer = defineComponent({
         class={cWowerlay}
         style={[this.positionStyle, this.syncedBoundsStyle]}
         onClick={this.handleClick}
+        role="tooltip"
         {...this.$attrs}
       >
         {this.$slots.default?.()}
