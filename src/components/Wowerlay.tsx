@@ -1,14 +1,11 @@
-import type { InjectionKey, PropType } from 'vue';
+import type { PropType } from 'vue';
 import {
   Teleport,
   Transition,
   computed,
   defineComponent,
-  inject,
   onBeforeUnmount,
   onMounted,
-  provide,
-  reactive,
   ref,
   shallowRef,
   watch,
@@ -31,12 +28,6 @@ export interface WowerlayProps extends WowerlayBaseProps {
   visible: boolean;
 }
 
-interface ParentWowerlayContext {
-  onClose: (hook: () => void) => void;
-}
-
-const ParentWowerlayContextInjectionKey: InjectionKey<ParentWowerlayContext> = Symbol('key');
-
 export const Wowerlay = defineComponent({
   name: 'Wowerlay',
   inheritAttrs: false,
@@ -52,7 +43,6 @@ export const Wowerlay = defineComponent({
     'update:el': null! as (value: HTMLElement | null) => void,
   },
   setup(props, { emit, expose }) {
-    const parentWowerlay = inject(ParentWowerlayContextInjectionKey, null);
     const wowerlayInstance = shallowRef<WowerlayTemplateRef>();
 
     expose({
@@ -61,56 +51,45 @@ export const Wowerlay = defineComponent({
       },
     } as WowerlayTemplateRef);
 
-    const childrenWowerlayHooks = reactive([]) as (() => void)[];
     const tooltipIsClosable = ref(false);
     const tooltipIsVisible = computed(() => isElement(props.target) && props.visible);
-
-    const closeChildWowerlays = () => {
-      childrenWowerlayHooks.forEach((v) => v());
-    };
 
     const close = () => {
       if (!props.visible) return;
 
       if (tooltipIsClosable.value) {
-        closeChildWowerlays();
-        childrenWowerlayHooks.length = 0;
         emit('update:visible', false);
       }
     };
 
-    parentWowerlay?.onClose(close);
-
-    const handleWowerlayClick = (e: MouseEvent) => {
-      e.stopPropagation();
-      closeChildWowerlays();
-    };
-
-    const handleContainerClick = (e: MouseEvent) => {
-      e.stopPropagation();
-      close();
-    };
-
     onBeforeUnmount(close);
 
-    provide(ParentWowerlayContextInjectionKey, {
-      onClose(hook) {
-        childrenWowerlayHooks.push(hook);
-      },
-    });
-
+    const backgroundEl = shallowRef<HTMLElement>();
     const handleWindowClick = (e: MouseEvent) => {
+      // We should not call this function if Wowerlay is not visible
+      // or has no target element etc.
       if (
         !props.visible ||
         !(props.target instanceof HTMLElement) ||
+        // This check is for TypeScript, TypeScript doesn't think e.target is HTMLElement
         !(e.target instanceof HTMLElement) ||
+        // This simulates `stopPropagation` but do not block event bubbling
         e.target.closest(STOP_ATTR_QUERY)
       ) {
         return;
       }
 
       const scopeEl = e.target.closest(SCOPE_ATTR_QUERY);
+
+      // If scope element exists but it isn't our Wowerlay's scope we just return.
       if (scopeEl && !scopeEl.contains(props.target)) {
+        return;
+      }
+
+      // If a Wowerlay background is clicked but it isn't our background, we don't close.
+      // This enables nested Wowerlays to work properly
+      // @see Demo/Nested
+      if (e.target.matches('[data-wowerlay-background]') && e.target !== backgroundEl.value) {
         return;
       }
 
@@ -120,7 +99,6 @@ export const Wowerlay = defineComponent({
     onMounted(() => {
       window.addEventListener('click', handleWindowClick);
     });
-
     onBeforeUnmount(() => {
       window.removeEventListener('click', handleWindowClick);
     });
@@ -153,12 +131,11 @@ export const Wowerlay = defineComponent({
       });
 
     return {
+      handleContentTransitionEnd,
       tooltipIsClosable,
       tooltipIsVisible,
-      handleWowerlayClick,
-      handleContainerClick,
+      backgroundEl,
       wowerlayInstance,
-      handleContentTransitionEnd,
       backgroundVisible,
     };
   },
@@ -166,7 +143,7 @@ export const Wowerlay = defineComponent({
     const popover = this.tooltipIsVisible ? (
       <WowerlayRenderer
         onUpdate:el={(el) => this.$emit('update:el', el)}
-        onClick={this.handleWowerlayClick}
+        data-wowerlay-scope
         ref="wowerlayInstance"
         {...this.$props}
         {...this.$attrs}
@@ -208,9 +185,10 @@ export const Wowerlay = defineComponent({
           if (this.backgroundVisible) {
             return (
               <div
+                data-wowerlay-background
                 class={cWowerlayBackground}
-                onClick={this.handleContainerClick}
                 role="dialog"
+                ref="backgroundEl"
                 {...backgroundAttrsClone}
               >
                 {wowerlayContentToRender}

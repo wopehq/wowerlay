@@ -1,6 +1,14 @@
-## 0.7.1
+## 0.8.0
 
 - **Added** `data-wowerlay-scope` and `data-wowerlay-stop` attributes. See [demo](https://wowerlay.pages.dev/) page for examples.
+
+#### Behavior Changes
+  - Formerly Wowerlay was using `event.stopPropagation` on click for Popover and Background. Wowerlay would have listened 3 events and those were self click, background click and window click.
+
+    With new attributes we just have single `window click` listener. Even Wowerlay uses special attributes for nested Wowerlays to work properly and to prevent closing itself `(data-wowerlay-stop)`.
+
+    This update mey be both `Breaking Change` and `Behavior Change` current users may be using `stopPropagation` for Wowerlay's listener.
+
 
 <br>
 
