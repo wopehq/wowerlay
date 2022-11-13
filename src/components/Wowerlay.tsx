@@ -23,6 +23,10 @@ import { wowerlayBaseProps } from './WowerlayReusables';
 
 export type { WowerlayTemplateRef } from './WowerlayRenderer';
 
+const ATTR_PREFIX = 'data-wowerlay-';
+const SCOPE_ATTR_QUERY = `[${ATTR_PREFIX}scope]`;
+const STOP_ATTR_QUERY = `[${ATTR_PREFIX}stop]`;
+
 export interface WowerlayProps extends WowerlayBaseProps {
   visible: boolean;
 }
@@ -95,12 +99,30 @@ export const Wowerlay = defineComponent({
       },
     });
 
+    const handleWindowClick = (e: MouseEvent) => {
+      if (
+        !props.visible ||
+        !(props.target instanceof HTMLElement) ||
+        !(e.target instanceof HTMLElement) ||
+        e.target.closest(STOP_ATTR_QUERY)
+      ) {
+        return;
+      }
+
+      const scopeEl = e.target.closest(SCOPE_ATTR_QUERY);
+      if (scopeEl && !scopeEl.contains(props.target)) {
+        return;
+      }
+
+      close();
+    };
+
     onMounted(() => {
-      window.addEventListener('click', close);
+      window.addEventListener('click', handleWindowClick);
     });
 
     onBeforeUnmount(() => {
-      window.removeEventListener('click', close);
+      window.removeEventListener('click', handleWindowClick);
     });
 
     const backgroundVisible = ref(props.visible);

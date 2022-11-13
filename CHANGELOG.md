@@ -1,3 +1,9 @@
+## 0.7.1
+
+- **Added** `data-wowerlay-scope` and `data-wowerlay-stop` attributes. See [demo](https://wowerlay.pages.dev/) page for examples.
+
+<br>
+
 ## 0.7.0
 
 - **Added** `backgroundAttrs` prop, with this you can pass any attribute to Wowerlay's background element.
