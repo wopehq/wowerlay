@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@types/dedent': ^0.7.0
   '@types/fs-extra': ^9.0.13
   '@types/node': ^16.10.3
   '@types/prompts': ^2.0.14
@@ -8,6 +9,7 @@ specifiers:
   bottom-sheet-vue3: ^1.0.2
   chalk: ^4.1.2
   cross-env: ^7.0.3
+  dedent: ^0.7.0
   eslint: 8.7.0
   eslint-config-airbnb-typescript-prettier: 5.0.0
   execa: ^5.1.1
@@ -24,6 +26,7 @@ specifiers:
   vue: ^3.2.0
 
 devDependencies:
+  '@types/dedent': 0.7.0
   '@types/fs-extra': 9.0.13
   '@types/node': 16.11.4
   '@types/prompts': 2.0.14
@@ -31,6 +34,7 @@ devDependencies:
   bottom-sheet-vue3: 1.0.2
   chalk: 4.1.2
   cross-env: 7.0.3
+  dedent: 0.7.0
   eslint: 8.7.0
   eslint-config-airbnb-typescript-prettier: 5.0.0_gm5mkiv2b6jnvafajl33ilvbze
   execa: 5.1.1
@@ -446,6 +450,10 @@ packages:
 
   /@tsconfig/node16/1.0.2:
     resolution: {integrity: sha512-eZxlbI8GZscaGS7kkc/trHTT5xgrjH3/1n2JDwusC9iahPKWMRvRjJSAN5mCXviuTGQ/lHnhvv8Q1YTpnfz9gA==}
+    dev: true
+
+  /@types/dedent/0.7.0:
+    resolution: {integrity: sha512-EGlKlgMhnLt/cM4DbUSafFdrkeJoC9Mvnj0PUCU7tFmTjMjNRT957kXCx0wYm3JuEq4o4ZsS5vG+NlkM2DMd2A==}
     dev: true
 
   /@types/fs-extra/9.0.13:
@@ -1039,6 +1047,10 @@ packages:
         optional: true
     dependencies:
       ms: 2.1.2
+    dev: true
+
+  /dedent/0.7.0:
+    resolution: {integrity: sha512-Q6fKUPqnAHAyhiUgFU7BUzLiv0kd8saH9al7tnu5Q/okj6dnupxyTgFIBjVzJATdfIAm9NAsvXNzjaKa+bxVyA==}
     dev: true
 
   /deep-is/0.1.4:

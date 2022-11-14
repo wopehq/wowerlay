@@ -1,4 +1,5 @@
 import { DefineComponent, markRaw } from 'vue';
+import dedent from 'dedent';
 
 export interface IDemo {
   name: string;
@@ -8,17 +9,10 @@ export interface IDemo {
   script?: string;
 }
 
-const removeBeginningIndent = (code: string) => {
-  // 4 spaces always thanks to prettier
-  return code.replace(/\n\s{4}/g, '\n');
-};
-
 export const defineDemo = (_demo: IDemo) => {
   const demo = { ..._demo };
 
   demo.component = markRaw(demo.component);
-  demo.script &&= removeBeginningIndent(demo.script);
-  demo.template &&= removeBeginningIndent(demo.template);
 
   return demo;
 };
@@ -29,7 +23,7 @@ export function html(code: string | TemplateStringsArray, ...expressions: string
     code.forEach((_code, index) => {
       editedCode = editedCode.concat(_code).concat((expressions || [])[index] || '');
     });
-    return editedCode;
+    return dedent(editedCode);
   }
-  return code as string;
+  return dedent(code as string);
 }

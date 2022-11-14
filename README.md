@@ -270,6 +270,16 @@ interface WowerlayProps {
 }
 ```
 
+## Special Attributes
+Wowerlay has two special attributes for managing close on click situations.
+These attributes help users not to use `stopPropagation` to control Wowerlay close mechanism.
+
+- `data-wowerlay-scope` If clicked element or any of its parent element has this attribute, only Wowerlay instances that is attached to any children  of the scope element will close on click.
+
+- `data-wowerlay-stop` If clicked element or any of its parent element has this attribute, Wowerlay will not fire close event. This is intended to be alternative of `stopPropagation`.
+
+- See [demo](https://wowerlay.pages.dev) for examples.
+
 ## What about TypeScript?
 
 This package has built-in TypeScript support for events and props. It works with `JSX | TSX` and `Render Functions` with type support.

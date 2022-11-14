@@ -1,7 +1,7 @@
 {
   "name": "wowerlay",
   "description": "Wowerlay is a popover library for Vue 3 applications.",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "main": "./dist/wowerlay.umd.js",
   "module": "./dist/wowerlay.es.js",
   "types": "./dist/types/lib.d.ts",
@@ -31,6 +31,7 @@
     "watch": "cross-env MODE=production vite build --watch"
   },
   "devDependencies": {
+    "@types/dedent": "^0.7.0",
     "@types/fs-extra": "^9.0.13",
     "@types/node": "^16.10.3",
     "@types/prompts": "^2.0.14",
@@ -38,6 +39,7 @@
     "bottom-sheet-vue3": "^1.0.2",
     "chalk": "^4.1.2",
     "cross-env": "^7.0.3",
+    "dedent": "^0.7.0",
     "eslint": "8.7.0",
     "eslint-config-airbnb-typescript-prettier": "5.0.0",
     "execa": "^5.1.1",

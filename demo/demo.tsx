@@ -75,7 +75,13 @@ const App = defineComponent({
         sheetColor="rgb(28, 28, 28)"
         v-model:visible={this.isCodeSampleVisible}
       >
-        {this.activeDemo.template && <Highlight language="html" code={this.activeDemo.template} />}
+        {this.activeDemo.template && (
+          <>
+            <Highlight language="html" code={this.activeDemo.template} />
+            <br />
+          </>
+        )}
+
         {this.activeDemo.script && ( //
           <Highlight language="html" code={this.activeDemo.script} />
         )}

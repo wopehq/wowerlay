@@ -10,6 +10,8 @@ import noTransition from './noTransition';
 import customTransition from './customTransition';
 import noFlip from './noFlip';
 import syncedBounds from './syncedBounds';
+import stopAttribute from './stopAttribute';
+import scopeAttribute from './scopeAttribute';
 
 export default [
   simple,
@@ -24,4 +26,6 @@ export default [
   nested,
   noTransition,
   customTransition,
+  stopAttribute,
+  scopeAttribute,
 ];

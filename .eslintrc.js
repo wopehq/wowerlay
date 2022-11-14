@@ -34,6 +34,7 @@ const config = {
     'react/no-string-refs': 'off',
     'react/no-this-in-sfc': 'off',
     'react/style-prop-object': 'off',
+    'react/no-unescaped-entities': 'off',
   },
   overrides: [
     {
