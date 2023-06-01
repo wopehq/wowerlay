@@ -12,45 +12,10 @@ import {
   watch,
 } from 'vue';
 import { useFloating, flip, shift, offset, autoUpdate, Middleware } from '@floating-ui/vue';
-import { cWowerlayAnimEnter, cWowerlayAnimLeave, cWowerlayBackground, cWowerlay } from '../consts';
 
 import { Props } from './Wowerlay.constants';
-import { isElement } from '../utils';
-
-const ATTR_PREFIX = 'data-wowerlay-';
-const SCOPE_ATTR_QUERY = `[${ATTR_PREFIX}scope]`;
-const STOP_ATTR_QUERY = `[${ATTR_PREFIX}stop]`;
-
-const syncSize: Middleware = {
-  name: 'wowerlay:syncBounds',
-  fn({ placement, elements }) {
-    const target = elements.reference as HTMLElement;
-    const popover = elements.floating as HTMLElement;
-
-    if (placement.startsWith('left') || placement.startsWith('right')) {
-      popover.style.setProperty('height', `${target.offsetHeight}px`);
-    } else if (placement.startsWith('top') || placement.startsWith('bottom')) {
-      popover.style.setProperty('width', `${target.offsetWidth}px`);
-    }
-
-    return {};
-  },
-};
-
-const attrs: Middleware = {
-  name: 'wowerlay:attr',
-  fn({ placement, elements, x, y, rects }) {
-    elements.floating.setAttribute('data-popover-placement', placement);
-    elements.floating.setAttribute('data-popover-x', x.toString());
-    elements.floating.setAttribute('data-popover-y', y.toString());
-    elements.floating.setAttribute('data-popover-rect', JSON.stringify(rects.floating));
-
-    return {};
-  },
-};
-
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-const NOOP = () => {};
+import { NOOP, isElement } from '../utils';
+import { attrs, syncSize } from './Wowerlay.middlewares';
 
 export const Wowerlay = defineComponent({
   name: 'Wowerlay',
@@ -94,11 +59,11 @@ export const Wowerlay = defineComponent({
           };
         },
         middleware: computed<Middleware[]>(() => {
-          const middlewares = [attrs] as Middleware[];
+          const middlewares = [attrs()] as Middleware[];
 
           if (typeof props.gap === 'number' && props.gap !== 0) middlewares.push(offset(props.gap));
           if (!props.noFlip) middlewares.push(flip());
-          if (props.syncSize) middlewares.push(syncSize);
+          if (props.syncSize) middlewares.push(syncSize());
           if (!props.canLeaveViewport) middlewares.push(shift({ crossAxis: true }));
 
           return middlewares;
@@ -132,12 +97,12 @@ export const Wowerlay = defineComponent({
         // This check is for TypeScript, TypeScript doesn't think e.target is HTMLElement
         !(e.target instanceof HTMLElement) ||
         // This simulates `stopPropagation` but do not block event bubbling
-        e.target.closest(STOP_ATTR_QUERY)
+        e.target.closest('[data-wowerlay-scope]')
       ) {
         return;
       }
 
-      const scopeEl = e.target.closest(SCOPE_ATTR_QUERY);
+      const scopeEl = e.target.closest('data-wowerlay-scope');
 
       // If scope element exists but it isn't our Wowerlay's scope we just return.
       if (scopeEl && !scopeEl.contains(props.target)) {
@@ -200,7 +165,7 @@ export const Wowerlay = defineComponent({
   render() {
     const popover = this.popoverVisible ? (
       <div
-        class={cWowerlay}
+        class="wowerlay"
         data-wowerlay-scope
         ref="popoverEl"
         style={this.floatingStyles}
@@ -213,8 +178,8 @@ export const Wowerlay = defineComponent({
     let wowerlayContentToRender: JSX.Element | null = (
       <Transition
         appear
-        enterActiveClass={cWowerlayAnimEnter}
-        leaveActiveClass={cWowerlayAnimLeave}
+        enterActiveClass="wowerlay-anim-enter"
+        leaveActiveClass="wowerlay-anim-leave"
         onAfterLeave={this.handleContentTransitionEnd}
       >
         {popover}
@@ -244,7 +209,7 @@ export const Wowerlay = defineComponent({
             return (
               <div
                 data-wowerlay-background
-                class={cWowerlayBackground}
+                class="wowerlay-background"
                 role="dialog"
                 ref="backgroundEl"
                 {...backgroundAttrsClone}
