@@ -5,7 +5,6 @@ import {
   defineComponent,
   onBeforeUnmount,
   onMounted,
-  onScopeDispose,
   ref,
   shallowRef,
   toRef,
@@ -29,9 +28,6 @@ export const Wowerlay = defineComponent({
     const popoverEl = shallowRef<HTMLDivElement | null>(null);
     const backgroundEl = shallowRef<HTMLElement | null>();
 
-    let autoUpdateCleanup = NOOP;
-    onScopeDispose(() => autoUpdateCleanup());
-
     const { floatingStyles } = useFloating(
       toRef(props, 'target'), //
       popoverEl,
@@ -47,16 +43,11 @@ export const Wowerlay = defineComponent({
             return NOOP;
           }
 
-          autoUpdateCleanup = autoUpdate(target, popover, update, {
+          return autoUpdate(target, popover, update, {
             ancestorResize: true,
             ancestorScroll: true,
             elementResize: true,
           });
-
-          return () => {
-            autoUpdateCleanup();
-            autoUpdateCleanup = NOOP;
-          };
         },
         middleware: computed<Middleware[]>(() => {
           const middlewares = [attrs()] as Middleware[];
