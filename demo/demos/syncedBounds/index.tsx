@@ -28,14 +28,10 @@ const Component = defineComponent({
   setup() {
     const { targetEl } = useDemoState();
 
-    const syncWidth = ref(true);
-    const syncHeight = ref(false);
     const isBig = ref(false);
 
     return {
       targetEl,
-      syncWidth,
-      syncHeight,
       isBig,
     };
   },
@@ -76,7 +72,7 @@ const Component = defineComponent({
             noFlip
             position="bottom"
             target={this.targetEl}
-            syncWidth
+            syncSize
           >
             This Wowerlay is synced to width of target element.
           </Wowerlay>
@@ -87,7 +83,7 @@ const Component = defineComponent({
             noFlip
             position="right"
             target={this.targetEl}
-            syncHeight
+            syncSize
           >
             This Wowerlay is synced to height of target element.
           </Wowerlay>
@@ -109,8 +105,7 @@ export default defineDemo({
         <Wowerlay
           v-model:visible="visible"
           :target="target"
-          syncWidth
-          syncHeight
+          syncSize
         >
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rerum quam, qui asperiores,
             sed ipsa fuga, repellendus officiis labore odit temporibus quisquam necessitatibus? Illo

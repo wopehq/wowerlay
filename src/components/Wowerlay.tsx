@@ -1,4 +1,3 @@
-import type { PropType } from 'vue';
 import {
   Teleport,
   Transition,
@@ -8,63 +7,113 @@ import {
   onMounted,
   ref,
   shallowRef,
+  toRef,
   watch,
 } from 'vue';
-import { cWowerlayAnimEnter, cWowerlayAnimLeave, cWowerlayBackground } from '../consts';
+import { useFloating, flip, shift, offset, autoUpdate, Middleware } from '@floating-ui/vue';
+import { cWowerlayAnimEnter, cWowerlayAnimLeave, cWowerlayBackground, cWowerlay } from '../consts';
 
-import type { WowerlayTemplateRef } from './WowerlayRenderer';
-import type { WowerlayBaseProps } from './WowerlayReusables';
-import { WowerlayRenderer } from './WowerlayRenderer';
+import { Props } from './Wowerlay.constants';
 import { isElement } from '../utils';
-import { wowerlayBaseProps } from './WowerlayReusables';
-
-export type { WowerlayTemplateRef } from './WowerlayRenderer';
 
 const ATTR_PREFIX = 'data-wowerlay-';
 const SCOPE_ATTR_QUERY = `[${ATTR_PREFIX}scope]`;
 const STOP_ATTR_QUERY = `[${ATTR_PREFIX}stop]`;
 
-export interface WowerlayProps extends WowerlayBaseProps {
-  visible: boolean;
-}
+const syncSize: Middleware = {
+  name: 'wowerlay:syncBounds',
+  fn({ placement, elements }) {
+    const target = elements.reference as HTMLElement;
+    const popover = elements.floating as HTMLElement;
+
+    if (placement.startsWith('left') || placement.startsWith('right')) {
+      popover.style.setProperty('height', `${target.offsetHeight}px`);
+    } else if (placement.startsWith('top') || placement.startsWith('bottom')) {
+      popover.style.setProperty('width', `${target.offsetWidth}px`);
+    }
+
+    return {};
+  },
+};
+
+const attrs: Middleware = {
+  name: 'wowerlay:attr',
+  fn({ placement, elements, x, y, rects }) {
+    elements.floating.setAttribute('data-popover-placement', placement);
+    elements.floating.setAttribute('data-popover-x', x.toString());
+    elements.floating.setAttribute('data-popover-y', y.toString());
+    elements.floating.setAttribute('data-popover-rect', JSON.stringify(rects.floating));
+
+    return {};
+  },
+};
+
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const NOOP = () => {};
 
 export const Wowerlay = defineComponent({
   name: 'Wowerlay',
   inheritAttrs: false,
-  props: {
-    ...wowerlayBaseProps,
-    visible: {
-      required: true,
-      type: Boolean as PropType<WowerlayProps['visible']>,
-    },
-  },
+  props: Props,
   emits: {
     'update:visible': null! as (value: boolean) => void,
     'update:el': null! as (value: HTMLElement | null) => void,
   },
-  setup(props, { emit, expose }) {
-    const wowerlayInstance = shallowRef<WowerlayTemplateRef>();
+  setup(props, { emit }) {
+    const popoverEl = shallowRef<HTMLDivElement | null>(null);
+    const backgroundEl = shallowRef<HTMLElement | null>();
 
-    expose({
-      update() {
-        wowerlayInstance.value?.update();
+    const { floatingStyles } = useFloating(
+      toRef(props, 'target'), //
+      popoverEl,
+      {
+        placement: toRef(props, 'position'),
+        open: computed(() => props.visible),
+        strategy: 'fixed',
+        // If we use transform: true, animation that uses transform property will be broken.
+        transform: false,
+        whileElementsMounted(target, popover, update) {
+          if (props.fixed) {
+            update();
+            return NOOP;
+          }
+
+          return autoUpdate(target, popover, update, {
+            ancestorResize: true,
+            ancestorScroll: true,
+            elementResize: true,
+          });
+        },
+        middleware: computed<Middleware[]>(() => {
+          const middlewares = [attrs] as Middleware[];
+
+          if (typeof props.gap === 'number' && props.gap !== 0) middlewares.push(offset(props.gap));
+          if (!props.noFlip) middlewares.push(flip());
+          if (props.syncSize) middlewares.push(syncSize);
+          if (!props.canLeaveViewport) middlewares.push(shift({ crossAxis: true }));
+
+          return middlewares;
+        }),
       },
-    } as WowerlayTemplateRef);
+    );
 
-    const tooltipIsClosable = ref(false);
-    const tooltipIsVisible = computed(() => isElement(props.target) && props.visible);
+    watch(popoverEl, (el) => {
+      emit('update:el', el);
+    });
+
+    const popoverClosable = ref(false);
+    const popoverVisible = computed(() => isElement(props.target) && props.visible);
 
     const close = () => {
       if (!props.visible) return;
 
-      if (tooltipIsClosable.value) {
+      if (popoverClosable.value) {
         emit('update:visible', false);
       }
     };
 
     onBeforeUnmount(close);
 
-    const backgroundEl = shallowRef<HTMLElement>();
     const handleWindowClick = (e: MouseEvent) => {
       // We should not call this function if Wowerlay is not visible
       // or has no target element etc.
@@ -110,12 +159,12 @@ export const Wowerlay = defineComponent({
       (state) => {
         if (state) {
           setTimeout(() => {
-            tooltipIsClosable.value = true;
+            popoverClosable.value = true;
           }, 0);
 
           backgroundVisible.value = true;
         } else {
-          tooltipIsClosable.value = false;
+          popoverClosable.value = false;
           if (props.transition === false) {
             setTimeout(() => {
               backgroundVisible.value = false;
@@ -132,24 +181,24 @@ export const Wowerlay = defineComponent({
 
     return {
       handleContentTransitionEnd,
-      tooltipIsClosable,
-      tooltipIsVisible,
+      floatingStyles,
+      popoverVisible,
       backgroundEl,
-      wowerlayInstance,
+      popoverEl,
       backgroundVisible,
     };
   },
   render() {
-    const popover = this.tooltipIsVisible ? (
-      <WowerlayRenderer
-        onUpdate:el={(el) => this.$emit('update:el', el)}
+    const popover = this.popoverVisible ? (
+      <div
+        class={cWowerlay}
         data-wowerlay-scope
-        ref="wowerlayInstance"
-        {...this.$props}
+        ref="popoverEl"
+        style={this.floatingStyles}
         {...this.$attrs}
       >
         {this.$slots.default?.()}
-      </WowerlayRenderer>
+      </div>
     ) : null;
 
     let wowerlayContentToRender: JSX.Element | null = (

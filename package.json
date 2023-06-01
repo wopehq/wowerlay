@@ -57,5 +57,8 @@
   },
   "peerDependencies": {
     "vue": "^3.2.0"
+  },
+  "dependencies": {
+    "@floating-ui/vue": "^1.0.1"
   }
 }
