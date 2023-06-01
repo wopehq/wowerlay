@@ -88,12 +88,12 @@ export const Wowerlay = defineComponent({
         // This check is for TypeScript, TypeScript doesn't think e.target is HTMLElement
         !(e.target instanceof HTMLElement) ||
         // This simulates `stopPropagation` but do not block event bubbling
-        e.target.closest('[data-wowerlay-scope]')
+        e.target.closest('[data-wowerlay-stop]')
       ) {
         return;
       }
 
-      const scopeEl = e.target.closest('data-wowerlay-scope');
+      const scopeEl = e.target.closest('[data-wowerlay-scope]');
 
       // If scope element exists but it isn't our Wowerlay's scope we just return.
       if (scopeEl && !scopeEl.contains(props.target)) {
