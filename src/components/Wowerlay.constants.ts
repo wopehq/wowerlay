@@ -1,6 +1,12 @@
 import { type PropType, type Ref, type HTMLAttributes } from 'vue';
 import { type AlignedPlacement, type Side } from '@floating-ui/vue';
 
+export type WowerlayTransitionFn = (
+  type: 'enter' | 'leave',
+  el: HTMLElement,
+  done: () => void,
+) => void;
+
 export interface WowerlayProps {
   visible: boolean;
   position: AlignedPlacement | Side;
@@ -11,7 +17,7 @@ export interface WowerlayProps {
   target: HTMLElement;
   tag: string;
   noBackground: boolean;
-  transition: boolean | string;
+  transition: string | WowerlayTransitionFn;
   syncSize: boolean;
   backgroundAttrs: HTMLAttributes & {
     ref?: ((element: HTMLDivElement) => void) | Ref<HTMLElement | null | undefined>;
@@ -65,7 +71,7 @@ export const Props = {
   },
   transition: {
     default: true,
-    type: [Boolean, String] as PropType<WowerlayProps['transition']>,
+    type: [Boolean, String, Function] as PropType<WowerlayProps['transition']>,
   },
   visible: {
     type: Boolean,

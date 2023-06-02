@@ -5,7 +5,7 @@ import { Wowerlay } from '../../../src/lib';
 import useDemoState from '../../helpers/useDemoState';
 
 const Component = defineComponent({
-  name: 'NoTransition',
+  name: 'CSS Transition',
   setup: () => useDemoState(),
   render() {
     return (
@@ -15,7 +15,7 @@ const Component = defineComponent({
           onUpdate:visible={this.handleVisibleChange}
           visible={this.isOpen}
           target={this.targetEl}
-          transition={false}
+          transition="myTransition"
         >
           <div style="max-width: 300px">
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rerum quam, qui asperiores,
@@ -31,7 +31,7 @@ const Component = defineComponent({
 });
 
 export default defineDemo({
-  name: 'No Transition',
+  name: 'CSS Transition',
   component: Component,
   /* prettier-ignore */
   template: html`
@@ -39,9 +39,10 @@ export default defineDemo({
       <button @click="visible = !visible" ref="target">
         Click To Trigger Popover
 
+        <!-- See: https://vuejs.org/guide/built-ins/transition.html#named-transitions -->
         <Wowerlay
+          transition="myTransitionName"
           style="max-width: 300px"
-          :transition="false"
           v-model:visible="visible"
           :target="target"
         >

@@ -80,27 +80,28 @@ export const Wowerlay = defineComponent({
     onBeforeUnmount(close);
 
     const handleWindowClick = (e: MouseEvent) => {
-      // We should not call this function if Wowerlay is not visible
-      // or has no target element etc.
       if (
         !props.visible ||
         !(props.target instanceof HTMLElement) ||
-        // This check is for TypeScript, TypeScript doesn't think e.target is HTMLElement
         !(e.target instanceof HTMLElement) ||
-        // This simulates `stopPropagation` but do not block event bubbling
+        // Some people (like us in Wope) don't want to use `event.stopPropagation()` to prevent Wowerlay closing
+        // Because it blocks following analytics or other events that rely on click.
+        // If clicked element or it's ancestors has this attribute, Wowerlay doesn't close.
         e.target.closest('[data-wowerlay-stop]')
       ) {
         return;
       }
 
+      // If clicked element or any ancestors has scope attribute we only
+      // close popovers attached to elements in the target scope.
+      // @See Demo/Nested and click the child Wowerlay body, it won't close parent Wowerlay
+      // because each Wowerlay popover is a new scope.
       const scopeEl = e.target.closest('[data-wowerlay-scope]');
-
-      // If scope element exists but it isn't our Wowerlay's scope we just return.
       if (scopeEl && !scopeEl.contains(props.target)) {
         return;
       }
 
-      // If a Wowerlay background is clicked but it isn't our background, we don't close.
+      // If a Wowerlay background is clicked but it isn't our background, prevents close.
       // This enables nested Wowerlays to work properly
       // @see Demo/Nested
       if (e.target.matches('[data-wowerlay-background]') && e.target !== backgroundEl.value) {
@@ -117,12 +118,30 @@ export const Wowerlay = defineComponent({
       window.removeEventListener('click', handleWindowClick);
     });
 
+    /**
+     * This variable is for watching Popover's animation state.
+     * When we unmount popover if user passed a transition we need to wait
+     * for transition to end to hide Popover.
+     *
+     * When popover animation ends this variable will hide background.
+     */
     const backgroundVisible = ref(props.visible);
+
+    /**
+     * Hides background element (so popover) when Popover animation ends.
+     */
+    const handleContentTransitionEnd = () => {
+      backgroundVisible.value = false;
+    };
 
     watch(
       () => props.visible,
       (state) => {
         if (state) {
+          // We need to prevent closing popover in the same event loop because
+          // If users clicks a button and changes visible to true
+          // Wowerlay will be opened but same click event may be triggered on window
+          // due to bubbling so it will be cached by our Window:click listener.
           setTimeout(() => {
             popoverClosable.value = true;
           }, 0);
@@ -130,19 +149,17 @@ export const Wowerlay = defineComponent({
           backgroundVisible.value = true;
         } else {
           popoverClosable.value = false;
-          if (props.transition === false) {
-            setTimeout(() => {
-              backgroundVisible.value = false;
-            });
-          }
         }
       },
     );
 
-    const handleContentTransitionEnd = () =>
-      setTimeout(() => {
-        backgroundVisible.value = false;
+    const handleTransition = (type: 'enter' | 'leave', el: Element, done: () => void) => {
+      // We need to wait for FloatingUI to calculate Popover position
+      // If we run this function immediately, it will run before FloatingUI calculations
+      requestAnimationFrame(() => {
+        if (typeof props.transition === 'function') props.transition(type, el as HTMLElement, done);
       });
+    };
 
     return {
       handleContentTransitionEnd,
@@ -151,6 +168,7 @@ export const Wowerlay = defineComponent({
       backgroundEl,
       popoverEl,
       backgroundVisible,
+      handleTransition,
     };
   },
   render() {
@@ -166,20 +184,29 @@ export const Wowerlay = defineComponent({
       </div>
     ) : null;
 
-    let wowerlayContentToRender: JSX.Element | null = (
-      <Transition
-        appear
-        enterActiveClass="wowerlay-anim-enter"
-        leaveActiveClass="wowerlay-anim-leave"
-        onAfterLeave={this.handleContentTransitionEnd}
-      >
-        {popover}
-      </Transition>
+    let wowerlayContentToRender = (
+      // onAfterLeave is called even if there is not animation
+      <Transition onAfterLeave={this.handleContentTransitionEnd}>{popover}</Transition>
     );
 
-    // We need it to be exactly `false` otherwise we use default transition.
-    if (this.transition === false) {
-      wowerlayContentToRender = popover;
+    if (typeof this.transition === 'function') {
+      const handleEnter = (el: Element, done: () => void) =>
+        this.handleTransition('enter', el, done);
+
+      const handleLeave = (el: Element, done: () => void) =>
+        this.handleTransition('leave', el, done);
+
+      wowerlayContentToRender = (
+        <Transition
+          appear
+          onAppear={handleEnter}
+          onEnter={handleEnter}
+          onLeave={handleLeave}
+          onAfterLeave={this.handleContentTransitionEnd}
+        >
+          {popover}
+        </Transition>
+      );
     } else if (typeof this.transition === 'string') {
       wowerlayContentToRender = (
         <Transition appear onAfterLeave={this.handleContentTransitionEnd} name={this.transition}>
