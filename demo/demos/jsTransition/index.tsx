@@ -11,16 +11,15 @@ const Component = defineComponent({
     const handleTransition: WowerlayTransitionFn = (type, element, done) => {
       const placement = element.getAttribute('data-popover-placement')!.split('-').at(0) as Side;
 
-      const [from, to] = [
-        {
-          transform: `translateY(${placement === 'top' ? '10px' : '-10px'})`,
-          opacity: 0,
-        },
-        {
-          transform: `translateY(0px)`,
-          opacity: 1,
-        },
-      ];
+      const from = {
+        transform: `translateY(${placement === 'top' ? '10px' : '-10px'})`,
+        opacity: 0,
+      };
+
+      const to = {
+        transform: `translateY(0px)`,
+        opacity: 1,
+      };
 
       const animation = element.animate(type === 'enter' ? [from, to] : [to, from], {
         duration: 200,
