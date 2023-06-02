@@ -172,8 +172,10 @@ export const Wowerlay = defineComponent({
     };
   },
   render() {
+    const Tag = this.tag as /* for typechecking */ 'div';
+
     const popover = this.popoverVisible ? (
-      <div
+      <Tag
         class="wowerlay"
         data-wowerlay-scope
         ref="popoverEl"
@@ -181,7 +183,7 @@ export const Wowerlay = defineComponent({
         {...this.$attrs}
       >
         {this.$slots.default?.()}
-      </div>
+      </Tag>
     ) : null;
 
     let wowerlayContentToRender = (
