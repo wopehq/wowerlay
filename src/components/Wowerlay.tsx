@@ -10,7 +10,7 @@ import {
   toRef,
   watch,
 } from 'vue';
-import { useFloating, flip, shift, offset, autoUpdate, Middleware } from '@floating-ui/vue';
+import { useFloating, flip, shift, offset, autoUpdate, Middleware, Side } from '@floating-ui/vue';
 
 import { Props } from './Wowerlay.constants';
 import { NOOP, isElement } from '../utils';
@@ -32,7 +32,12 @@ export const Wowerlay = defineComponent({
       toRef(props, 'target'), //
       popoverEl,
       {
-        placement: toRef(props, 'position'),
+        placement: computed(() => {
+          // If syncSize is true, we need to use only side of the position
+          if (props.syncSize) return props.position.split('-')[0] as Side;
+
+          return props.position;
+        }),
         open: computed(() => props.visible),
         strategy: 'fixed',
         // If we use transform: true, animation that uses transform property will be broken.
