@@ -9,13 +9,13 @@
   top: #{$positionY};
   overflow: auto;
 
-  // max-width: calc(100vw - #{$gap});
-  // max-width: calc(#{-webkit-fill-available} - #{$gap});
-  // max-width: calc(#{fill-available} - #{$gap});
+  max-width: calc(100vw - #{$gap});
+  max-width: calc(#{-webkit-fill-available} - #{$gap});
+  max-width: calc(#{fill-available} - #{$gap});
 
-  // max-height: calc(100vh - #{$gap});
-  // max-height: calc(#{-webkit-fill-available} - #{$gap});
-  // max-height: calc(#{fill-available} - #{$gap});
+  max-height: calc(100vh - #{$gap});
+  max-height: calc(#{-webkit-fill-available} - #{$gap});
+  max-height: calc(#{fill-available} - #{$gap});
 
   // If `noBackground` is given this will work as global one.
   z-index: var(--wowerlay-z, 500);
