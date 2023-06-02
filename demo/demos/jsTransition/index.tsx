@@ -9,7 +9,7 @@ const Component = defineComponent({
   name: 'JsTransition',
   setup: () => {
     const handleTransition: WowerlayTransitionFn = (type, element, done) => {
-      const placement = element.getAttribute('data-popover-placement')!.split('-').at(0) as Side;
+      const placement = element.getAttribute('data-popover-placement')!.split('-')[0] as Side;
 
       const from = {
         transform: `translateY(${placement === 'top' ? '10px' : '-10px'})`,
