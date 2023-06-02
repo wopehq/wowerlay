@@ -28,44 +28,40 @@ export const Wowerlay = defineComponent({
     const popoverEl = shallowRef<HTMLDivElement | null>(null);
     const backgroundEl = shallowRef<HTMLElement | null>();
 
-    const { floatingStyles } = useFloating(
-      toRef(props, 'target'), //
-      popoverEl,
-      {
-        placement: computed(() => {
-          // If syncSize is true, we need to use only side of the position
-          if (props.syncSize) return props.position.split('-')[0] as Side;
+    const { floatingStyles } = useFloating(toRef(props, 'target'), popoverEl, {
+      placement: computed(() => {
+        // If syncSize is true, we need to use only side of the position
+        if (props.syncSize) return props.position.split('-')[0] as Side;
 
-          return props.position;
-        }),
-        open: computed(() => props.visible),
-        strategy: 'fixed',
-        // If we use transform: true, animation that uses transform property will be broken.
-        transform: false,
-        whileElementsMounted(target, popover, update) {
-          if (props.fixed) {
-            update();
-            return NOOP;
-          }
+        return props.position;
+      }),
+      open: computed(() => props.visible),
+      strategy: 'fixed',
+      // If we use transform: true, animation that uses transform property will be broken.
+      transform: false,
+      whileElementsMounted(target, popover, update) {
+        if (props.fixed) {
+          update();
+          return NOOP;
+        }
 
-          return autoUpdate(target, popover, update, {
-            ancestorResize: true,
-            ancestorScroll: true,
-            elementResize: true,
-          });
-        },
-        middleware: computed<Middleware[]>(() => {
-          const middlewares = [attrs()] as Middleware[];
-
-          if (typeof props.gap === 'number' && props.gap !== 0) middlewares.push(offset(props.gap));
-          if (!props.noFlip) middlewares.push(flip());
-          if (props.syncSize) middlewares.push(syncSize());
-          if (!props.canLeaveViewport) middlewares.push(shift({ crossAxis: true }));
-
-          return middlewares;
-        }),
+        return autoUpdate(target, popover, update, {
+          ancestorResize: true,
+          ancestorScroll: true,
+          elementResize: true,
+        });
       },
-    );
+      middleware: computed<Middleware[]>(() => {
+        const middlewares = [attrs()] as Middleware[];
+
+        if (typeof props.gap === 'number' && props.gap !== 0) middlewares.push(offset(props.gap));
+        if (!props.noFlip) middlewares.push(flip());
+        if (props.syncSize) middlewares.push(syncSize());
+        if (!props.canLeaveViewport) middlewares.push(shift({ crossAxis: true }));
+
+        return middlewares;
+      }),
+    });
 
     watch(popoverEl, (el) => {
       emit('update:el', el);
@@ -89,8 +85,7 @@ export const Wowerlay = defineComponent({
         !props.visible ||
         !(props.target instanceof HTMLElement) ||
         !(e.target instanceof HTMLElement) ||
-        // Some people (like us in Wope) don't want to use `event.stopPropagation()` to prevent Wowerlay closing
-        // Because it blocks following analytics or other events that rely on click.
+        // If we use "e.stopPropagation" to prevent closing, Analytics or other events that rely on click will be blocked.
         // If clicked element or it's ancestors has this attribute, Wowerlay doesn't close.
         e.target.closest('[data-wowerlay-stop]')
       ) {
@@ -123,17 +118,11 @@ export const Wowerlay = defineComponent({
       window.removeEventListener('click', handleWindowClick);
     });
 
-    /**
-     * This variable is for watching Popover's animation state.
-     * When we unmount popover if user passed a transition we need to wait
-     * for transition to end to hide Popover.
-     *
-     * When popover animation ends this variable will hide background.
-     */
     const backgroundVisible = ref(props.visible);
 
-    /**
-     * Hides background element (so popover) when Popover animation ends.
+    /** .
+     * If popover has a background we rely on popover's transition state to
+     * hide it with the background or not, otherwise leave transition will not be seen.
      */
     const handleContentTransitionEnd = () => {
       backgroundVisible.value = false;
@@ -143,10 +132,8 @@ export const Wowerlay = defineComponent({
       () => props.visible,
       (state) => {
         if (state) {
-          // We need to prevent closing popover in the same event loop because
-          // If users clicks a button and changes visible to true
-          // Wowerlay will be opened but same click event may be triggered on window
-          // due to bubbling so it will be cached by our Window:click listener.
+          // Use setTimeout to prevent immediate popover closure caused by the same click event due to event bubbling.
+          // We listen to the window, so this ensures a single click doesn't simultaneously open and close the popover.
           setTimeout(() => {
             popoverClosable.value = true;
           }, 0);
@@ -159,8 +146,7 @@ export const Wowerlay = defineComponent({
     );
 
     const handleTransition = (type: 'enter' | 'leave', el: Element, done: () => void) => {
-      // We need to wait for FloatingUI to calculate Popover position
-      // If we run this function immediately, it will run before FloatingUI calculations
+      // We need to wait for FloatingUI to update the position before we can transition.
       requestAnimationFrame(() => {
         if (typeof props.transition === 'function') props.transition(type, el as HTMLElement, done);
       });

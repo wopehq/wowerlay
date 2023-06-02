@@ -20,9 +20,8 @@ export interface WowerlayProps {
   transition: string | WowerlayTransitionFn;
   syncSize: boolean;
   backgroundAttrs: HTMLAttributes & {
-    ref?: ((element: HTMLDivElement) => void) | Ref<HTMLElement | null | undefined>;
+    ref?: ((element: HTMLDivElement | null) => void) | Ref<HTMLElement | null | undefined>;
     key?: undefined | null;
-
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [key: string]: any;
   };
@@ -33,7 +32,6 @@ export const Props = {
     type: Object as PropType<WowerlayProps['target'] | null>,
   },
   backgroundAttrs: {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     type: Object as PropType<WowerlayProps['backgroundAttrs']>,
     default: () => ({}),
   },
