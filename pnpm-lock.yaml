@@ -55,6 +55,9 @@ devDependencies:
   highlight.js:
     specifier: ^11.3.1
     version: 11.3.1
+  pnpm:
+    specifier: ^8.6.0
+    version: 8.6.0
   prettier:
     specifier: 2.5.1
     version: 2.5.1
@@ -2618,6 +2621,12 @@ packages:
   /picomatch@2.3.0:
     resolution: {integrity: sha512-lY1Q/PiJGC2zOv/z391WOTD+Z02bCgsFfvxoXXf6h7kv9o+WmsmzYqrAwY63sNgOxE4xEdq0WyUnXfKeBrSvYw==}
     engines: {node: '>=8.6'}
+    dev: true
+
+  /pnpm@8.6.0:
+    resolution: {integrity: sha512-uMaWGXlvG+m5NIJaR4JEEenChbg+1AP4zVpqs4PEcZg4uH+lXMTd/X/lirKZA+TC0w0d+++y3btINcwyKsuwAA==}
+    engines: {node: '>=16.14'}
+    hasBin: true
     dev: true
 
   /postcss@8.3.11:
