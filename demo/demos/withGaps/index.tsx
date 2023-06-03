@@ -9,8 +9,7 @@ const Component = defineComponent({
   setup() {
     const { handleVisibleChange, isOpen, targetEl, toggleVisible } = useDemoState();
 
-    const verticalGap = ref(0);
-    const horizontalGap = ref(0);
+    const gap = ref(0);
 
     const positionCount = ref(0);
     const positions: WowerlayProps['position'][] = [
@@ -37,8 +36,7 @@ const Component = defineComponent({
       toggleVisible,
       position,
       positionCount,
-      verticalGap,
-      horizontalGap,
+      gap,
     };
   },
   render() {
@@ -54,11 +52,7 @@ const Component = defineComponent({
       <>
         <div class="object">
           <div style={inputWrapperStyle}>
-            verticalGap: <input type="number" v-model={[this.verticalGap, ['number']]} />
-          </div>
-          <br />
-          <div style={inputWrapperStyle}>
-            horizontalGap: <input type="number" v-model={[this.horizontalGap, ['number']]} />
+            gap: <input type="number" v-model={[this.gap, ['number']]} />
           </div>
         </div>
 
@@ -68,8 +62,7 @@ const Component = defineComponent({
         <div class="object" ref="targetEl">
           Click to Show Popover
           <Wowerlay
-            verticalGap={this.verticalGap}
-            horizontalGap={this.horizontalGap}
+            gap={this.gap}
             position={this.position}
             visible={this.isOpen}
             target={this.targetEl}
@@ -107,8 +100,7 @@ export default defineDemo({
 
         <Wowerlay
           style="max-width: 300px" 
-          :horizontalGap="5"
-          :verticalGap="10"
+          :gap="10"
           v-model:visible="visible"
           :target="target"
         >

@@ -4,7 +4,7 @@ import dedent from 'dedent';
 export interface IDemo {
   name: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  component: DefineComponent<any, any, any, any, any, any, any, any, any>;
+  component: DefineComponent<any, any, any>;
   template?: string;
   script?: string;
 }

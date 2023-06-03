@@ -1,3 +1,4 @@
 import './styles/Wowerlay.scss';
 
-export * from './components/Wowerlay';
+export { Wowerlay } from './components/Wowerlay';
+export { type WowerlayProps, type WowerlayTransitionFn } from './components/Wowerlay.constants';

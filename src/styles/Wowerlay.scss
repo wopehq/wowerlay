@@ -10,12 +10,12 @@
   overflow: auto;
 
   max-width: calc(100vw - #{$gap});
-  max-width: calc(#{fill-available} - #{$gap});
   max-width: calc(#{-webkit-fill-available} - #{$gap});
+  max-width: calc(#{fill-available} - #{$gap});
 
   max-height: calc(100vh - #{$gap});
-  max-height: calc(#{fill-available} - #{$gap});
   max-height: calc(#{-webkit-fill-available} - #{$gap});
+  max-height: calc(#{fill-available} - #{$gap});
 
   // If `noBackground` is given this will work as global one.
   z-index: var(--wowerlay-z, 500);
@@ -27,28 +27,10 @@
   left: 0;
   top: 0;
   width: 100vw;
-  max-width: fill-available;
   max-width: -webkit-fill-available;
+  max-width: fill-available;
   height: 100vh;
-  max-height: fill-available;
   max-height: -webkit-fill-available;
+  max-height: fill-available;
   z-index: var(--wowerlay-z, 500);
-}
-
-.wowerlay-anim-enter {
-  animation: kOverlayAnimation 0.25s;
-}
-.wowerlay-anim-leave {
-  animation: kOverlayAnimation 0.25s reverse;
-}
-
-@keyframes kOverlayAnimation {
-  0% {
-    transform-origin: 0% 0%;
-    opacity: 0;
-  }
-  100% {
-    transform-origin: 0% 0%;
-    opacity: 1;
-  }
 }

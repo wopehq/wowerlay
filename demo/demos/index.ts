@@ -6,8 +6,8 @@ import canLeaveViewport from './canLeaveViewport';
 import withGaps from './withGaps';
 import changeableTarget from './changeableTarget';
 import nested from './nested';
-import noTransition from './noTransition';
-import customTransition from './customTransition';
+import withTransition from './withTransition';
+import jsTransition from './jsTransition';
 import noFlip from './noFlip';
 import syncedBounds from './syncedBounds';
 import stopAttribute from './stopAttribute';
@@ -24,8 +24,8 @@ export default [
   withGaps,
   changeableTarget,
   nested,
-  noTransition,
-  customTransition,
+  withTransition,
+  jsTransition,
   stopAttribute,
   scopeAttribute,
 ];

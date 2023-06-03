@@ -1,12 +1,36 @@
 import { defineComponent } from 'vue';
 
+import { Side } from '@floating-ui/vue';
 import { defineDemo, html } from '../../helpers';
-import { Wowerlay } from '../../../src/lib';
+import { Wowerlay, type WowerlayTransitionFn } from '../../../src/lib';
 import useDemoState from '../../helpers/useDemoState';
 
 const Component = defineComponent({
-  name: 'CustomTransition',
-  setup: () => useDemoState(),
+  name: 'JsTransition',
+  setup: () => {
+    const handleTransition: WowerlayTransitionFn = (type, element, done) => {
+      const placement = element.getAttribute('data-popover-placement')!.split('-')[0] as Side;
+
+      const from = {
+        transform: `translateY(${placement === 'top' ? '10px' : '-10px'})`,
+        opacity: 0,
+      };
+
+      const to = {
+        transform: `translateY(0px)`,
+        opacity: 1,
+      };
+
+      const animation = element.animate(type === 'enter' ? [from, to] : [to, from], {
+        duration: 200,
+        easing: 'ease',
+      });
+
+      animation.onfinish = done;
+    };
+
+    return { ...useDemoState(), handleTransition };
+  },
   render() {
     return (
       <button type="button" onClick={this.toggleVisible} ref="targetEl">
@@ -15,7 +39,8 @@ const Component = defineComponent({
           onUpdate:visible={this.handleVisibleChange}
           visible={this.isOpen}
           target={this.targetEl}
-          transition="skew"
+          transition={this.handleTransition}
+          position="bottom"
         >
           <div style="max-width: 300px">
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rerum quam, qui asperiores,
@@ -31,7 +56,7 @@ const Component = defineComponent({
 });
 
 export default defineDemo({
-  name: 'Custom Transition',
+  name: 'JS Transition',
   component: Component,
   /* prettier-ignore */
   template: html`
@@ -41,7 +66,8 @@ export default defineDemo({
 
         <Wowerlay 
           style="max-width: 300px"
-          transition="custom-transition-name"
+          :transition="handleTransition"
+          position="bottom"
           v-model:visible="visible"
           :target="target"
         >
@@ -57,6 +83,14 @@ export default defineDemo({
   script: html`
     <script setup>
       import { ref } from 'vue';
+
+      const handleTransition = (type, el, done) => {
+        if (type === 'enter') {
+          doAnimation(el).onFinish(done);
+        } else {
+          doAnimation(el).onFinish(done);
+        }
+      };
 
       const visible = ref(false);
       const target = ref();
