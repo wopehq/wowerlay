@@ -1,5 +1,5 @@
 import { type PropType, type Ref, type HTMLAttributes } from 'vue';
-import { type AlignedPlacement, type Side } from '@floating-ui/vue';
+import { Middleware, type AlignedPlacement, type Side, VirtualElement } from '@floating-ui/vue';
 
 export type WowerlayTransitionFn = (
   type: 'enter' | 'leave',
@@ -14,7 +14,7 @@ export interface WowerlayProps {
   canLeaveViewport: boolean;
   fixed: boolean;
   noFlip: boolean;
-  target: HTMLElement;
+  target: HTMLElement | VirtualElement;
   tag: string;
   noBackground: boolean;
   transition: string | WowerlayTransitionFn;
@@ -74,5 +74,9 @@ export const Props = {
   visible: {
     type: Boolean,
     required: true,
+  },
+  middlewares: {
+    type: Array as PropType<Middleware[]>,
+    default: () => [],
   },
 } as const;

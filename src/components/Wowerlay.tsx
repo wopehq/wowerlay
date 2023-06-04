@@ -10,11 +10,28 @@ import {
   toRef,
   watch,
 } from 'vue';
-import { useFloating, flip, shift, offset, autoUpdate, Middleware, Side } from '@floating-ui/vue';
+import {
+  useFloating,
+  flip,
+  shift,
+  offset,
+  autoUpdate,
+  Middleware,
+  Side,
+  VirtualElement,
+} from '@floating-ui/vue';
 
 import { Props } from './Wowerlay.constants';
-import { NOOP, isElement } from '../utils';
+import { NOOP, isElement, isObject } from '../utils';
 import { attrs, syncSize } from './Wowerlay.middlewares';
+
+function isValidTarget(target: unknown): target is HTMLElement | VirtualElement {
+  return (
+    isElement(target) ||
+    (isObject<Partial<VirtualElement>>(target) &&
+      typeof target.getBoundingClientRect === 'function')
+  );
+}
 
 export const Wowerlay = defineComponent({
   name: 'Wowerlay',
@@ -59,7 +76,7 @@ export const Wowerlay = defineComponent({
         if (props.syncSize) middlewares.push(syncSize());
         if (!props.canLeaveViewport) middlewares.push(shift({ crossAxis: true }));
 
-        return middlewares;
+        return middlewares.concat(props.middlewares || []);
       }),
     });
 
@@ -68,7 +85,7 @@ export const Wowerlay = defineComponent({
     });
 
     const popoverClosable = ref(false);
-    const popoverVisible = computed(() => isElement(props.target) && props.visible);
+    const popoverVisible = computed(() => isValidTarget(props.target) && props.visible);
 
     const close = () => {
       if (!props.visible) return;
@@ -83,7 +100,7 @@ export const Wowerlay = defineComponent({
     const handleWindowClick = (e: MouseEvent) => {
       if (
         !props.visible ||
-        !(props.target instanceof HTMLElement) ||
+        !isValidTarget(props.target) ||
         !(e.target instanceof HTMLElement) ||
         // If we use "e.stopPropagation" to prevent closing, Analytics or other events that rely on click will be blocked.
         // If clicked element or it's ancestors has this attribute, Wowerlay doesn't close.
@@ -97,7 +114,7 @@ export const Wowerlay = defineComponent({
       // @See Demo/Nested and click the child Wowerlay body, it won't close parent Wowerlay
       // because each Wowerlay popover is a new scope.
       const scopeEl = e.target.closest('[data-wowerlay-scope]');
-      if (scopeEl && !scopeEl.contains(props.target)) {
+      if (scopeEl && isElement(props.target) && !scopeEl.contains(props.target)) {
         return;
       }
 
