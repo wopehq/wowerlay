@@ -16,9 +16,9 @@ import {
   shift,
   offset,
   autoUpdate,
-  Middleware,
-  Side,
-  VirtualElement,
+  type Middleware,
+  type Side,
+  type VirtualElement,
 } from '@floating-ui/vue';
 
 import { Props } from './Wowerlay.constants';

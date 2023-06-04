@@ -1,5 +1,10 @@
 import { type PropType, type Ref, type HTMLAttributes } from 'vue';
-import { Middleware, type AlignedPlacement, type Side, VirtualElement } from '@floating-ui/vue';
+import {
+  type Middleware,
+  type AlignedPlacement,
+  type Side,
+  type VirtualElement,
+} from '@floating-ui/vue';
 
 export type WowerlayTransitionFn = (
   type: 'enter' | 'leave',
