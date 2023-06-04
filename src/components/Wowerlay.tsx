@@ -18,20 +18,11 @@ import {
   autoUpdate,
   type Middleware,
   type Side,
-  type VirtualElement,
 } from '@floating-ui/vue';
 
 import { Props } from './Wowerlay.constants';
-import { NOOP, isElement, isObject } from '../utils';
+import { NOOP, isElement, isValidTarget } from '../utils';
 import { attrs, syncSize } from './Wowerlay.middlewares';
-
-function isValidTarget(target: unknown): target is HTMLElement | VirtualElement {
-  return (
-    isElement(target) ||
-    (isObject<Partial<VirtualElement>>(target) &&
-      typeof target.getBoundingClientRect === 'function')
-  );
-}
 
 export const Wowerlay = defineComponent({
   name: 'Wowerlay',

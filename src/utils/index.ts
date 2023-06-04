@@ -1,3 +1,5 @@
+import { type VirtualElement } from '@floating-ui/vue';
+
 export const isBrowser = () => typeof window !== 'undefined' && typeof document !== 'undefined';
 
 export const isElement = (el: unknown): el is HTMLElement =>
@@ -10,4 +12,12 @@ export const typeOf = (value: unknown) => Object.prototype.toString.call(value).
 
 export function isObject<T>(value: unknown): value is T {
   return typeOf(value) === 'Object';
+}
+
+export function isValidTarget(target: unknown): target is HTMLElement | VirtualElement {
+  return (
+    isElement(target) ||
+    (isObject<Partial<VirtualElement>>(target) &&
+      typeof target.getBoundingClientRect === 'function')
+  );
 }
