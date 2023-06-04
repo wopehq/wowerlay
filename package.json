@@ -4,7 +4,7 @@
   "version": "0.8.0",
   "main": "./dist/wowerlay.umd.js",
   "module": "./dist/wowerlay.mjs",
-  "types": "./dist/types/lib.d.ts",
+  "types": "./dist/types/src/lib.d.ts",
   "repository": {
     "url": "git+https://github.com/teamseodo/wowerlay.git",
     "type": "git"
