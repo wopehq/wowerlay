@@ -5,6 +5,14 @@
   "main": "./dist/wowerlay.umd.js",
   "module": "./dist/wowerlay.mjs",
   "types": "./dist/types/src/lib.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/wowerlay.mjs",
+      "require": "./dist/wowerlay.umd.js",
+      "types": "./dist/types/src/lib.d.ts"
+    },
+    "./style.css": "./dist/style.css"
+  },
   "repository": {
     "url": "git+https://github.com/teamseodo/wowerlay.git",
     "type": "git"
