@@ -17,7 +17,11 @@
     "strictFunctionTypes": true,
     "alwaysStrict": false,
     "noImplicitReturns": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      // We needed to add this because TypeScript compiler not happy with pnpm symbolic links.
+      "@floating-ui/vue": ["./node_modules/@floating-ui/vue/index.d.ts"]
+    }
   },
   "include": [
     "src/**/*.ts",
