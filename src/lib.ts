@@ -13,4 +13,6 @@ export type {
   ReferenceElement,
   Coords,
   Axis,
+  VirtualElement,
+  Placement,
 } from '@floating-ui/vue';
