@@ -17,7 +17,7 @@
     "strictFunctionTypes": true,
     "alwaysStrict": false,
     "noImplicitReturns": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
   },
   "include": [
     "src/**/*.ts",

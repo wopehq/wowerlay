@@ -3,8 +3,16 @@
   "description": "Wowerlay is a popover library for Vue 3 applications.",
   "version": "0.8.0",
   "main": "./dist/wowerlay.umd.js",
-  "module": "./dist/wowerlay.es.js",
-  "types": "./dist/types/lib.d.ts",
+  "module": "./dist/wowerlay.mjs",
+  "types": "./dist/types/src/lib.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/wowerlay.mjs",
+      "require": "./dist/wowerlay.umd.js",
+      "types": "./dist/types/src/lib.d.ts"
+    },
+    "./style.css": "./dist/style.css"
+  },
   "repository": {
     "url": "git+https://github.com/teamseodo/wowerlay.git",
     "type": "git"
@@ -25,7 +33,7 @@
   ],
   "scripts": {
     "dev": "cross-env MODE=demo vite",
-    "build": "ts-node -T --project tsconfig-build.json scripts/build.ts",
+    "build": "cross-env MODE=production vite build",
     "build:demo": "cross-env MODE=demo vite build",
     "script:build": "tsc --project tsconfig-build.json && cross-env MODE=production vite build",
     "watch": "cross-env MODE=production vite build --watch"
@@ -33,8 +41,8 @@
   "devDependencies": {
     "@types/dedent": "^0.7.0",
     "@types/fs-extra": "^9.0.13",
-    "@types/node": "^16.10.3",
-    "@types/prompts": "^2.0.14",
+    "@types/node": "^16.18.34",
+    "@types/prompts": "^2.4.4",
     "@vitejs/plugin-vue-jsx": "^3.0.1",
     "bottom-sheet-vue3": "^1.0.2",
     "chalk": "^4.1.2",
@@ -43,21 +51,20 @@
     "eslint": "8.7.0",
     "eslint-config-airbnb-typescript-prettier": "5.0.0",
     "execa": "^5.1.1",
-    "fast-glob": "^3.2.7",
-    "fs-extra": "^10.0.0",
-    "highlight.js": "^11.3.1",
+    "fs-extra": "^10.1.0",
+    "highlight.js": "^11.8.0",
     "pnpm": "^8.6.0",
     "prettier": "2.5.1",
     "prompts": "^2.4.2",
-    "sass": "^1.42.1",
-    "ts-node": "^10.2.1",
+    "sass": "^1.62.1",
+    "ts-node": "^10.9.1",
     "typescript": "5.1.3",
-    "vite": "^4.0.5",
+    "vite": "^4.3.9",
     "vite-plugin-dts": "^0.8.3",
-    "vue": "^3.2.0"
+    "vue": "^3.3.4"
   },
   "peerDependencies": {
-    "vue": "^3.2.0"
+    "vue": "^3.3.0"
   },
   "dependencies": {
     "@floating-ui/vue": "^1.0.1"

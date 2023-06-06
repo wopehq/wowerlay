@@ -11,7 +11,7 @@ const productionConfig = defineConfig({
   plugins: [
     VueJSX(),
     DTS({
-      outputDir: 'dist',
+      outputDir: 'dist/types',
     }),
   ],
   build: {
