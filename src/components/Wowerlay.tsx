@@ -40,47 +40,43 @@ export const Wowerlay = defineComponent({
     const popoverEl = shallowRef<HTMLDivElement | null>(null);
     const backgroundEl = shallowRef<HTMLElement | null>();
 
-    const { floatingStyles, update: updatePopover } = useFloating(
-      toRef(props, 'target'),
-      popoverEl,
-      {
-        placement: computed(() => {
-          // If syncSize is true, we need to use only side of the position
-          if (props.syncSize) return props.position.split('-')[0] as Side;
+    const { floatingStyles, update } = useFloating(toRef(props, 'target'), popoverEl, {
+      placement: computed(() => {
+        // If syncSize is true, we need to use only side of the position
+        if (props.syncSize) return props.position.split('-')[0] as Side;
 
-          return props.position;
-        }),
-        open: computed(() => props.visible),
-        strategy: 'fixed',
-        // If we use transform: true, animation that uses transform property will be broken.
-        transform: false,
-        whileElementsMounted(target, popover, update) {
-          if (props.fixed) {
-            update();
-            return NOOP;
-          }
+        return props.position;
+      }),
+      open: computed(() => props.visible),
+      strategy: 'fixed',
+      // If we use transform: true, animation that uses transform property will be broken.
+      transform: false,
+      whileElementsMounted(target, popover, updatePopover) {
+        if (props.fixed) {
+          updatePopover();
+          return NOOP;
+        }
 
-          return autoUpdate(target, popover, update, {
-            ancestorResize: true,
-            ancestorScroll: true,
-            elementResize: true,
-          });
-        },
-        middleware: computed<Middleware[]>(() => {
-          const middlewares = [attrs()] as Middleware[];
-
-          if (typeof props.gap === 'number' && props.gap !== 0) middlewares.push(offset(props.gap));
-          if (!props.noFlip) middlewares.push(flip());
-          if (props.syncSize) middlewares.push(syncSize());
-          if (!props.canLeaveViewport) middlewares.push(shift({ crossAxis: true }));
-
-          return middlewares.concat(props.middlewares || []);
-        }),
+        return autoUpdate(target, popover, updatePopover, {
+          ancestorResize: true,
+          ancestorScroll: true,
+          elementResize: true,
+        });
       },
-    );
+      middleware: computed<Middleware[]>(() => {
+        const middlewares = [attrs()] as Middleware[];
+
+        if (typeof props.gap === 'number' && props.gap !== 0) middlewares.push(offset(props.gap));
+        if (!props.noFlip) middlewares.push(flip());
+        if (props.syncSize) middlewares.push(syncSize());
+        if (!props.canLeaveViewport) middlewares.push(shift({ crossAxis: true }));
+
+        return middlewares.concat(props.middlewares || []);
+      }),
+    });
 
     expose({
-      update: updatePopover,
+      update,
     } as WowerlayTemplateRef);
 
     watch(popoverEl, (el) => {
