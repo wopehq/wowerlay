@@ -1,6 +1,7 @@
 import './styles/Wowerlay.scss';
 
 export { Wowerlay } from './components/Wowerlay';
+export type { WowerlayTemplateRef } from './components/Wowerlay';
 export type { WowerlayProps, WowerlayTransitionFn } from './components/Wowerlay.constants';
 export type {
   Middleware,

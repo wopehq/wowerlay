@@ -1,8 +1,7 @@
-<p align="center">
-   <img src="md/wowerlay.png">
-</p>
+Wowerlay is a popover library for Vue 3 applications. It is based on [Floating UI]()
 
-Wowerlay is a popover library for Vue 3 applications. It isn't an alternative for [Popper](https://popper.js.org/).
+### About Wowerlay
+Wowerlay is created to work well with Vue. It wraps `floating-ui` features with it's own features like `scoping` (See Demo/Scope), `transitioning` (See Demo/Transitions) and mounting-unmounting vue components when popover visiblity changes.
 
 [![wowerlay](https://img.shields.io/npm/v/wowerlay)](https://npmjs.com/package/wowerlay)
 
@@ -46,15 +45,24 @@ createApp(App).mount('#app');
 
 ## Using Wowerlay.
 
-To make Wowerlay visible you must set `visibility` to `true` and give a target element, template refs can be given.
+Using wowerlay is simple, place it anywhere in your component (It will be teleported to body) and give `target` and `visible` props. Wowerlay will follow it's `target` when `visible` is true otherwise it will not be mounted.
 
-Anything goes to `<Wowerlay/>` will be unmounted when `visibility` is `false` and you can change tag of `<Wowerlay/>` wrapper with `tag` prop.
+Wowerlay is just a `div` element, any attribute that is not a Wowerlay prop will be passed as attribute to the element. Element tag can be changed by `tag` prop.
 
 ```html
 <template>
-  <button ref="targetElement" @click="toggle">Hi How Are you?</button>
+  <button
+    ref="targetElement"
+    @click="visible = !visible"
+  >
+    Show Popover?
+  </button>
 
-  <Wowerlay tag="section" :target="targetElement" v-model:visible="isVisible">
+  <Wowerlay
+    tag="section"
+    :target="targetElement"
+    v-model:visible="visible"
+  >
     <div>Hey how you doin?</div>
     <button>Good</button>
     <button>Bad</button>
@@ -65,51 +73,25 @@ Anything goes to `<Wowerlay/>` will be unmounted when `visibility` is `false` an
   import { Wowerlay } from 'wowerlay';
   import { ref } from 'vue';
 
-  /*
-   * if you are using typescript define template ref like this otherwise
-   * you will get a type error.
-   */
   const targetElement = ref<HTMLElement>();
-  /* For JS */
-  const targetElement = ref(null);
-
-  const isVisible = ref(false);
-  const toggle = () => (isVisible.value = !isVisible.value);
+  const visible = ref(false);
 </script>
 ```
 
-If you don't want to use `v-model:visible` syntax you can use the following one:
+If you don't want to prevent [`attribute inheritance`](https://v3.vuejs.org/guide/component-attrs.html#attribute-inheritance) you can use Wowerlay inside of an element, it'll be `teleported` to `body`.
 
 ```html
 <template>
-  <button ref="targetElement" @click="toggle">Hi How Are you?</button>
-
-  <Wowerlay
-    tag="span"
-    :target="targetElement"
-    :visible="isVisible"
-    @update:visible="(state) => isVisible = state"
-  >
-    <div>Hey how you doin?</div>
-    <button>Good</button>
-    <button>Bad</button>
-  </Wowerlay>
-</template>
-```
-
-If you don't want to prevent [`attribute inheritance`](https://v3.vuejs.org/guide/component-attrs.html#attribute-inheritance) you can use
-`<Wowerlay/>` component inside of an element, it will work as expected because it'll be `teleported` to `body` eventually.
-
-```html
-<template>
-  <button ref="targetElement" @click="toggle">
-    Hi How Are you?
+  <button
+    ref="targetElement"
+    @click="visible = !visible">
+    Show popover
 
     <Wowerlay
       tag="div"
       :target="targetElement"
-      :visible="isVisible"
-      @update:visible="(state) => isVisible = state"
+      :visible="visible"
+      @update:visible="(value) => visible = value"
     >
       <div>Hey how you doin?</div>
       <button>Good</button>
@@ -126,10 +108,16 @@ Styling wowerlay is simple. `<Wowerlay/>` is just a single wrapper element.
 **!! You shouldn't change necessary styles !!**
 
 ```html
-<Wowerlay tag="span" style="width: 300px; height: 300px; display: inline-block">
+<Wowerlay
+  tag="span"
+  style="width: 300px; height: 300px; display: inline-block"
+>
   Content Goes Here
 </Wowerlay>
 ```
+
+ ##### Z-index
+ - You can set `--wowerlay-z` CSS parameter for Wowerlay z-index.
 
 ## Updating Position Dynamically
 
@@ -158,7 +146,7 @@ interface WowerlayEmits {
   /**
    * Fires when wowerlay wants to change it's visibility state.
    */
-  'update:visible': (visibility: Boolean) => void;
+  'update:visible': (visible: Boolean) => void;
 
   /**
    * Fires when Wowerlay element changes, this can be used to do some DOM stuff to Wowerlay popover element.
@@ -191,9 +179,9 @@ interface WowerlayProps {
     | 'bottom-end';
 
   /**
-   * Target element for Wowerlay to follow
+   * Target for Wowerlay to follow
    */
-  target: HTMLElement;
+  target: HTMLElement | VirtualElement;
 
   /**
    * If given, Wowerlay will be able to leave screen.
@@ -220,16 +208,10 @@ interface WowerlayProps {
   tag?: string;
 
   /**
-   * Horizontal gap betweeen Wowerlay and the target
+   * Gap between Wowerlay and the target.
    * @default 0
    */
-  horizontalGap?: number;
-
-  /**
-   * Vertical gap between Wowerlay and the target.
-   * @default 0
-   */
-  verticalGap?: number;
+  gap?: number;
 
   /**
    * Removes click blocker background when Wowerlay is visible
@@ -239,34 +221,34 @@ interface WowerlayProps {
 
   /**
    * Disable or set custom transition for Wowerlay
-   * @set false to disable transition
    * @set string to use your own transition name.
+   * @set function to use a custom handler..
+   * @see "Demo/JS Transition"
    */
-  transition?: string | boolean;
+  transition?: string | WowerlayTransitionFn;
 
   /**
-   * If enabled Wowerlay will sync its width same as target's width.
-   * @set true to enable.
+   * If enabled Wowerlay will sync its placement bounds same as target's bounds.
    * @default false
    */
-  syncWidth?: boolean;
-
-  /**
-   * If enabled Wowerlay will sync its width same as target's width.
-   * @set true to enable.
-   * @default false
-   */
-  syncHeight?: boolean;
+  syncSize?: boolean;
 
   /**
    * Any given attribute (except key) is passed to Wowerlay`s wrapper background element.
    * @default {}
    */
   backgroundAttrs?: {
+    // This means that do not pass a key it will be dropped.
     key?: undefined | null;
     ref?: ((element: HTMLDivElement) => void) | Ref<HTMLElement | null | undefined>;
     [key: string]: any;
   };
+
+  /**
+   * Custom middlewares for Floating-UI.
+   * @default {}
+   */
+  middlewas?: Middleware[];
 }
 ```
 
@@ -274,16 +256,8 @@ interface WowerlayProps {
 Wowerlay has two special attributes for managing close on click situations.
 These attributes help users not to use `stopPropagation` to control Wowerlay close mechanism.
 
-- `data-wowerlay-scope` If clicked element or any of its parent element has this attribute, only Wowerlay instances that is attached to any children  of the scope element will close on click.
+- `data-wowerlay-scope`: If clicked element or any of its parent element has this attribute, only Wowerlay instances that is attached to any children  of the scope element will close on click.
 
-- `data-wowerlay-stop` If clicked element or any of its parent element has this attribute, Wowerlay will not fire close event. This is intended to be alternative of `stopPropagation`.
+- `data-wowerlay-stop`: If clicked element or any of its parent element has this attribute, Wowerlay will not fire close event. This is intended to be alternative of `stopPropagation`.
 
 - See [demo](https://wowerlay.pages.dev) for examples.
-
-## What about TypeScript?
-
-This package has built-in TypeScript support for events and props. It works with `JSX | TSX` and `Render Functions` with type support.
-
-To have types support in vue files we recommend you to use `Volar`. <br>
-[Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar) <br>
-[TypeScript Vue Plugin](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.vscode-typescript-vue-plugin)
