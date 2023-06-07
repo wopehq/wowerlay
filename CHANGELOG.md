@@ -1,3 +1,27 @@
+## 1.0.0
+#### Breaking Changes
+  - Now instead of custom positioning algorithm, Wowerlay uses floating-ui.
+  - `syncWidth` and `syncHeight` props are changed to single `syncSize` prop. Depending on the side it will synchronize the bounds.
+  
+  - `verticalGap` and `horizontalGap` props are changed to single `gap` prop. Depending on the side it will put the gap.
+  
+  - Now Wowerlay doesn't come with an opacity transition, by default Wowerlay has no transition.
+  
+  - `transition` prop does not accept `false` anymore.
+
+#### New Features
+  - Now thanks to `floating-ui`, Wowerlay supports `VirtualElement` a.k.a an object with `getBoundingClientRect` as the target.
+
+  - New `middlewares[]` prop can inject custom middlewares into `Floating-UI`.
+
+  - Now Wowerlay writes it's information to itself as attributes: `data-popover-placement`, `data-popover-rect`, `data-popover-x` and `data-popover-y`. Purpose of these attributes are `placement-based` transitioning. See `Demo/JS Transition` for sample code.
+  
+  - Now `transition` prop accepts a function that handles both enter and leave transitions.  See `Demo/JS Transition` for sample code.
+
+  - Some of the `Floating-UI` types are exported from Wowerlay.
+
+<br>
+
 ## 0.8.0
 
 - **Added** `data-wowerlay-scope` and `data-wowerlay-stop` attributes. See [demo](https://wowerlay.pages.dev/) page for examples.
