@@ -9,8 +9,10 @@ import {
   shallowRef,
   toRef,
   watch,
+  watchEffect,
 } from 'vue';
 import {
+  arrow,
   useFloating,
   flip,
   shift,
@@ -18,14 +20,22 @@ import {
   autoUpdate,
   type Middleware,
   type Side,
+  AlignedPlacement,
+  limitShift,
 } from '@floating-ui/vue';
 
 import { Props } from './Wowerlay.constants';
 import { NOOP, isElement, isValidTarget } from '../utils';
 import { attrs, syncSize } from './Wowerlay.middlewares';
+import { useSlotWithRef } from '../composables';
 
 export interface WowerlayTemplateRef {
   update(): void;
+}
+
+export interface ArrowProps {
+  side: Side;
+  placement: AlignedPlacement;
 }
 
 export const Wowerlay = defineComponent({
@@ -36,43 +46,106 @@ export const Wowerlay = defineComponent({
     'update:visible': null! as (value: boolean) => void,
     'update:el': null! as (value: HTMLElement | null) => void,
   },
-  setup(props, { emit, expose }) {
+  setup(props, { emit, expose, slots }) {
     const popoverEl = shallowRef<HTMLDivElement | null>(null);
     const backgroundEl = shallowRef<HTMLElement | null>();
 
-    const { floatingStyles, update } = useFloating(toRef(props, 'target'), popoverEl, {
-      placement: computed(() => {
-        // If syncSize is true, we need to use only side of the position
-        if (props.syncSize) return props.position.split('-')[0] as Side;
+    const [renderArrow, arrowElement] = useSlotWithRef<ArrowProps>('arrow');
 
-        return props.position;
-      }),
-      open: computed(() => props.visible),
-      strategy: 'fixed',
-      // If we use transform: true, animation that uses transform property will be broken.
-      transform: false,
-      whileElementsMounted(target, popover, updatePopover) {
-        if (props.fixed) {
-          updatePopover();
-          return NOOP;
-        }
+    const { floatingStyles, update, middlewareData, placement } = useFloating(
+      toRef(props, 'target'),
+      popoverEl,
+      {
+        placement: computed(() => {
+          // If syncSize is true, we need to use only side of the position
+          if (props.syncSize) return props.position.split('-')[0] as Side;
 
-        return autoUpdate(target, popover, updatePopover, {
-          ancestorResize: true,
-          ancestorScroll: true,
-          elementResize: true,
-        });
+          return props.position;
+        }),
+        open: computed(() => props.visible),
+        strategy: 'fixed',
+        // If we use transform: true, animation that uses transform property will be broken.
+        transform: false,
+        whileElementsMounted(target, popover, updatePopover) {
+          if (props.fixed) {
+            updatePopover();
+            return NOOP;
+          }
+
+          return autoUpdate(target, popover, updatePopover, {
+            ancestorResize: true,
+            ancestorScroll: true,
+            elementResize: true,
+          });
+        },
+        middleware: computed<Middleware[]>(() => {
+          const middlewares = [attrs()] as Middleware[];
+
+          if (typeof props.gap === 'number' && props.gap !== 0) middlewares.push(offset(props.gap));
+          if (!props.noFlip) middlewares.push(flip());
+          if (props.syncSize) middlewares.push(syncSize());
+
+          middlewares.push(
+            shift({
+              crossAxis: true,
+              limiter: props.canLeaveViewport ? limitShift() : undefined,
+            }),
+          );
+
+          if ('arrow' in slots)
+            middlewares.push(arrow({ element: arrowElement.value, padding: props.arrowPadding }));
+
+          return middlewares.concat(props.middlewares || []);
+        }),
       },
-      middleware: computed<Middleware[]>(() => {
-        const middlewares = [attrs()] as Middleware[];
+    );
 
-        if (typeof props.gap === 'number' && props.gap !== 0) middlewares.push(offset(props.gap));
-        if (!props.noFlip) middlewares.push(flip());
-        if (props.syncSize) middlewares.push(syncSize());
-        if (!props.canLeaveViewport) middlewares.push(shift({ crossAxis: true }));
+    const arrowProps = computed(() => {
+      const side = placement.value.split('-')[0] as Side;
 
-        return middlewares.concat(props.middlewares || []);
-      }),
+      return {
+        side,
+        placement: placement.value,
+      } as ArrowProps;
+    });
+
+    const arrowStyles = computed(() => {
+      const { side } = arrowProps.value;
+
+      let left = '';
+      let top = '';
+      let bottom = '';
+      let right = '';
+
+      const { x = 0, y = 0 } = middlewareData.value?.arrow || {};
+
+      if (side === 'left') {
+        top = `${y}px`;
+        left = '100%';
+      } else if (side === 'right') {
+        top = `${y}px`;
+        right = '100%';
+      } else if (side === 'top') {
+        top = '100%';
+        left = `${x}px`;
+      } else if (side === 'bottom') {
+        bottom = '100%';
+        left = `${x}px`;
+      }
+
+      return {
+        position: 'absolute',
+        left,
+        top,
+        right,
+        bottom,
+      };
+    });
+
+    watchEffect(() => {
+      if (arrowElement.value) {
+        Object.assign(arrowElement.value.style, arrowStyles.value);
+      }
     });
 
     expose({
@@ -175,6 +248,10 @@ export const Wowerlay = defineComponent({
       backgroundEl,
       popoverEl,
       backgroundVisible,
+      middlewareData,
+      arrowStyles,
+      arrowProps,
+      renderArrow,
       handleTransition,
     };
   },
@@ -189,6 +266,8 @@ export const Wowerlay = defineComponent({
         style={this.floatingStyles}
         {...this.$attrs}
       >
+        {this.backgroundVisible && this.renderArrow(this.arrowProps)}
+
         {this.$slots.default?.()}
       </Tag>
     ) : null;

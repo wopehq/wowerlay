@@ -12,6 +12,7 @@ import noFlip from './noFlip';
 import syncedBounds from './syncedBounds';
 import stopAttribute from './stopAttribute';
 import scopeAttribute from './scopeAttribute';
+import withArrow from './withArrow';
 
 export default [
   simple,
@@ -22,6 +23,7 @@ export default [
   syncedBounds,
   canLeaveViewport,
   withGaps,
+  withArrow,
   changeableTarget,
   nested,
   withTransition,
