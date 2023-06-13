@@ -74,8 +74,8 @@ export const Props = {
     type: String as PropType<WowerlayProps['tag']>,
   },
   transition: {
-    default: true,
-    type: [Boolean, String, Function] as PropType<WowerlayProps['transition']>,
+    default: null,
+    type: [String, Function] as PropType<WowerlayProps['transition']>,
   },
   visible: {
     type: Boolean,
