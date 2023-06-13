@@ -24,6 +24,7 @@ export interface WowerlayProps {
   noBackground: boolean;
   transition: string | WowerlayTransitionFn;
   syncSize: boolean;
+  arrowPadding: number;
   backgroundAttrs: HTMLAttributes & {
     ref?: ((element: HTMLDivElement | null) => void) | Ref<HTMLElement | null | undefined>;
     key?: undefined | null;
@@ -83,5 +84,9 @@ export const Props = {
   middlewares: {
     type: Array as PropType<Middleware[]>,
     default: () => [],
+  },
+  arrowPadding: {
+    type: Number as PropType<WowerlayProps['arrowPadding']>,
+    default: 0,
   },
 } as const;
