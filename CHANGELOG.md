@@ -1,3 +1,11 @@
+## 1.0.1
+#### New Features
+  - Added `arrow` slot for supporting custom arrows.
+
+  - Added `arrowPadding` prop for `floating-ui` `arrow` middleware.
+
+<br>
+
 ## 1.0.0
 #### Breaking Changes
   - Now instead of custom positioning algorithm, Wowerlay uses floating-ui.

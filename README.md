@@ -1,7 +1,7 @@
-Wowerlay is a popover library for Vue 3 applications. It is based on [Floating UI]()
+Wowerlay is a popover library for Vue 3 applications. It's powered by [Floating UI](https://floating-ui.com/)
 
 ### About Wowerlay
-Wowerlay is created to work well with Vue. It wraps `floating-ui` features with it's own features like `scoping` (See Demo/Scope), `transitioning` (See Demo/Transitions) and mounting-unmounting vue components when popover visiblity changes.
+Wowerlay is created to work well with Vue. It wraps `floating-ui` features with its own features like `scoping` (See Demo/Scope), `transitioning` (See Demo/Transitions) and mounting-unmounting vue components when popover visiblity changes.
 
 [![wowerlay](https://img.shields.io/npm/v/wowerlay)](https://npmjs.com/package/wowerlay)
 
@@ -45,7 +45,7 @@ createApp(App).mount('#app');
 
 ## Using Wowerlay.
 
-Using wowerlay is simple, place it anywhere in your component (It will be teleported to body) and give `target` and `visible` props. Wowerlay will follow it's `target` when `visible` is true otherwise it will not be mounted.
+Using wowerlay is simple, place it anywhere in your component (It will be teleported to body) and give `target` and `visible` props. Wowerlay will follow its `target` when `visible` is true otherwise it will not be mounted.
 
 Wowerlay is just a `div` element, any attribute that is not a Wowerlay prop will be passed as attribute to the element. Element tag can be changed by `tag` prop.
 
@@ -139,12 +139,54 @@ function updateSomeTime() {
 </script>
 ```
 
+## Popover arrow
+
+You can use `#arrow` slot for custom arrows, Wowerlay will automatically get element from `#arrow` slot but you shouldn't pass Fragments (multiple root components) to slot. Arrow slot must contain only one root element or a component that has only one root element, otherwise it won't work.
+
+You can use `side` (top, left, right, bottom) and `placement` (left-start, righ-start, etc.) for styling your arrow depending on the side and placement.
+
+You must add `gap` prop to Wowerlay otherwise arrow will be on top of the target.
+
+```html
+<template>
+  <!-- Gap same as arrow size -->
+  <Wowerlay :gap="10">
+    <template #default>
+      Content Goes Here
+    </template>
+
+    <template #arrow="{ side, placement }">
+      <div 
+        class="my-arrow"
+        :class="{
+          'arrow-right': side === 'left',
+          'arrow-left': side === 'right',
+          'arrow-top': side === 'bottom',
+          'arrow-bottom': side === 'top',
+        }"
+      />
+    </template>
+  </Wowerlay>
+
+  <!-- Or you can use a component -->
+  <Wowerlay :arrowPadding="5">
+    <template #default>
+      Content Goes Here
+    </template>
+    
+    <template #arrow="{ side, placement }">
+      <MyArrow :side="side" :placement="placement" />
+    </template>
+  </Wowerlay>
+</template>
+```
+
 ## Emits
 
 ```ts
 interface WowerlayEmits {
   /**
-   * Fires when wowerlay wants to change it's visibility state.
+   * Fires when wowerlay wants to change its visibility state.
    */
   'update:visible': (visible: Boolean) => void;
 
@@ -249,6 +291,12 @@ interface WowerlayProps {
    * @default {}
    */
   middlewas?: Middleware[];
+
+  /**
+   * Padding value for floating-ui arrow middleware.
+   * @default 0
+   */
+  arrowPadding?: number;
 }
 ```
 
