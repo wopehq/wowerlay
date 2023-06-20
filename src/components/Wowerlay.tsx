@@ -266,8 +266,7 @@ export const Wowerlay = defineComponent({
         style={this.floatingStyles}
         {...this.$attrs}
       >
-        {this.backgroundVisible && this.renderArrow(this.arrowProps)}
-
+        {this.renderArrow(this.arrowProps)}
         {this.$slots.default?.()}
       </Tag>
     ) : null;
