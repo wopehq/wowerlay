@@ -1,3 +1,8 @@
+## 1.0.2
+  - Fixed minor problem.
+  
+<br>
+
 ## 1.0.1
 #### New Features
   - Added `arrow` slot for supporting custom arrows.
