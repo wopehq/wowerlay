@@ -8,7 +8,7 @@ import {
 
 export type WowerlayTransitionFn = (
   type: 'enter' | 'leave',
-  elements: { background: HTMLElement | null; popover: HTMLElement },
+  params: { background: HTMLElement | null; popover: HTMLElement; side: Side },
   done: () => void,
 ) => void;
 

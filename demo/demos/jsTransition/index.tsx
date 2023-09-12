@@ -1,6 +1,5 @@
 import { defineComponent } from 'vue';
 
-import { Side } from '@floating-ui/vue';
 import { defineDemo, html } from '../../helpers';
 import { Wowerlay, type WowerlayTransitionFn } from '../../../src/lib';
 import useDemoState from '../../helpers/useDemoState';
@@ -8,11 +7,9 @@ import useDemoState from '../../helpers/useDemoState';
 const Component = defineComponent({
   name: 'JsTransition',
   setup: () => {
-    const handleTransition: WowerlayTransitionFn = (type, { popover }, done) => {
-      const placement = popover.getAttribute('data-popover-placement')!.split('-')[0] as Side;
-
+    const handleTransition: WowerlayTransitionFn = (type, { popover, side }, done) => {
       const from = {
-        transform: `translateY(${placement === 'top' ? '10px' : '-10px'})`,
+        transform: `translateY(${side === 'top' ? '10px' : '-10px'})`,
         opacity: 0,
       };
 
@@ -84,11 +81,15 @@ export default defineDemo({
     <script setup>
       import { ref } from 'vue';
 
-      const handleTransition = (type, el, done) => {
+      const handleTransition = (type, { popover, side, background }, done) => {
+        if (background) {
+          doBackgroundAnimation(background);
+        }
+
         if (type === 'enter') {
-          doAnimation(el).onFinish(done);
+          doAnimation(popover).onFinish(done);
         } else {
-          doAnimation(el).onFinish(done);
+          doAnimation(popover).onFinish(done);
         }
       };
 
