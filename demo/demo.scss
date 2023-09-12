@@ -186,10 +186,10 @@ input[type='number'] {
 @keyframes kOverlayAnimation {
   0% {
     transform-origin: 0% 0%;
-    transform: rotateZ(180deg);
+    opacity: 0;
   }
   100% {
     transform-origin: 0% 0%;
-    transform: rotateZ(0deg);
+    opacity: 1;
   }
 }
