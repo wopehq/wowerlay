@@ -225,10 +225,13 @@ export const Wowerlay = defineComponent({
         const popover = (
           background ? background.getElementsByClassName('wowerlay')[0] : el
         ) as HTMLElement;
-        const side = popover.getAttribute('data-popover-placement')!.split('-')[0] as Side;
+        const popoverPlacement = popover.getAttribute('data-popover-placement') as
+          | AlignedPlacement
+          | Side;
+        const side = popoverPlacement.split('-')[0] as Side;
 
         if (typeof props.transition === 'function')
-          props.transition(type, { background, popover, side }, done);
+          props.transition(type, { background, popover, side, placement: popoverPlacement }, done);
       });
     };
 
