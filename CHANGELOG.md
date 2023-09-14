@@ -1,3 +1,9 @@
+## 1.1.0
+#### Breaking Changes
+  - Transition handling mechanism is changed, now `Transition` component is on top of `wowerlay-background` element, that means you are targeting background element if `noBackground` prop is not given. For CSS transitions now users must select `.wowerlay-background-name-active .wowerlay` if target is background. 
+
+    For JavaScript api you can now choose `popover, background` explicitly. See [demo](https://wowerlay.pages.dev/) page for examples.
+
 ## 1.0.2
   - Fixed minor problem.
   
