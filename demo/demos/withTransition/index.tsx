@@ -54,6 +54,18 @@ export default defineDemo({
         </Wowerlay>
       </button>
     </template>
+
+    <!--
+      you need to explicitly select standalone popover or popover inside background.
+      If you change position of popover in css transition (e.g. transform: translateX(100%)) it will break positioning of popover.
+      If you need to change position of popover while transitioning, use JS transition instead.
+    -->
+    <style>
+      .wowerlay-background.transition-name-enter-active wowerlay[data-popover-placement="right"],
+      .wowerlay[data-popover-placement="right"].transition-name-enter-active {
+        animation: myAnimation .3s;
+      }
+    </style>
   `,
   script: html`
     <script setup>

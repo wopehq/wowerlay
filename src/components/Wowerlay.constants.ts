@@ -8,7 +8,12 @@ import {
 
 export type WowerlayTransitionFn = (
   type: 'enter' | 'leave',
-  el: HTMLElement,
+  params: {
+    background: HTMLElement | null;
+    popover: HTMLElement;
+    side: Side;
+    placement: AlignedPlacement | Side;
+  },
   done: () => void,
 ) => void;
 
@@ -25,6 +30,7 @@ export interface WowerlayProps {
   transition: string | WowerlayTransitionFn;
   syncSize: boolean;
   arrowPadding: number;
+  middlewares: Middleware[];
   backgroundAttrs: HTMLAttributes & {
     ref?: ((element: HTMLDivElement | null) => void) | Ref<HTMLElement | null | undefined>;
     key?: undefined | null;
@@ -78,11 +84,11 @@ export const Props = {
     type: [String, Function] as PropType<WowerlayProps['transition']>,
   },
   visible: {
-    type: Boolean,
+    type: Boolean as PropType<WowerlayProps['visible']>,
     required: true,
   },
   middlewares: {
-    type: Array as PropType<Middleware[]>,
+    type: Array as PropType<WowerlayProps['middlewares']>,
     default: () => [],
   },
   arrowPadding: {

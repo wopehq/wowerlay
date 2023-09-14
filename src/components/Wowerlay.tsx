@@ -1,11 +1,12 @@
 import {
+  Ref,
+  Slots,
   Teleport,
   Transition,
   computed,
   defineComponent,
   onBeforeUnmount,
   onMounted,
-  ref,
   shallowRef,
   toRef,
   watch,
@@ -22,9 +23,10 @@ import {
   type Side,
   AlignedPlacement,
   limitShift,
+  MiddlewareData,
 } from '@floating-ui/vue';
 
-import { Props } from './Wowerlay.constants';
+import { Props, WowerlayProps } from './Wowerlay.constants';
 import { NOOP, isElement, isValidTarget } from '../utils';
 import { attrs, syncSize } from './Wowerlay.middlewares';
 import { useSlotWithRef } from '../composables';
@@ -36,6 +38,66 @@ export interface WowerlayTemplateRef {
 export interface ArrowProps {
   side: Side;
   placement: AlignedPlacement;
+}
+
+function combineMiddlewares(
+  props: Readonly<WowerlayProps>,
+  slots: Slots,
+  arrowElement: Ref<HTMLElement | null>,
+) {
+  const middlewares = [attrs()] as Middleware[];
+
+  if (typeof props.gap === 'number' && props.gap !== 0) middlewares.push(offset(props.gap));
+  if (!props.noFlip) middlewares.push(flip());
+  if (props.syncSize) middlewares.push(syncSize());
+
+  middlewares.push(
+    shift({
+      crossAxis: true,
+      limiter: props.canLeaveViewport ? limitShift() : undefined,
+    }),
+  );
+
+  if ('arrow' in slots)
+    middlewares.push(arrow({ element: arrowElement.value, padding: props.arrowPadding }));
+
+  return middlewares.concat(props.middlewares || []);
+}
+
+function creteArrowStyles(
+  arrowProps: Readonly<Ref<ArrowProps>>,
+  middlewareData: Readonly<Ref<MiddlewareData>>,
+) {
+  const { side } = arrowProps.value;
+
+  let left = '';
+  let top = '';
+  let bottom = '';
+  let right = '';
+
+  const { x = 0, y = 0 } = middlewareData.value?.arrow || {};
+
+  if (side === 'left') {
+    top = `${y}px`;
+    left = '100%';
+  } else if (side === 'right') {
+    top = `${y}px`;
+    right = '100%';
+  } else if (side === 'top') {
+    top = '100%';
+    left = `${x}px`;
+  } else if (side === 'bottom') {
+    bottom = '100%';
+    left = `${x}px`;
+  }
+
+  return {
+    position: 'absolute',
+    left,
+    top,
+    right,
+    bottom,
+  };
 }
 
 export const Wowerlay = defineComponent({
@@ -78,25 +140,9 @@ export const Wowerlay = defineComponent({
             elementResize: true,
           });
         },
-        middleware: computed<Middleware[]>(() => {
-          const middlewares = [attrs()] as Middleware[];
-
-          if (typeof props.gap === 'number' && props.gap !== 0) middlewares.push(offset(props.gap));
-          if (!props.noFlip) middlewares.push(flip());
-          if (props.syncSize) middlewares.push(syncSize());
-
-          middlewares.push(
-            shift({
-              crossAxis: true,
-              limiter: props.canLeaveViewport ? limitShift() : undefined,
-            }),
-          );
-
-          if ('arrow' in slots)
-            middlewares.push(arrow({ element: arrowElement.value, padding: props.arrowPadding }));
-
-          return middlewares.concat(props.middlewares || []);
-        }),
+        middleware: computed<Middleware[]>(() =>
+          combineMiddlewares(props as Readonly<WowerlayProps>, slots, arrowElement),
+        ),
       },
     );
 
@@ -109,38 +155,7 @@ export const Wowerlay = defineComponent({
       } as ArrowProps;
     });
 
-    const arrowStyles = computed(() => {
-      const { side } = arrowProps.value;
-
-      let left = '';
-      let top = '';
-      let bottom = '';
-      let right = '';
-
-      const { x = 0, y = 0 } = middlewareData.value?.arrow || {};
-
-      if (side === 'left') {
-        top = `${y}px`;
-        left = '100%';
-      } else if (side === 'right') {
-        top = `${y}px`;
-        right = '100%';
-      } else if (side === 'top') {
-        top = '100%';
-        left = `${x}px`;
-      } else if (side === 'bottom') {
-        bottom = '100%';
-        left = `${x}px`;
-      }
-
-      return {
-        position: 'absolute',
-        left,
-        top,
-        right,
-        bottom,
-      };
-    });
+    const arrowStyles = computed(() => creteArrowStyles(arrowProps, middlewareData));
 
     watchEffect(() => {
       if (arrowElement.value) {
@@ -156,15 +171,11 @@ export const Wowerlay = defineComponent({
       emit('update:el', el);
     });
 
-    const popoverClosable = ref(false);
     const popoverVisible = computed(() => isValidTarget(props.target) && props.visible);
 
     const close = () => {
       if (!props.visible) return;
-
-      if (popoverClosable.value) {
-        emit('update:visible', false);
-      }
+      emit('update:visible', false);
     };
 
     onBeforeUnmount(close);
@@ -201,53 +212,34 @@ export const Wowerlay = defineComponent({
     };
 
     onMounted(() => {
-      window.addEventListener('click', handleWindowClick);
+      window.addEventListener('click', handleWindowClick, true);
     });
     onBeforeUnmount(() => {
-      window.removeEventListener('click', handleWindowClick);
+      window.removeEventListener('click', handleWindowClick, true);
     });
-
-    const backgroundVisible = ref(props.visible);
-
-    /** .
-     * If popover has a background we rely on popover's transition state to
-     * hide it with the background or not, otherwise leave transition will not be seen.
-     */
-    const handleContentTransitionEnd = () => {
-      backgroundVisible.value = false;
-    };
-
-    watch(
-      () => props.visible,
-      (state) => {
-        if (state) {
-          // Use setTimeout to prevent immediate popover closure caused by the same click event due to event bubbling.
-          // We listen to the window, so this ensures a single click doesn't simultaneously open and close the popover.
-          setTimeout(() => {
-            popoverClosable.value = true;
-          }, 0);
-
-          backgroundVisible.value = true;
-        } else {
-          popoverClosable.value = false;
-        }
-      },
-    );
 
     const handleTransition = (type: 'enter' | 'leave', el: Element, done: () => void) => {
       // We need to wait for FloatingUI to update the position before we can transition.
       requestAnimationFrame(() => {
-        if (typeof props.transition === 'function') props.transition(type, el as HTMLElement, done);
+        const background = el.matches('[data-wowerlay-background]') ? (el as HTMLElement) : null;
+        const popover = (
+          background ? background.getElementsByClassName('wowerlay')[0] : el
+        ) as HTMLElement;
+        const popoverPlacement = popover.getAttribute('data-popover-placement') as
+          | AlignedPlacement
+          | Side;
+        const side = popoverPlacement.split('-')[0] as Side;
+
+        if (typeof props.transition === 'function')
+          props.transition(type, { background, popover, side, placement: popoverPlacement }, done);
       });
     };
 
     return {
-      handleContentTransitionEnd,
       floatingStyles,
       popoverVisible,
       backgroundEl,
       popoverEl,
-      backgroundVisible,
       middlewareData,
       arrowStyles,
       arrowProps,
@@ -258,7 +250,7 @@ export const Wowerlay = defineComponent({
   render() {
     const Tag = this.tag as /* for typechecking */ 'div';
 
-    const popover = this.popoverVisible ? (
+    const popover = (
       <Tag
         class="wowerlay"
         data-wowerlay-scope
@@ -269,12 +261,28 @@ export const Wowerlay = defineComponent({
         {this.renderArrow(this.arrowProps)}
         {this.$slots.default?.()}
       </Tag>
-    ) : null;
-
-    let wowerlayContentToRender = (
-      // onAfterLeave is called even if there is not animation
-      <Transition onAfterLeave={this.handleContentTransitionEnd}>{popover}</Transition>
     );
+
+    const backgroundAttrsClone = Object.assign(Object.create(null), this.backgroundAttrs);
+    delete backgroundAttrsClone.key;
+
+    let wowerlayContentToRender: JSX.Element | null = null;
+
+    if (this.popoverVisible) {
+      wowerlayContentToRender = this.noBackground ? (
+        popover
+      ) : (
+        <div
+          data-wowerlay-background
+          class="wowerlay-background"
+          role="dialog"
+          ref="backgroundEl"
+          {...backgroundAttrsClone}
+        >
+          {popover}
+        </div>
+      );
+    }
 
     if (typeof this.transition === 'function') {
       const handleEnter = (el: Element, done: () => void) =>
@@ -284,49 +292,18 @@ export const Wowerlay = defineComponent({
         this.handleTransition('leave', el, done);
 
       wowerlayContentToRender = (
-        <Transition
-          appear
-          onAppear={handleEnter}
-          onEnter={handleEnter}
-          onLeave={handleLeave}
-          onAfterLeave={this.handleContentTransitionEnd}
-        >
-          {popover}
+        <Transition appear onAppear={handleEnter} onEnter={handleEnter} onLeave={handleLeave}>
+          {wowerlayContentToRender}
         </Transition>
       );
     } else if (typeof this.transition === 'string') {
       wowerlayContentToRender = (
-        <Transition appear onAfterLeave={this.handleContentTransitionEnd} name={this.transition}>
-          {popover}
+        <Transition appear name={this.transition}>
+          {wowerlayContentToRender}
         </Transition>
       );
     }
 
-    const backgroundAttrsClone = Object.assign(Object.create(null), this.backgroundAttrs);
-    delete backgroundAttrsClone.key;
-
-    return (
-      <Teleport to="body">
-        {(() => {
-          if (this.noBackground) return wowerlayContentToRender;
-
-          if (this.backgroundVisible) {
-            return (
-              <div
-                data-wowerlay-background
-                class="wowerlay-background"
-                role="dialog"
-                ref="backgroundEl"
-                {...backgroundAttrsClone}
-              >
-                {wowerlayContentToRender}
-              </div>
-            );
-          }
-
-          return null;
-        })()}
-      </Teleport>
-    );
+    return <Teleport to="body">{wowerlayContentToRender}</Teleport>;
   },
 });
