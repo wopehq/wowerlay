@@ -1,7 +1,7 @@
 {
   "name": "wowerlay",
   "description": "Wowerlay is a popover library for Vue 3 applications.",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "main": "./dist/wowerlay.umd.js",
   "module": "./dist/wowerlay.mjs",
   "types": "./dist/types/src/lib.d.ts",
